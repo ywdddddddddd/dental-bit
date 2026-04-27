@@ -132,6 +132,11 @@
     .option-score-hint { font-size: 0.7rem; color: #8a84b8; opacity: 0; transition: opacity 0.2s; }
     .option-btn:active .option-score-hint { opacity: 1; }
 
+    /* Multi-select styles */
+    .option-btn.selected { background: var(--option-active-bg); border-color: var(--accent-purple); }
+    .multi-select-hint { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 6px; text-align: center; }
+    .btn-submit-multi { margin-top: 12px; width: 100%; }
+
     /* Result Styles */
     .result-header { text-align: center; }
     .result-header h2 { font-size: 1.4rem; font-weight: 700; color: #f0eef9; }
@@ -311,7 +316,29 @@
         // === 其他/系统 ===
         halitosis: { name:'非口源性口臭', desc:'口腔清洁良好但仍有严重异味，可能伴有反酸、胃胀。', urgency:'green', advice:'建议前往消化内科排查幽门螺杆菌或胃食管反流。', emoji:'🤢', cat:'other' },
         fluorosis: { name:'氟斑牙/四环素牙', desc:'牙齿表面呈白垩色、黄褐色甚至缺损，多为幼年时期水质或药物导致。', urgency:'green', advice:'影响美观可通过贴面或全冠修复。', emoji:'🟤', cat:'other' },
-        xerostomia: { name:'口干症', desc:'长期口干舌燥，喝水难缓解，说话/吞咽困难，多发龋齿。', urgency:'yellow', advice:'排查干燥综合征、糖尿病或药物副作用。咀嚼无糖口香糖刺激唾液。', emoji:'🏜️', cat:'other' }
+        xerostomia: { name:'口干症', desc:'长期口干舌燥，喝水难缓解，说话/吞咽困难，多发龋齿。', urgency:'yellow', advice:'排查干燥综合征、糖尿病或药物副作用。咀嚼无糖口香糖刺激唾液。', emoji:'🏜️', cat:'other' },
+
+        // === 牙体牙髓（新增）===
+        enamel_hypoplasia: { name:'牙釉质发育不全', desc:'牙齿表面出现带状或窝状凹陷，釉质变薄甚至无釉质，多见于恒牙。', urgency:'green', advice:'轻症涂氟/再矿化治疗，重症考虑冠修复。', emoji:'🦷', cat:'tooth' },
+        dens_evaginatus: { name:'畸形中央尖', desc:'牙齿咬合面中央突起的锥形牙尖，易折断导致牙髓暴露。', urgency:'yellow', advice:'分次调磨或树脂加固，若已折断需根管治疗。', emoji:'🔺', cat:'tooth' },
+        dens_invaginatus: { name:'畸形舌侧窝/沟', desc:'上颌侧切牙舌侧深陷的窝洞或沟裂，极易积食导致龋坏。', urgency:'yellow', advice:'尽早做预防性充填或窝沟封闭，深者需根管治疗。', emoji:'🌀', cat:'tooth' },
+        tetracycline_teeth: { name:'四环素牙', desc:'幼年服用四环素类药物导致牙齿呈灰黄/灰褐色带状变色。', urgency:'green', advice:'因病因机制与氟斑牙不同，需区分诊断。轻症漂白，重者贴面/全冠修复。', emoji:'🟫', cat:'tooth' },
+        fusion_teeth: { name:'融合牙/双生牙/结合牙', desc:'两颗牙齿异常结合或一颗牙齿分裂为二，形态异常。', urgency:'green', advice:'发育异常无需特殊处理，注意清洁沟裂，定期检查。', emoji:'🔗', cat:'tooth' },
+
+        // === 牙周（新增）=== 
+        aggressive_periodontitis: { name:'侵袭性牙周炎', desc:'年轻时（<35岁）即出现严重牙槽骨吸收，牙齿迅速松动脱落，常有家族史。', urgency:'red', advice:'与遗传密切相关！需立即接受系统的牙周治疗并排查家族史。', emoji:'🧬', cat:'perio' },
+        gingival_fibromatosis: { name:'牙龈纤维瘤病', desc:'牙龈弥漫性增生，质地坚韧，覆盖大部分牙冠，遗传性或特发性。', urgency:'yellow', advice:'需手术治疗（牙龈成形术），排查遗传背景。', emoji:'🥩', cat:'perio' },
+        puberty_gingivitis: { name:'青春期龈炎', desc:'青春期牙龈明显红肿出血，牙菌斑量不与之成比例。', urgency:'green', advice:'青春期激素变化所致，加强口腔卫生清洁，青春期过后多可缓解。', emoji:'🧑', cat:'perio' },
+
+        // === 黏膜（新增）===
+        pemphigus: { name:'天疱疮/类天疱疮', desc:'口腔内大面积水疱破溃形成糜烂面，波及牙龈/颊黏膜/腭部，尼氏征阳性。', urgency:'red', advice:'严重自身免疫性大疱性疾病！需立即前往口腔黏膜科或皮肤科就诊。', emoji:'🫧', cat:'mucosa' },
+        oral_cancer: { name:'口腔鳞状细胞癌', desc:'口腔内长期不愈的溃疡（>2周）、硬结、菜花样肿物、黏膜颜色异常。', urgency:'red', advice:'高度警惕！超过2周不愈的口腔溃疡需立即活检排查口腔癌。', emoji:'⚠️', cat:'mucosa' },
+        radiation_stomatitis: { name:'放射性口炎', desc:'头颈部放疗后出现的口腔黏膜红肿、糜烂、剧烈疼痛。', urgency:'yellow', advice:'放化疗后常见并发症，需口腔科与肿瘤科联合管理。', emoji:'☢️', cat:'mucosa' },
+
+        // === 颌面/关节/神经（新增）===
+        osteomyelitis: { name:'颌骨骨髓炎', desc:'颌骨区域持续剧痛、面部肿胀、瘘管排脓、牙齿松动、下唇麻木。', urgency:'red', advice:'严重感染性疾病！需抗生素联合手术清创，尽早住院治疗。', emoji:'🦴', cat:'joint' },
+        cleft_related: { name:'唇腭裂术后口腔问题', desc:'唇腭裂修复术后可能存在的牙齿排列不齐、发音异常、口鼻腔瘘等。', urgency:'yellow', advice:'需正畸+口腔颌面外科+语音治疗多学科联合管理。', emoji:'👶', cat:'joint' },
+        oral_breathing_malocclusion: { name:'口呼吸相关错颌畸形', desc:'长期张口呼吸导致的上牙弓狭窄、开唇露齿、腺样体面容。', urgency:'yellow', advice:'需耳鼻喉科排查气道阻塞（腺样体肥大等），配合正畸早期干预。', emoji:'😤', cat:'joint' }
       };
 
       // 归类疾病
@@ -327,11 +354,10 @@
           text: '你的口腔最近主要在闹什么脾气？',
           stage: 'complaint',
           options: [
-            { emoji:'🦷', text:'牙痛 / 喝冷热水痛 / 咬东西痛', next:['q_pain_type','q_pain_trigger'], delta:{caries_deep:2,irreversible_pulpitis:2,dentin_hypersensitivity:1} },
-            { emoji:'🩸', text:'牙龈出血 / 红肿 / 长脓包', next:['q_gum_detail','q_gum_history'], delta:{gingivitis:3,periodontitis:3,apical_periodontitis:2} },
-            { emoji:'👄', text:'长了溃疡 / 奇怪斑块 / 舌头异常 / 口角裂开', next:['q_mucosa_look'], delta:{oral_ulcer:3,leukoplakia:2,angular_cheilitis:1} },
-            { emoji:'🕳️', text:'牙齿有黑洞 / 缺损 / 变色 / 裂纹', next:['q_hard_detail'], delta:{caries_shallow:3,wedge_defect:2,caries_recurrent:2} },
-            { emoji:'🗣️', text:'关节咔咔响 / 腮帮子酸 / 张嘴受限 / 面部肿痛', next:['q_jaw_detail'], delta:{tmd:3,bruxism:2,sialolithiasis:1} },
+            { emoji:'🦷', text:'牙痛 / 喝冷热水痛 / 咬东西痛', next:['q_pain_type','q_pain_trigger','q_pain_duration','q_pain_relief'], delta:{caries_deep:2,irreversible_pulpitis:2,dentin_hypersensitivity:1} },
+            { emoji:'🩸', text:'牙龈出血 / 红肿 / 长脓包', next:['q_gum_detail','q_gum_history','q_pain_duration'], delta:{gingivitis:3,periodontitis:3,apical_periodontitis:2} },
+            { emoji:'👄', text:'长了溃疡 / 奇怪斑块 / 舌头异常 / 口角裂开', next:['q_mucosa_look','q_pain_duration'], delta:{oral_ulcer:3,leukoplakia:2,angular_cheilitis:1} },
+            { emoji:'🗣️', text:'关节咔咔响 / 腮帮子酸 / 张嘴受限 / 面部肿痛', next:['q_jaw_detail','q_pain_duration','q_pain_relief'], delta:{tmd:3,bruxism:2,sialolithiasis:1} },
             { emoji:'🏜️', text:'口干舌燥 / 口臭严重 / 牙齿整体状况担忧', next:['q_other_detail'], delta:{xerostomia:3,halitosis:2} }
           ]
         },
@@ -502,27 +528,137 @@
             { emoji:'🥩', text:'偏好硬食（坚果/啃骨头/嚼冰块/脆骨）', riskTag:{cracked_tooth:3,wedge_defect:1.5,trauma:1.5} },
             { emoji:'🥗', text:'饮食均衡、荤素搭配、不过分偏食', riskTag:{} }
           ]
+        },
+
+        // ======= 疼痛时间轴（新增）=======
+        q_pain_duration: {
+          text: '这种不舒服持续多久了？',
+          stage: 'symptom',
+          options: [
+            { emoji:'⏰', text:'刚刚出现（1-2天内）', riskTag:{irreversible_pulpitis:1.8,pericoronitis:1.5,trauma:2} },
+            { emoji:'📅', text:'几天到一周了', riskTag:{irreversible_pulpitis:2.5,apical_periodontitis:1.5} },
+            { emoji:'🗓️', text:'断断续续几个星期了', riskTag:{periodontitis:1.8,tmd:1.8,lichen_planus:1.8,caries_recurrent:1.5} },
+            { emoji:'📆', text:'反复发作好几个月甚至更久', riskTag:{periodontitis:2.5,tmd:2.5,lichen_planus:2,burning_mouth:2,xerostomia:2,caries_deep:1.5} }
+          ]
+        },
+        q_pain_relief: {
+          text: '什么情况下疼痛或不适会缓解？',
+          stage: 'symptom',
+          options: [
+            { emoji:'❄️', text:'含冷水/冰敷能暂时缓解', delta:{irreversible_pulpitis:5} },
+            { emoji:'🔥', text:'含热水/热敷能暂时缓解', delta:{irreversible_pulpitis:3,apical_periodontitis:2} },
+            { emoji:'💊', text:'吃止痛药（布洛芬等）能暂时压住', delta:{irreversible_pulpitis:1.5,apical_periodontitis:1.5,tmd:1.5} },
+            { emoji:'🚫', text:'什么都不管用，持续疼', delta:{irreversible_pulpitis:3,dry_socket:3,trigeminal_neuralgia:3} },
+            { emoji:'😌', text:'休息/放松/睡觉后会好转', delta:{tmd:2,bruxism:2} }
+          ]
+        },
+
+        // ======= 口腔治疗史（新增）=======
+        q_oral_treatment: {
+          text: '你最近的口腔治疗经历是？',
+          stage: 'history',
+          options: [
+            { emoji:'🪥', text:'半年内刚洗过牙', riskTag:{gingivitis:0.6,periodontitis:0.7} },
+            { emoji:'🦷', text:'1年内补过牙/做过根管治疗', riskTag:{caries_recurrent:2.5,apical_periodontitis:1.5} },
+            { emoji:'💀', text:'近期（1个月内）拔过牙', riskTag:{dry_socket:8,pericoronitis:1.5} },
+            { emoji:'🩺', text:'正在做正畸（戴牙套）', riskTag:{caries_shallow:2,gingivitis:2,dentin_hypersensitivity:1.5} },
+            { emoji:'🦿', text:'有假牙/种植牙/烤瓷牙', riskTag:{caries_recurrent:2,periodontitis:1.5} },
+            { emoji:'✅', text:'以上均无，很久没看牙了', riskTag:{gingivitis:1.3,caries_shallow:1.3} }
+          ]
+        },
+        q_drug_allergy: {
+          text: '你有药物过敏史吗？（可能影响牙科用药）',
+          stage: 'history',
+          options: [
+            { emoji:'💉', text:'青霉素/头孢类过敏', riskTag:{} },
+            { emoji:'💊', text:'阿司匹林/布洛芬等NSAIDs过敏', riskTag:{} },
+            { emoji:'🧪', text:'麻醉药（如利多卡因）过敏', riskTag:{} },
+            { emoji:'✅', text:'无已知药物过敏', riskTag:{} },
+            { emoji:'❓', text:'不清楚/没注意过', riskTag:{} }
+          ]
+        },
+
+        // ======= 家族史（新增）======
+        q_family: {
+          text: '你的直系亲属（父母/兄弟姐妹/子女）是否有以下口腔问题？（可多选）',
+          stage: 'history',
+          multiSelect: true,
+          options: [
+            { emoji:'🩸', text:'严重的牙周病（年轻时即出现牙齿松动脱落）', riskTag:{aggressive_periodontitis:3,periodontitis:1.5} },
+            { emoji:'🧩', text:'牙齿排列不齐（错颌畸形）', riskTag:{malocclusion:2,oral_breathing_malocclusion:2} },
+            { emoji:'🦷', text:'牙齿发育异常（颜色异常/形态异常/牙釉质发育不全）', riskTag:{enamel_hypoplasia:2.5,dens_evaginatus:2,dens_invaginatus:2,fluorosis:1.5,tetracycline_teeth:1.5} },
+            { emoji:'⚠️', text:'口腔肿瘤/癌症病史', riskTag:{leukoplakia:2.5,oral_cancer:4} },
+            { emoji:'🔗', text:'唇腭裂家族史', riskTag:{cleft_related:3} },
+            { emoji:'✅', text:'以上均无', riskTag:{}, isNone:true }
+          ]
+        },
+
+        // ======= 保护因素（新增）======
+        q_protective: {
+          text: '以下保护措施中你在坚持的有哪些？（可多选）',
+          stage: 'lifestyle',
+          multiSelect: true,
+          options: [
+            { emoji:'🪥', text:'每天用含氟牙膏刷牙', protectFactor:{caries_shallow:0.6,caries_deep:0.6,caries_recurrent:0.7} },
+            { emoji:'🦷', text:'定期做窝沟封闭（儿童/青少年时期）', protectFactor:{caries_shallow:0.5,caries_deep:0.5} },
+            { emoji:'🧹', text:'每半年到一年洗牙一次', protectFactor:{gingivitis:0.5,periodontitis:0.5,halitosis:0.6} },
+            { emoji:'💧', text:'饮用含氟自来水', protectFactor:{caries_shallow:0.7,caries_deep:0.7} },
+            { emoji:'🧵', text:'每天用牙线/冲牙器清洁牙缝', protectFactor:{gingivitis:0.6,periodontitis:0.6,caries_shallow:0.7} },
+            { emoji:'✅', text:'以上均无', protectFactor:{}, isNone:true }
+          ]
+        },
+
+        // ======= 心理状态评估（新增）======
+        q_psychology: {
+          text: '最近你的心理状态更接近哪种？',
+          stage: 'lifestyle',
+          options: [
+            { emoji:'😰', text:'经常紧张焦虑，很难放松下来', riskTag:{bruxism:3,tmd:2,oral_ulcer:2,burning_mouth:2,pericoronitis:1.5} },
+            { emoji:'😞', text:'情绪低落，对什么事都提不起兴趣', riskTag:{burning_mouth:2.5,tmd:1.5,xerostomia:1.5,halitosis:1.3} },
+            { emoji:'✋', text:'有咬指甲/咬嘴唇/咬牙等自己控制不住的小动作', riskTag:{bruxism:3,wedge_defect:1.5,tmd:1.5,angular_cheilitis:1.3} },
+            { emoji:'😌', text:'情绪状态比较平稳', riskTag:{} }
+          ]
+        },
+
+        // ======= 职业/环境暴露（新增）======
+        q_occupation: {
+          text: '你的生活环境或工作中是否有以下暴露？',
+          stage: 'history',
+          options: [
+            { emoji:'🏭', text:'长期接触酸性气体/化学品/粉尘环境', riskTag:{dental_erosion:3,leukoplakia:1.5,oral_cancer:2} },
+            { emoji:'💧', text:'曾在高氟区长期生活（8岁前）', riskTag:{fluorosis:5} },
+            { emoji:'🫒', text:'经常嚼槟榔（每周≥1次）', riskTag:{osf:5,leukoplakia:3,oral_cancer:3,periodontitis:1.5}, forceRed:true },
+            { emoji:'☀️', text:'长期户外工作（日晒多），唇部长期不适', riskTag:{leukoplakia:1.5,oral_cancer:2} },
+            { emoji:'🎤', text:'职业需要用嗓过度/经常说话（教师/主播/销售等）', riskTag:{tmd:1.5,burning_mouth:1.5,xerostomia:1.3} },
+            { emoji:'✅', text:'以上均无', riskTag:{} }
+          ]
         }
       };
 
-      // ==================== SBTI 核心引擎 ====================
+      // ==================== SBTI 核心引擎（改进版）====================
       let scores = {};
-      let rawScores = {};      // 原始未乘权重的分数
-      let riskTagAccum = {};   // 累计的风险标签
+      let rawScores = {};         // 原始未乘权重的分数
+      let riskTagAccum = {};      // 累计的风险标签（乘法累积）
+      let protectFactorAccum = {};// 累计的保护因素
       let questionQueue = [];
       let answeredCount = 0;
       let totalEstimated = 5;
       let hasRedFlag = false;
-      let userAnswers = [];    // 记录用户回答
+      let userAnswers = [];       // 记录用户回答
+      let identifiedRiskFactors = [];  // 已识别的风险因素文本
+      let missingProtections = [];     // 缺失的保护因素文本
 
       function initTest() {
         scores = {};
         rawScores = {};
         riskTagAccum = {};
+        protectFactorAccum = {};
         answeredCount = 0;
         hasRedFlag = false;
         userAnswers = [];
-        questionQueue = ['q_start', 'q_age', 'q_medical', 'q_smoking', 'q_life_brush', 'q_life_stress', 'q_diet'];
+        identifiedRiskFactors = [];
+        missingProtections = [];
+        questionQueue = ['q_start', 'q_oral_treatment', 'q_drug_allergy', 'q_age', 'q_medical', 'q_smoking', 'q_family', 'q_life_brush', 'q_life_stress', 'q_psychology', 'q_diet', 'q_occupation', 'q_protective'];
         totalEstimated = questionQueue.length;
         renderNextQuestion();
       }
@@ -535,10 +671,42 @@
         });
       }
 
+      // 改进版：累乘而非取最大值，上限10倍
       function applyRiskTag(riskTag) {
         if (!riskTag || Object.keys(riskTag).length === 0) return;
         Object.entries(riskTag).forEach(([diseaseId, multiplier]) => {
-          riskTagAccum[diseaseId] = Math.max(riskTagAccum[diseaseId] || 1, multiplier);
+          if (multiplier > 1) {
+            riskTagAccum[diseaseId] = (riskTagAccum[diseaseId] || 1) * multiplier;
+            riskTagAccum[diseaseId] = Math.min(riskTagAccum[diseaseId], 10);
+          }
+        });
+      }
+
+      // 新增：保护因素降分
+      function applyProtectFactor(protectFactor) {
+        if (!protectFactor || Object.keys(protectFactor).length === 0) return;
+        Object.entries(protectFactor).forEach(([diseaseId, factor]) => {
+          protectFactorAccum[diseaseId] = (protectFactorAccum[diseaseId] || 1) * factor;
+        });
+      }
+
+      // 新增：疾病互斥/演进规则
+      const EXCLUSION_RULES = [
+        { ifDisease: 'irreversible_pulpitis', minScore: 8, thenDownWeight: ['caries_deep', 'dentin_hypersensitivity'], factor: 0.3 },
+        { ifDisease: 'apical_periodontitis', minScore: 6, thenDownWeight: ['irreversible_pulpitis'], factor: 0.4 },
+        { ifDisease: 'oral_cancer', minScore: 5, thenDownWeight: ['leukoplakia'], factor: 0.5 },
+        { ifDisease: 'aggressive_periodontitis', minScore: 6, thenDownWeight: ['gingivitis'], factor: 0.3 }
+      ];
+
+      function applyExclusionRules() {
+        EXCLUSION_RULES.forEach(rule => {
+          if ((scores[rule.ifDisease] || 0) >= rule.minScore) {
+            rule.thenDownWeight.forEach(dw => {
+              if (scores[dw] !== undefined) {
+                scores[dw] = Math.round(scores[dw] * rule.factor);
+              }
+            });
+          }
         });
       }
 
@@ -561,9 +729,9 @@
             <div class="subhead">AI预问诊 · SBTI多维加权分析</div>
             ${renderThemeDots()}
             <div style="text-align:center;line-height:1.8;font-size:0.9rem;margin:6px 0;">
-              <div style="color:var(--accent-purple)">📊 覆盖 <b>38</b> 种口腔疾病</div>
-              <div style="color:#6ee7b7">🧠 MBTI式多维积分算法</div>
-              <div style="color:var(--accent-yellow)">⏱️ 约2分钟 · 7个维度 · 智能分析</div>
+              <div style="color:var(--accent-purple)">📊 覆盖 <b>53</b> 种口腔疾病</div>
+              <div style="color:#6ee7b7">🧠 生物·心理·社会 多维积分</div>
+              <div style="color:var(--accent-yellow)">⏱️ 约3分钟 · 10个维度 · 智能分析</div>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-size:0.75rem;margin:4px 0;">
               <span style="background:rgba(244,114,182,0.15);color:#f9a8d4;padding:4px 10px;border-radius:20px;">牙体牙髓</span>
@@ -590,18 +758,18 @@
         const currentQId = questionQueue.shift();
         const qData = QUESTIONS[currentQId];
 
-        // 如果是主诉题，重新计算总进度（主诉+深挖+通用）
+        // 如果是主诉题，重新计算总进度
         if (currentQId === 'q_start') {
           totalEstimated = answeredCount + questionQueue.length + 1;
-          // 根据主诉选项动态调整
         }
 
         answeredCount++;
         let progress = Math.round((answeredCount / totalEstimated) * 100);
-        if (progress > 100) progress = Math.min(100, answeredCount / (totalEstimated + 2) * 100);
-        progress = Math.min(100, Math.max(progress, 5));
+        if (progress > 100) progress = Math.min(100, answeredCount / (totalEstimated + 5) * 100);
+        progress = Math.min(100, Math.max(progress, 3));
 
         const stage = getStageInfo(qData.stage);
+        const isMulti = qData.multiSelect === true;
 
         const container = document.getElementById('appContainer');
         container.innerHTML = `
@@ -617,40 +785,114 @@
               <span class="question-stage-tag ${stage.cls}">${stage.tag}</span>
               <div class="question-text">${qData.text}</div>
               ${qData.subtitle ? `<div class="question-subtitle">${qData.subtitle}</div>` : ''}
+              ${isMulti ? '<div class="multi-select-hint">👇 可多选，选完后点击下方确认</div>' : ''}
               <div class="options-grid" id="optionsContainer"></div>
+              ${isMulti ? '<button class="btn btn-submit-multi" id="multiSubmitBtn">✅ 确认选择</button>' : ''}
             </div>
           </div>
         `;
 
         const optionsContainer = document.getElementById('optionsContainer');
+        let selectedOptions = [];
+
         qData.options.forEach((opt, idx) => {
           const btn = document.createElement('div');
           btn.className = 'option-btn';
+          btn.dataset.index = idx;
           btn.innerHTML = `<span class="option-emoji">${opt.emoji}</span><span class="option-text">${opt.text}</span>`;
 
-          btn.addEventListener('click', () => {
-            userAnswers.push({ qid: currentQId, text: opt.text });
+          if (isMulti) {
+            btn.addEventListener('click', () => {
+              if (opt.isNone) {
+                selectedOptions = [opt];
+                document.querySelectorAll('#optionsContainer .option-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+              } else {
+                selectedOptions = selectedOptions.filter(o => !o.isNone);
+                const existIdx = selectedOptions.findIndex(o => o === opt);
+                if (existIdx >= 0) {
+                  selectedOptions.splice(existIdx, 1);
+                  btn.classList.remove('selected');
+                } else {
+                  selectedOptions.push(opt);
+                  btn.classList.add('selected');
+                }
+              }
+            });
+          } else {
+            btn.addEventListener('click', () => {
+              userAnswers.push({ qid: currentQId, text: opt.text });
 
-            if (opt.delta) applyDelta(opt.delta);
-            if (opt.riskTag) applyRiskTag(opt.riskTag);
-            if (opt.forceRed) hasRedFlag = true;
+              if (opt.delta) applyDelta(opt.delta);
+              if (opt.riskTag) { applyRiskTag(opt.riskTag); recordRiskFactors(opt.text, opt.riskTag); }
+              if (opt.protectFactor) { applyProtectFactor(opt.protectFactor); recordProtections(opt.text, opt.protectFactor); }
+              if (opt.forceRed) hasRedFlag = true;
 
-            // 动态插入深挖题（插在通用题之前）
-            if (opt.next && opt.next.length > 0) {
-              questionQueue = opt.next.concat(questionQueue);
-              totalEstimated += opt.next.length;
-            }
+              if (opt.next && opt.next.length > 0) {
+                const newQuestions = opt.next.filter(q => !questionQueue.includes(q));
+                questionQueue = newQuestions.concat(questionQueue);
+                totalEstimated += newQuestions.length;
+              }
 
-            renderNextQuestion();
-          });
+              renderNextQuestion();
+            });
+          }
           optionsContainer.appendChild(btn);
         });
+
+        if (isMulti) {
+          document.getElementById('multiSubmitBtn').addEventListener('click', () => {
+            if (selectedOptions.length === 0) {
+              alert('请至少选择一个选项');
+              return;
+            }
+            selectedOptions.forEach(opt => {
+              userAnswers.push({ qid: currentQId, text: opt.text });
+              if (opt.delta) applyDelta(opt.delta);
+              if (opt.riskTag) { applyRiskTag(opt.riskTag); recordRiskFactors(opt.text, opt.riskTag); }
+              if (opt.protectFactor) { applyProtectFactor(opt.protectFactor); recordProtections(opt.text, opt.protectFactor); }
+              if (opt.forceRed) hasRedFlag = true;
+            });
+            renderNextQuestion();
+          });
+        }
+      }
+
+      function recordRiskFactors(text, riskTag) {
+        if (!riskTag || Object.keys(riskTag).length === 0) return;
+        const shortText = text.length > 18 ? text.substring(0, 18) + '…' : text;
+        if (!identifiedRiskFactors.includes(shortText)) {
+          identifiedRiskFactors.push(shortText);
+        }
+      }
+
+      function recordProtections(text, protectFactor) {
+        if (!protectFactor || Object.keys(protectFactor).length === 0) return;
+        const shortText = text.length > 18 ? text.substring(0, 18) + '…' : text;
+        if (!missingProtections.includes(shortText)) {
+          missingProtections.push(shortText);
+        }
       }
 
       function applyRiskMultipliers() {
+        // 1. 应用风险累积乘数
         Object.entries(riskTagAccum).forEach(([diseaseId, multiplier]) => {
-          if (scores[diseaseId] !== undefined) {
+          if (scores[diseaseId] !== undefined && multiplier > 1) {
             scores[diseaseId] = Math.round(scores[diseaseId] * multiplier);
+          }
+        });
+        // 2. 应用保护因素降分
+        Object.entries(protectFactorAccum).forEach(([diseaseId, factor]) => {
+          if (scores[diseaseId] !== undefined && factor < 1) {
+            scores[diseaseId] = Math.round(scores[diseaseId] * factor);
+          }
+        });
+        // 3. 应用疾病互斥规则
+        applyExclusionRules();
+        // 4. 确保分数不低于1（避免全部归零）
+        Object.keys(rawScores).forEach(diseaseId => {
+          if (rawScores[diseaseId] > 0 && (scores[diseaseId] || 0) <= 0) {
+            scores[diseaseId] = 1;
           }
         });
       }
@@ -756,6 +998,17 @@
         return svg;
       }
 
+      function getReferralInfo(cat) {
+        const map = {
+          tooth: { dept: '牙体牙髓科', exam: '口腔X光片（根尖片/咬翼片）· 牙髓活力测试（冷/热/电测）· 视诊探诊检查' },
+          perio: { dept: '牙周科', exam: '牙周探诊检查 · 全口曲面断层片 · 菌斑指数评估 · 牙龈出血指数' },
+          mucosa: { dept: '口腔黏膜科/口腔颌面外科', exam: '视诊触诊 · 活检病理检查（如发现白斑/肿物）· 血液学检查（排除系统性疾病）' },
+          joint: { dept: '口腔颌面外科/颞下颌关节专科', exam: '锥形束CT(CBCT) · 关节造影/MRI · 颌骨X光片 · 神经电生理检查' },
+          other: { dept: '口腔综合科/相应专科', exam: '全口检查 · 唾液流率检测（口干）· 消化内科会诊（口臭）· 血液生化检查' }
+        };
+        return map[cat] || { dept: '口腔综合科', exam: '全口检查 · 视诊探诊 · 必要时拍X光片' };
+      }
+
       function showResult() {
         const entries = Object.entries(scores).filter(([_, s]) => s > 0);
         if (entries.length === 0) {
@@ -774,6 +1027,7 @@
 
         const primary = results[0];
         const secondary = results.slice(1, 6).filter(r => r.prob >= 5);
+        const diffDiag = results.slice(1, 4).filter(r => r.prob >= 3);
 
         let finalUrgency = primary.data.urgency;
         if (hasRedFlag && finalUrgency !== 'red') finalUrgency = 'red';
@@ -789,6 +1043,20 @@
           key, label: c.label, color: c.color, score: catScores[key] || 0
         }));
         const catMax = Math.max(1, ...catEntries.map(c => c.score));
+
+        const referral = getReferralInfo(primary.data.cat);
+
+        const riskFactorHTML = identifiedRiskFactors.length > 0
+          ? `<div style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px;">
+              <strong style="color:var(--accent-yellow)">⚠️ 已识别风险因素：</strong><br/>
+              ${identifiedRiskFactors.map(f => `<span style="display:inline-block;margin:3px 4px;background:rgba(249,115,22,0.15);color:#fdba74;padding:2px 8px;border-radius:10px;font-size:0.72rem;">${f}</span>`).join(' ')}
+            </div>` : '';
+
+        const protectionGapHTML = (identifiedRiskFactors.length > 0 && missingProtections.length < 2)
+          ? `<div style="font-size:0.78rem;color:var(--text-secondary);margin-top:6px;">
+              <strong style="color:var(--green)">🛡️ 建议补充的保护措施：</strong><br/>
+              <span style="color:#9ca3af;font-size:0.74rem;">每天含氟牙膏刷牙 · 每半年到一年洗牙 · 使用牙线/冲牙器</span>
+            </div>` : '';
 
         const container = document.getElementById('appContainer');
         container.innerHTML = `
@@ -807,6 +1075,34 @@
               <div class="disease-advice">
                 <strong>💡 建议方案：</strong><br/>
                 <span style="color:#e2dcf4;display:inline-block;margin-top:6px;">${primary.data.advice}</span>
+              </div>
+            </div>
+
+            ${diffDiag.length > 0 ? `
+            <div>
+              <div class="section-title">🔬 鉴别诊断参考</div>
+              <div class="rank-list">
+                ${diffDiag.map(r => `
+                  <div class="rank-item">
+                    <span class="rank-name">${r.data.emoji} ${r.data.name}</span>
+                    <div class="prob-bar-container">
+                      <div class="prob-bar-fill" style="width:${r.prob}%;opacity:${0.25 + r.prob/150};background:linear-gradient(90deg,#fbbf24,#f59e0b)"></div>
+                    </div>
+                    <span class="rank-pct" style="color:#fbbf24">${r.prob}%</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+
+            ${riskFactorHTML}
+            ${protectionGapHTML}
+
+            <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-sm);padding:12px;margin-top:4px;">
+              <div class="section-title">🏥 就诊建议</div>
+              <div style="font-size:0.82rem;line-height:1.7;color:var(--text-secondary);">
+                <div><strong style="color:var(--accent-purple)">建议挂号科室：</strong>${referral.dept}</div>
+                <div><strong style="color:var(--accent-purple)">可能需要的检查：</strong>${referral.exam}</div>
               </div>
             </div>
 
@@ -852,14 +1148,14 @@
               <button class="btn btn-secondary" id="shareBtn" style="flex:0 0 auto;padding:15px 18px;">📋 复制结果</button>
             </div>
             <div class="disclaimer">
-              ⚠️ 医疗免责声明：本问卷采用多维加权算法分析症状倾向，仅作科普参考，不具备临床诊断效力。请以专业医师的面诊及影像学检查结果为准。
+              ⚠️ 医疗免责声明：本问卷采用多维加权算法分析症状倾向，仅作科普参考，不具备临床诊断效力。请以专业医师的面诊及影像学检查结果为准。如有紧急症状请立即就医。
             </div>
           </div>
         `;
 
         document.getElementById('restartBtn').addEventListener('click', renderWelcome);
         document.getElementById('shareBtn').addEventListener('click', () => {
-          const text = `🦷 口腔健康解密卡报告\n📌 主要风险：${primary.data.name} (${primary.prob}%)\n${urgencyLabel[finalUrgency]}\n💡 ${primary.data.advice}\n\n⚕️ 本报告仅为AI参考，请咨询专业牙医。`;
+          const text = `🦷 口腔健康解密卡报告\n📌 主要风险：${primary.data.name} (${primary.prob}%)\n${urgencyLabel[finalUrgency]}\n💡 ${primary.data.advice}\n🏥 建议科室：${referral.dept}\n\n⚕️ 本报告仅为AI参考，请咨询专业牙医。`;
           if (navigator.clipboard) {
             navigator.clipboard.writeText(text).then(() => {
               const btn = document.getElementById('shareBtn');
