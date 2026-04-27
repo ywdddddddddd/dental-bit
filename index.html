@@ -8,6 +8,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#1a1535">
   <title>口腔健康解密卡 · AI预问诊</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-deep: #0f0c24;
@@ -34,6 +37,9 @@
       --option-hover-bg: rgba(192,132,252,0.14);
       --btn-grad: linear-gradient(135deg, #8b5cf6, #ec4899);
       --theme-switcher-bg: rgba(255,255,255,0.06);
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
     body.theme-purple { --body-bg: linear-gradient(155deg, #0f0c24 0%, #1a1540 40%, #1a1535 100%); --accent-purple: #a78bfa; --accent-pink: #f472b6; --accent-yellow: #facc15; --accent-orange: #f97316; --gradient-title: linear-gradient(135deg, #c3b5fd, #f9a8d4); --btn-grad: linear-gradient(135deg, #8b5cf6, #ec4899); }
     body.theme-ocean { --body-bg: linear-gradient(155deg, #0a1628 0%, #0d2137 40%, #0f2744 100%); --accent-purple: #67c3f3; --accent-pink: #38bdf8; --accent-yellow: #fde68a; --accent-orange: #fbbf24; --gradient-title: linear-gradient(135deg, #7dd3fc, #a5f3fc); --btn-grad: linear-gradient(135deg, #0369a1, #0284c7); }
@@ -42,7 +48,7 @@
     body.theme-light { --body-bg: linear-gradient(155deg, #e8e8ec 0%, #dde4f0 40%, #eef1f5 100%); --app-bg: rgba(255, 255, 255, 0.55); --bg-card: rgba(255, 255, 255, 0.7); --border-subtle: rgba(0, 0, 0, 0.08); --text-primary: #1e1b3a; --text-secondary: #5a5480; --option-bg: rgba(0,0,0,0.03); --option-border: rgba(0,0,0,0.08); --option-active-bg: rgba(139,92,246,0.12); --option-hover-bg: rgba(139,92,246,0.08); --accent-purple: #7c3aed; --accent-pink: #db2777; --accent-yellow: #ca8a04; --accent-orange: #ea580c; --gradient-title: linear-gradient(135deg, #7c3aed, #db2777); --btn-grad: linear-gradient(135deg, #7c3aed, #db2777); --theme-switcher-bg: rgba(0,0,0,0.04); --shadow-card: 0 10px 25px rgba(0,0,0,0.1); --green: #059669; --red: #dc2626; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+      font-family: var(--font-body);
       background: var(--body-bg);
       background-attachment: fixed;
       min-height: 100vh;
@@ -55,7 +61,16 @@
       user-select: none;
       -webkit-user-select: none;
     }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
     .app-container {
+      position: relative;
       width: 100%;
       max-width: 480px;
       background: var(--app-bg);
@@ -63,7 +78,7 @@
       -webkit-backdrop-filter: blur(24px);
       border-radius: 36px;
       border: 1px solid var(--border-subtle);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 0 80px rgba(139, 92, 246, 0.08);
       padding: 24px 18px 28px;
       color: var(--text-primary);
       max-height: 96vh;
@@ -71,49 +86,66 @@
       overflow-y: auto;
       overflow-x: hidden;
     }
+    .app-container::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 20%;
+      right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      pointer-events: none;
+    }
     .app-container::-webkit-scrollbar { width: 4px; }
     .app-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
 
-    .screen { display: flex; flex-direction: column; gap: 18px; animation: fadeSlideIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
-    @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .screen { display: flex; flex-direction: column; gap: 18px; animation: fadeSlideIn 0.5s cubic-bezier(0.22, 0.61, 0.36, 1); }
+    @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(20px); filter: blur(4px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.65; } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes glowPulse { 0%,100% { box-shadow: 0 0 20px rgba(139,92,246,0.15); } 50% { box-shadow: 0 0 40px rgba(139,92,246,0.25); } }
 
-    h1 { font-size: 1.9rem; font-weight: 700; background: var(--gradient-title); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
-    .subhead { text-align: center; color: var(--text-secondary); font-size: 0.9rem; }
+    h1 { font-family: var(--font-display); font-size: 2rem; font-weight: 400; background: var(--gradient-title); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; letter-spacing: -0.02em; line-height: 1.2; }
+    .subhead { text-align: center; color: var(--text-secondary); font-size: 0.88rem; font-weight: 400; line-height: 1.5; }
 
-    .theme-switcher { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding: 8px 0; }
-    .theme-dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
-    .theme-dot:active { transform: scale(0.9); }
-    .theme-dot.active { border-color: #fff; box-shadow: 0 0 12px rgba(255,255,255,0.3); }
+    .theme-switcher { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 8px 0; }
+    .theme-dot { width: 32px; height: 32px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1); flex-shrink: 0; position: relative; }
+    .theme-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid transparent; transition: border-color 0.25s; }
+    .theme-dot:active { transform: scale(0.88); }
+    .theme-dot.active { border-color: #fff; box-shadow: 0 0 16px rgba(255,255,255,0.25); }
+    .theme-dot.active::after { border-color: rgba(255,255,255,0.15); }
     .theme-dot.purple { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
     .theme-dot.ocean { background: linear-gradient(135deg, #0369a1, #7dd3fc); }
     .theme-dot.emerald { background: linear-gradient(135deg, #047857, #6ee7b7); }
     .theme-dot.sunset { background: linear-gradient(135deg, #c2410c, #fcd34d); }
     .theme-dot.light { background: linear-gradient(135deg, #cbd5e1, #f1f5f9); border-color: #d1d5db !important; }
-    body.theme-light .theme-dot.active { border-color: #6366f1; box-shadow: 0 0 10px rgba(99,102,241,0.4); }
-    .tooth-icon { font-size: 3.2rem; text-align: center; filter: drop-shadow(0 8px 12px rgba(0,0,0,0.5)); }
+    body.theme-light .theme-dot.active { border-color: #6366f1; box-shadow: 0 0 12px rgba(99,102,241,0.35); }
+    .tooth-icon { font-size: 3.4rem; text-align: center; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5)); animation: float 4s ease-in-out infinite; }
 
-    .progress-section { display: flex; align-items: center; gap: 10px; }
-    .progress-stage { font-size: 0.75rem; color: var(--text-secondary); min-width: 48px; font-weight: 500; }
+    .progress-section { display: flex; align-items: center; gap: 12px; }
+    .progress-stage { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-secondary); min-width: 48px; font-weight: 500; letter-spacing: 0.05em; }
     body.theme-light .progress-stage { color: #6b7280; }
-    .progress-bar-bg { flex: 1; height: 7px; background: rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; }
+    .progress-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; position: relative; }
     body.theme-light .progress-bar-bg { background: rgba(0,0,0,0.1); }
-    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); border-radius: 20px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 14px rgba(192,132,252,0.7); }
+    .progress-bar-bg::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); animation: shimmer 3s infinite; background-size: 200% 100%; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); border-radius: 20px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 12px rgba(192,132,252,0.6); position: relative; }
+    .progress-fill::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border-radius: 50%; background: white; box-shadow: 0 0 8px rgba(192,132,252,0.8); opacity: 0.9; }
 
-    .question-card { background: var(--bg-card); backdrop-filter: blur(12px); border-radius: var(--radius-lg); padding: 22px 16px; border: 1px solid var(--border-subtle); box-shadow: var(--shadow-card); }
-    .question-stage-tag { display: inline-block; font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.3px; }
+    .question-card { background: var(--bg-card); backdrop-filter: blur(12px); border-radius: var(--radius-lg); padding: 22px 16px; border: 1px solid var(--border-subtle); box-shadow: var(--shadow-card); animation: glowPulse 6s ease-in-out infinite; }
+    .question-stage-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
     .tag-complaint { background: rgba(244,114,182,0.2); color: #f9a8d4; border: 1px solid rgba(244,114,182,0.3); }
     .tag-symptom { background: rgba(168,139,250,0.2); color: #c4b5fd; border: 1px solid rgba(168,139,250,0.3); }
     .tag-lifestyle { background: rgba(52,211,153,0.2); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.3); }
     .tag-history { background: rgba(251,191,36,0.2); color: #fcd34d; border: 1px solid rgba(251,191,36,0.3); }
 
-    .question-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 18px; line-height: 1.45; color: var(--text-primary); }
+    .question-text { font-family: var(--font-display); font-size: 1.25rem; font-weight: 400; margin-bottom: 18px; line-height: 1.5; color: var(--text-primary); letter-spacing: -0.01em; }
     body.theme-light .question-text { color: #1e1b3a; }
     .question-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 14px; font-weight: 400; }
 
     .disease-desc { font-size: 0.9rem; line-height: 1.55; color: var(--text-secondary); }
     body.theme-light .disease-desc { color: #4a4468; }
-    .disease-advice { margin-top: 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 12px; font-size: 0.9rem; }
+    .disease-advice { margin-top: 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 12px; font-size: 0.9rem; border-left: 3px solid var(--accent-yellow); }
     body.theme-light .disease-advice { background: rgba(0,0,0,0.05); }
     .disease-advice strong { color: var(--accent-yellow); }
 
@@ -122,26 +154,36 @@
       background: var(--option-bg); border: 1px solid var(--option-border);
       border-radius: var(--radius-md); padding: 14px 16px; font-size: 0.92rem;
       font-weight: 500; color: var(--text-primary); text-align: left; display: flex;
-      align-items: center; gap: 10px; transition: all 0.22s ease; cursor: pointer; line-height: 1.35;
-      -webkit-tap-highlight-color: transparent;
+      align-items: center; gap: 12px; transition: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1); cursor: pointer; line-height: 1.35;
+      -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden;
     }
+    .option-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(255,255,255,0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .option-btn:hover::before { opacity: 1; }
     .option-btn:active { background: var(--option-active-bg); border-color: var(--accent-purple); transform: scale(0.98); }
-    .option-btn:hover { background: var(--option-hover-bg); border-color: rgba(192,132,252,0.5); transform: translateY(-1px); }
-    .option-emoji { font-size: 1.5rem; min-width: 30px; text-align: center; flex-shrink: 0; }
+    .option-btn:hover { background: var(--option-hover-bg); border-color: rgba(192,132,252,0.5); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+    .option-emoji { font-size: 1.5rem; min-width: 30px; text-align: center; flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
     .option-text { flex: 1; min-width: 0; }
     .option-score-hint { font-size: 0.7rem; color: #8a84b8; opacity: 0; transition: opacity 0.2s; }
     .option-btn:active .option-score-hint { opacity: 1; }
 
-    .option-btn.selected { background: var(--option-active-bg); border-color: var(--accent-purple); }
-    .multi-select-hint { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 6px; text-align: center; }
+    .option-btn.selected { background: var(--option-active-bg); border-color: var(--accent-purple); box-shadow: 0 0 0 1px var(--accent-purple), 0 4px 12px rgba(139,92,246,0.2); }
+    .multi-select-hint { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 6px; text-align: center; font-family: var(--font-mono); }
     .btn-submit-multi { margin-top: 12px; width: 100%; }
 
     .result-header { text-align: center; }
-    .result-header h2 { font-size: 1.4rem; font-weight: 700; color: #f0eef9; }
+    .result-header h2 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; color: #f0eef9; letter-spacing: -0.01em; }
 
     .urgency-panel {
       text-align: center; padding: 14px 20px; border-radius: var(--radius-md);
       font-weight: 700; font-size: 0.88rem; margin-bottom: 6px; letter-spacing: 0.3px;
+      font-family: var(--font-mono);
     }
     .urgency-green { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
     .urgency-yellow { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
@@ -149,10 +191,19 @@
 
     .main-diagnosis {
       background: rgba(255,255,255,0.06); border-radius: var(--radius-lg); padding: 18px;
-      border-left: 5px solid var(--accent-pink); margin: 4px 0;
+      border-left: 5px solid var(--accent-pink); margin: 4px 0; position: relative; overflow: hidden;
+    }
+    .main-diagnosis::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
     }
     .disease-name {
-      font-size: 1.5rem; font-weight: 700;
+      font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; letter-spacing: -0.02em;
       background: linear-gradient(to right, var(--accent-yellow), var(--accent-orange));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px;
     }
@@ -160,7 +211,7 @@
     .disease-advice { margin-top: 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 12px; font-size: 0.9rem; }
     .disease-advice strong { color: var(--accent-yellow); }
 
-    .section-title { font-weight: 700; font-size: 0.88rem; color: var(--text-secondary); margin: 4px 0; display: flex; align-items: center; gap: 6px; }
+    .section-title { font-family: var(--font-mono); font-weight: 500; font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0; display: flex; align-items: center; gap: 6px; letter-spacing: 0.05em; }
     body.theme-light .section-title { color: #5a5480; }
 
     .rank-list { display: flex; flex-direction: column; gap: 8px; }
@@ -168,38 +219,54 @@
       display: flex; justify-content: space-between; align-items: center;
       background: rgba(0,0,0,0.22); border-radius: var(--radius-sm); padding: 10px 12px;
       font-weight: 500; font-size: 0.85rem; gap: 8px; color: var(--text-primary);
+      transition: background 0.2s;
     }
+    .rank-item:hover { background: rgba(0,0,0,0.3); }
     body.theme-light .rank-item { background: rgba(0,0,0,0.05); }
     .rank-name { flex: 0 0 115px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.78rem; }
-    .prob-bar-container { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px; margin: 0 8px; }
+    .prob-bar-container { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px; margin: 0 8px; overflow: hidden; }
     body.theme-light .prob-bar-container { background: rgba(0,0,0,0.08); }
-    .prob-bar-fill { height: 100%; background: linear-gradient(90deg, #a78bfa, #c4b5fd); border-radius: 10px; transition: width 0.6s ease; }
-    .rank-pct { font-weight: 700; color: #c4b5fd; width: 36px; text-align: right; font-size: 0.82rem; flex-shrink: 0; }
+    .prob-bar-fill { height: 100%; background: linear-gradient(90deg, #a78bfa, #c4b5fd); border-radius: 10px; transition: width 0.6s ease; position: relative; }
+    .prob-bar-fill::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 4px; background: white; border-radius: 2px; opacity: 0.8; }
+    .rank-pct { font-family: var(--font-mono); font-weight: 600; color: #c4b5fd; width: 36px; text-align: right; font-size: 0.78rem; flex-shrink: 0; }
 
     .category-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .cat-chip {
       background: rgba(255,255,255,0.05); border-radius: var(--radius-sm); padding: 10px 12px;
       text-align: center; font-size: 0.78rem; border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.2s;
     }
+    .cat-chip:hover { background: rgba(255,255,255,0.08); transform: translateY(-1px); }
     .cat-chip .cat-name { color: var(--text-secondary); margin-bottom: 3px; }
-    .cat-chip .cat-pct { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+    .cat-chip .cat-pct { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
 
     .radar-chart { display: block; margin: 8px auto; max-width: 100%; width: 100%; }
 
     .btn {
       background: var(--btn-grad); border: none; border-radius: 40px;
-      padding: 15px 20px; font-weight: 700; font-size: 1.05rem; color: white; cursor: pointer;
-      box-shadow: 0 8px 22px rgba(168,85,247,0.4); transition: 0.2s; text-align: center;
-      margin-top: 6px; -webkit-tap-highlight-color: transparent;
+      padding: 15px 20px; font-weight: 600; font-size: 1rem; color: white; cursor: pointer;
+      box-shadow: 0 8px 22px rgba(168,85,247,0.35); transition: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1); text-align: center;
+      margin-top: 6px; -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden;
+      font-family: var(--font-body);
     }
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .btn:hover::before { opacity: 1; }
     .btn:active { transform: scale(0.97); box-shadow: 0 4px 12px rgba(168,85,247,0.5); }
-    .btn:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(236,72,153,0.55); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(236,72,153,0.45); }
     .btn-secondary {
       background: var(--theme-switcher-bg); border: 1px solid var(--border-subtle);
       box-shadow: none; color: var(--text-primary); font-size: 0.9rem; padding: 12px 18px;
     }
+    .btn-secondary:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
-    .disclaimer { font-size: 0.7rem; color: var(--text-secondary); text-align: center; margin-top: 10px; opacity: 0.8; line-height: 1.5; }
+    .disclaimer { font-size: 0.68rem; color: var(--text-secondary); text-align: center; margin-top: 10px; opacity: 0.75; line-height: 1.5; font-family: var(--font-mono); }
     body.theme-light .disclaimer { color: #6b7280; }
 
     .share-row { display: flex; gap: 8px; margin-top: 4px; }
@@ -207,7 +274,7 @@
 
     @media (max-width: 400px) {
       .app-container { border-radius: 28px; padding: 18px 14px 22px; }
-      h1 { font-size: 1.6rem; }
+      h1 { font-size: 1.7rem; }
       .question-text { font-size: 1.1rem; }
       .option-btn { padding: 12px 14px; font-size: 0.85rem; }
       .category-breakdown { grid-template-columns: 1fr 1fr; gap: 6px; }
@@ -984,24 +1051,24 @@
         const container = document.getElementById('appContainer');
         container.innerHTML = `
           <div class="screen" id="welcomeScreen">
-            <div class="tooth-icon">🦷✨</div>
-            <h1>口腔健康解密卡</h1>
-            <div class="subhead">DAG二叉树网络 · AI预问诊</div>
-            ${renderThemeDots()}
-            <div style="text-align:center;line-height:1.8;font-size:0.9rem;margin:6px 0;">
+            <div class="tooth-icon" style="animation-delay:0.1s">🦷✨</div>
+            <h1 style="animation:fadeSlideIn 0.5s 0.15s both cubic-bezier(0.22,0.61,0.36,1)">口腔健康解密卡</h1>
+            <div class="subhead" style="animation:fadeSlideIn 0.5s 0.25s both cubic-bezier(0.22,0.61,0.36,1)">DAG二叉树网络 · AI预问诊</div>
+            <div style="animation:fadeSlideIn 0.5s 0.35s both cubic-bezier(0.22,0.61,0.36,1)">${renderThemeDots()}</div>
+            <div style="text-align:center;line-height:1.8;font-size:0.9rem;margin:6px 0;animation:fadeSlideIn 0.5s 0.45s both cubic-bezier(0.22,0.61,0.36,1)">
               <div style="color:var(--accent-purple)">📊 覆盖 <b>72</b> 种口腔疾病</div>
               <div style="color:#6ee7b7">🧬 疾病因果关系感知引擎</div>
               <div style="color:var(--accent-yellow)">⏱️ 约3分钟 · DAG智能分析</div>
             </div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-size:0.75rem;margin:4px 0;">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-size:0.75rem;margin:4px 0;animation:fadeSlideIn 0.5s 0.55s both cubic-bezier(0.22,0.61,0.36,1)">
               <span style="background:rgba(244,114,182,0.15);color:#f9a8d4;padding:4px 10px;border-radius:20px;">牙体牙髓</span>
               <span style="background:rgba(168,139,250,0.15);color:#c4b5fd;padding:4px 10px;border-radius:20px;">牙周</span>
               <span style="background:rgba(52,211,153,0.15);color:#6ee7b7;padding:4px 10px;border-radius:20px;">黏膜</span>
               <span style="background:rgba(251,191,36,0.15);color:#fcd34d;padding:4px 10px;border-radius:20px;">颌面关节</span>
               <span style="background:rgba(249,115,22,0.15);color:#fdba74;padding:4px 10px;border-radius:20px;">系统性因素</span>
             </div>
-            <button class="btn" id="startBtn">🧬 开始解密我的口腔成分</button>
-            <div class="disclaimer">* 基于疾病因果关系网络分析症状倾向<br/>仅供健康参考，不能替代专业医师面诊。</div>
+            <button class="btn" id="startBtn" style="animation:fadeSlideIn 0.5s 0.65s both cubic-bezier(0.22,0.61,0.36,1)">🧬 开始解密我的口腔成分</button>
+            <div class="disclaimer" style="animation:fadeSlideIn 0.5s 0.75s both cubic-bezier(0.22,0.61,0.36,1)">* 基于疾病因果关系网络分析症状倾向<br/>仅供健康参考，不能替代专业医师面诊。</div>
           </div>
         `;
         document.getElementById('startBtn').addEventListener('click', startTest);
@@ -1234,10 +1301,10 @@
         const container = document.getElementById('appContainer');
         container.innerHTML = `
           <div class="screen" id="resultScreen">
-            <div class="tooth-icon">${primary.emoji}</div>
-            <div class="result-header"><h2>你的口腔成分报告</h2></div>
-            <div class="urgency-panel urgency-${finalUrgency}">${urgencyLabel[finalUrgency]}</div>
-            <div class="main-diagnosis">
+            <div class="tooth-icon" style="animation-delay:0.1s">${primary.emoji}</div>
+            <div class="result-header" style="animation:fadeSlideIn 0.5s 0.15s both cubic-bezier(0.22,0.61,0.36,1)"><h2>你的口腔成分报告</h2></div>
+            <div class="urgency-panel urgency-${finalUrgency}" style="animation:fadeSlideIn 0.5s 0.2s both cubic-bezier(0.22,0.61,0.36,1)">${urgencyLabel[finalUrgency]}</div>
+            <div class="main-diagnosis" style="animation:fadeSlideIn 0.5s 0.3s both cubic-bezier(0.22,0.61,0.36,1)">
               <div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:4px;">📌 主要风险指向 (${primary.prob}%)</div>
               <div class="disease-name">${primary.name}</div>
               <div class="disease-desc">${primary.desc}</div>
@@ -1248,7 +1315,7 @@
             </div>
 
             ${diffDiag.length > 0 ? `
-            <div>
+            <div style="animation:fadeSlideIn 0.5s 0.4s both cubic-bezier(0.22,0.61,0.36,1)">
               <div class="section-title">🔬 鉴别诊断参考</div>
               <div class="rank-list">
                 ${diffDiag.map(r => `
@@ -1263,7 +1330,7 @@
               </div>
             </div>` : ''}
 
-            <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-sm);padding:12px;margin-top:4px;">
+            <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-sm);padding:12px;margin-top:4px;animation:fadeSlideIn 0.5s 0.5s both cubic-bezier(0.22,0.61,0.36,1)">
               <div class="section-title">🏥 就诊建议</div>
               <div style="font-size:0.82rem;line-height:1.7;color:var(--text-secondary);">
                 <div><strong style="color:var(--accent-purple)">建议挂号科室：</strong>${referral.dept}</div>
@@ -1271,12 +1338,12 @@
               </div>
             </div>
 
-            <div>
+            <div style="animation:fadeSlideIn 0.5s 0.6s both cubic-bezier(0.22,0.61,0.36,1)">
               <div class="section-title">🎯 疾病维度雷达图</div>
               ${renderRadarChart(catScores)}
             </div>
 
-            <div>
+            <div style="animation:fadeSlideIn 0.5s 0.7s both cubic-bezier(0.22,0.61,0.36,1)">
               <div class="section-title">📊 疾病分类占比</div>
               <div class="category-breakdown">
                 ${catEntries.map(c => {
@@ -1287,7 +1354,7 @@
             </div>
 
             ${secondary.length > 0 ? `
-            <div>
+            <div style="animation:fadeSlideIn 0.5s 0.8s both cubic-bezier(0.22,0.61,0.36,1)">
               <div class="section-title">🔍 其他需关注的风险</div>
               <div class="rank-list">
                 ${secondary.map(r => `
@@ -1302,11 +1369,11 @@
               </div>
             </div>` : ''}
 
-            <div class="share-row">
+            <div class="share-row" style="animation:fadeSlideIn 0.5s 0.9s both cubic-bezier(0.22,0.61,0.36,1)">
               <button class="btn" id="restartBtn" style="flex:1;">🔄 重新测试</button>
               <button class="btn btn-secondary" id="shareBtn" style="flex:0 0 auto;padding:15px 18px;">📋 复制结果</button>
             </div>
-            <div class="disclaimer">
+            <div class="disclaimer" style="animation:fadeSlideIn 0.5s 1s both cubic-bezier(0.22,0.61,0.36,1)">
               ⚠️ 医疗免责声明：本问卷基于疾病因果关系网络（DAG）分析症状倾向，仅作科普参考，不具有临床诊断效力。请以专业医师的面诊及影像学检查结果为准。如有紧急症状请立即就医。
             </div>
           </div>
@@ -1329,10 +1396,10 @@
         const container = document.getElementById('appContainer');
         container.innerHTML = `
           <div class="screen" id="resultScreen">
-            <div class="tooth-icon">✨🦷✨</div>
-            <div class="result-header"><h2>口腔状态极佳！</h2></div>
-            <div class="urgency-panel urgency-green">🟢 健康达人 · 继续保持</div>
-            <div class="main-diagnosis" style="border-left-color:#34d399;">
+            <div class="tooth-icon" style="animation-delay:0.1s">✨🦷✨</div>
+            <div class="result-header" style="animation:fadeSlideIn 0.5s 0.15s both cubic-bezier(0.22,0.61,0.36,1)"><h2>口腔状态极佳！</h2></div>
+            <div class="urgency-panel urgency-green" style="animation:fadeSlideIn 0.5s 0.2s both cubic-bezier(0.22,0.61,0.36,1)">🟢 健康达人 · 继续保持</div>
+            <div class="main-diagnosis" style="border-left-color:#34d399;animation:fadeSlideIn 0.5s 0.3s both cubic-bezier(0.22,0.61,0.36,1)">
               <div class="disease-name" style="background:linear-gradient(to right,#34d399,#10b981);-webkit-background-clip:text;">口腔健康达人</div>
               <div class="disease-desc">根据你的回答，目前没有发现明显的口腔疾病风险。你的清洁习惯、生活作息和饮食都很棒！</div>
               <div class="disease-advice">
@@ -1340,8 +1407,8 @@
                 <span style="color:#e2dcf4;display:inline-block;margin-top:6px;">建议每半年到一年洗牙检查一次，防患于未然。小小的好习惯可以带来大大的口腔健康！</span>
               </div>
             </div>
-            <button class="btn" id="restartBtn">🔄 重新测试</button>
-            <div class="disclaimer">* 本结果仅供参考，定期牙科检查不可替代。</div>
+            <button class="btn" id="restartBtn" style="animation:fadeSlideIn 0.5s 0.4s both cubic-bezier(0.22,0.61,0.36,1)">🔄 重新测试</button>
+            <div class="disclaimer" style="animation:fadeSlideIn 0.5s 0.5s both cubic-bezier(0.22,0.61,0.36,1)">* 本结果仅供参考，定期牙科检查不可替代。</div>
           </div>
         `;
         document.getElementById('restartBtn').addEventListener('click', renderWelcome);
