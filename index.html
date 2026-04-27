@@ -327,6 +327,40 @@
         fluorosis: { name:'氟斑牙', cat:'other', urgency:'green', emoji:'🟤', desc:'牙齿上有白垩色或黄褐色的斑块，跟小时候（8岁前）生活的地方水里含氟量偏高有关。', advice:'觉得影响美观可以做贴面或牙冠。这个和四环素牙虽然看起来像，但形成原因完全不同。', ageRange:[3,99], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'developmental_tooth' },
         tetracycline_teeth: { name:'四环素牙', cat:'other', urgency:'green', emoji:'🟫', desc:'牙齿呈灰黄或灰褐色，跟小时候生病吃过四环素类药物有关。', advice:'贴面或牙冠可以改善外观。和氟斑牙虽然颜色有点像，但病因完全不同。', ageRange:[10,80], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'developmental_tooth' },
         xerostomia: { name:'口干症', cat:'other', urgency:'yellow', emoji:'🏜️', desc:'长期口干舌燥，喝很多水也不管用，说话久了就难受，还容易蛀牙。', advice:'要排查干燥综合征、糖尿病或者是不是吃的药有副作用。平时嚼点无糖口香糖可以刺激口水分泌。', ageRange:[40,85], genderBias:'female', causalParent:null, causalChildren:['caries_rampant','candidiasis','burning_mouth'], exclusiveGroup:'systemic' },
+
+        // ============ 牙体牙髓 新增6种 ============
+        reversible_pulpitis: { name:'可复性牙髓炎', cat:'tooth', urgency:'yellow', emoji:'🦷', desc:'冷热刺激引起尖锐疼痛，刺激去掉后疼痛立马消失，没有自己疼过。', advice:'把引发刺激的原因去掉（比如深龋补上、充填体调整），牙神经是可以恢复正常的。要是发展成自己会疼了就得根管治疗了。', ageRange:[6,70], genderBias:null, causalParent:'caries_deep', causalChildren:['irreversible_pulpitis'], exclusiveGroup:'pulp_pathosis' },
+        pulp_calcification: { name:'牙髓钙化/髓石', cat:'tooth', urgency:'green', emoji:'🪨', desc:'牙齿没啥原因就阵发性放射痛，有点像三叉神经痛，但拍片子能看到髓腔里有钙化的小石头。', advice:'拍张牙片确诊，症状明显的需要做根管治疗把髓石取出来。', ageRange:[30,70], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'pulp_pathosis' },
+        internal_resorption: { name:'牙内吸收', cat:'tooth', urgency:'yellow', emoji:'🩷', desc:'牙冠出现粉红色（"粉红牙"），牙髓腔里的组织在破坏性吸收，拍片子看到髓腔变大了。', advice:'赶紧做根管治疗阻止继续吸收，不然牙齿可能会裂掉。', ageRange:[15,60], genderBias:null, causalParent:'trauma', causalChildren:['residual_root'], exclusiveGroup:'resorption_trauma' },
+        dentinogenesis_imperfecta: { name:'遗传性牙本质发育不全', cat:'tooth', urgency:'green', emoji:'🦷', desc:'满口牙呈半透明琥珀色或灰蓝色，牙釉质容易剥落，牙本质露出来后磨得很快。家族里通常还有别人也有。', advice:'用全冠把牙齿保护起来，定期检查。这个有明确的家族遗传。', ageRange:[3,99], genderBias:null, causalParent:null, causalChildren:['tooth_wear_attrition'], exclusiveGroup:'developmental_tooth' },
+        vertical_root_fracture: { name:'牙根纵裂', cat:'tooth', urgency:'red', emoji:'⚡', desc:'根管治疗后的牙持续钝痛/咬合痛，拍片看到根旁边有"J形"或一圈透光影。', advice:'多数情况下这颗牙保不住了需要拔掉，少数可以尝试根管内粘接修复。', ageRange:[30,75], genderBias:null, causalParent:null, causalChildren:['apical_periodontitis'], exclusiveGroup:'crack_trauma' },
+        tooth_wear_attrition: { name:'牙齿磨损/磨耗', cat:'tooth', urgency:'green', emoji:'🪥', desc:'咬合面的牙体组织均匀变少，牙本质露出来呈淡黄色，嚼东西可能酸胀，对冷热也敏感。', advice:'晚上磨牙的话要配戴磨牙垫，磨损严重的可以做全冠把咬合高度恢复。', ageRange:[30,80], genderBias:'male', causalParent:'bruxism', causalChildren:['dentin_hypersensitivity','tmd'], exclusiveGroup:'erosion_abrasion' },
+
+        // ============ 牙周 新增8种 ============
+        anug: { name:'急性坏死性溃疡性龈炎(ANUG)', cat:'perio', urgency:'red', emoji:'☠️', desc:'牙龈疼得要命、龈乳头像被"挖掉"一样烂掉、自己就出血、嘴巴里一股腐败臭味。常跟精神压力大/抽烟有关。', advice:'马上去牙周科！用双氧水冲洗加上吃甲硝唑，先把感染控制住再洗牙。', ageRange:[15,35], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'perio_necrotizing' },
+        gingival_fibromatosis: { name:'遗传性牙龈纤维瘤病', cat:'perio', urgency:'green', emoji:'🥩', desc:'牙龈大范围增生把牙都快盖住了，质地很硬韧，颜色倒还正常，家里往往还有人有这个情况。', advice:'需要做牙龈成形手术切掉增生的部分，术后一定得好好清洁不然容易复发。', ageRange:[3,40], genderBias:null, causalParent:null, causalChildren:['periodontitis'], exclusiveGroup:'perio_hyperplastic' },
+        epulis: { name:'牙龈瘤', cat:'perio', urgency:'yellow', emoji:'🔴', desc:'牙龈上长了个孤立的肉疙瘩，常见在牙缝之间的牙龈，女性比较多见，跟局部刺激或激素有关。', advice:'手术完整切掉（包括骨膜），把牙周膜刮干净防复发。要是反复复发可能得拔掉那颗牙。', ageRange:[20,55], genderBias:'female', causalParent:null, causalChildren:[], exclusiveGroup:'perio_hyperplastic' },
+        acute_gingival_papillitis: { name:'急性龈乳头炎', cat:'perio', urgency:'green', emoji:'🦷', desc:'个别牙缝之间牙龈红肿跳着疼，一碰就很痛，常是食物塞牙或者牙签戳伤引起的。', advice:'把塞着的东西弄出来，双氧水冲一下，涂点碘甘油，一般一两天就好了。', ageRange:[6,99], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'perio_acute' },
+        perio_endo_lesion: { name:'牙周-牙髓联合病变', cat:'perio', urgency:'red', emoji:'⚠️', desc:'同一颗牙同时有很深的牙周袋和牙髓问题，两个病互相通着，牙龈反复排脓，牙神经活力也不正常。', advice:'需要根管治疗和牙周治疗一起做，多根牙的话预后不太乐观。', ageRange:[25,75], genderBias:null, causalParent:null, causalChildren:['apical_periodontitis'], exclusiveGroup:'perio_complex' },
+        furcation_involvement: { name:'根分叉病变', cat:'perio', urgency:'yellow', emoji:'🔱', desc:'多根牙的根分叉部位骨头吸收了，用探针能伸进分叉里，常伴有牙龈反复鼓脓包。', advice:'根据分叉受累程度，可能需要做成形术、隧道术、切半术甚至拔掉。', ageRange:[35,75], genderBias:null, causalParent:'periodontitis', causalChildren:['perio_endo_lesion'], exclusiveGroup:'perio_complex' },
+        periodontal_abscess: { name:'牙周脓肿', cat:'perio', urgency:'red', emoji:'🩹', desc:'牙周袋的壁急性化脓了，牙龈鼓起半球形红肿，能摸到波动感，疼得厉害，牙有浮出感。', advice:'挂急诊切开引流放脓，吃点抗生素，等炎症消了再做牙周系统治疗。', ageRange:[25,75], genderBias:null, causalParent:'periodontitis', causalChildren:[], exclusiveGroup:'perio_acute' },
+        gingival_recession: { name:'牙龈退缩', cat:'perio', urgency:'green', emoji:'🍂', desc:'牙龈往牙根方向退了，牙根露出来，牙齿看起来"变长了"，可能伴有冷酸敏感和根面蛀牙。', advice:'轻的脱敏治疗就好，重的可以做植牙龈手术把根面盖住。换个软毛牙刷用巴氏刷牙法。', ageRange:[25,80], genderBias:null, causalParent:'periodontitis', causalChildren:['dentin_hypersensitivity','root_caries'], exclusiveGroup:'perio_spectrum' },
+
+        // ============ 黏膜 新增8种 ============
+        behcet_disease: { name:'白塞病（口-眼-生殖器三联症）', cat:'mucosa', urgency:'red', emoji:'🔴', desc:'反反复复口腔溃疡，加上生殖器也长溃疡，眼睛反复发炎红肿（葡萄膜炎），还可能伴皮肤红斑、关节痛。', advice:'需要风湿免疫科和口腔黏膜科一起看，用免疫调节剂全身治疗。口腔溃疡是这个病最基本的表现。', ageRange:[20,45], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'mucosa_systemic' },
+        erythema_multiforme: { name:'多形红斑', cat:'mucosa', urgency:'red', emoji:'🎯', desc:'嘴里大面积糜烂、嘴唇上全是厚厚的血痂，皮肤上出现"靶子一样的"环形红斑。可能是吃了某种药或感染诱发的。', advice:'赶紧停掉可疑的药！严重的（Stevens-Johnson综合征）需要住院用激素治疗。', ageRange:[15,45], genderBias:'male', causalParent:null, causalChildren:[], exclusiveGroup:'mucosa_systemic' },
+        hfmd: { name:'手-足-口病', cat:'mucosa', urgency:'yellow', emoji:'🖐️', desc:'发烧加上手心脚底长了红色疹子或小水疱，嘴里也有散在的小水疱溃疡。小朋友多见，是肠道病毒引起的。', advice:'在家隔离休息，多喝水，一般7到10天自己就好了。需要和疱疹性口炎区分开来。', ageRange:[0,12], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'mucosa_vesicular' },
+        traumatic_ulcer: { name:'创伤性溃疡', cat:'mucosa', urgency:'green', emoji:'🪥', desc:'溃疡的形状正好和创伤来源对得上（比如残根尖戳的、自己咬的），去掉刺激后一到两周就好了。', advice:'把创伤来源去掉，局部抹点药保护一下。超过两周还不好就要去活检排除恶变了。', ageRange:[0,99], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'mucosa_ulcerative' },
+        allergic_stomatitis: { name:'过敏性口炎', cat:'mucosa', urgency:'yellow', emoji:'🤧', desc:'换了新牙膏/漱口水/吃了某种食物或药之后，嘴里出现红斑、水肿、糜烂或水疱。', advice:'马上停掉可疑的东西，吃点抗过敏药。严重的（比如嘴唇喉咙水肿呼吸困难）要挂急诊！', ageRange:[6,70], genderBias:'female', causalParent:null, causalChildren:[], exclusiveGroup:'mucosa_allergic' },
+        lupus_erythematosus_oral: { name:'盘状红斑狼疮（口腔型）', cat:'mucosa', urgency:'yellow', emoji:'🦋', desc:'嘴里有中央萎缩发红的斑、周围放射状白纹、边缘能看到扩张的小血管。唇红部位最多见。', advice:'注意防晒，局部抹激素药膏。得去皮肤科或风湿科查一下有没有影响到全身。', ageRange:[25,55], genderBias:'female', causalParent:null, causalChildren:[], exclusiveGroup:'mucosa_autoimmune' },
+        pemphigoid: { name:'类天疱疮（瘢痕性/大疱性）', cat:'mucosa', urgency:'red', emoji:'🫧', desc:'牙龈大面积脱皮发红像被"烫掉一层皮"（剥脱性龈炎），水疱没那么容易破（和天疱疮不一样），眼睛也可能受影响留疤。', advice:'口腔黏膜科加眼科一起看，需要用免疫抑制剂全身治疗。牙龈脱皮烂是口腔里最早出现的表现。', ageRange:[40,80], genderBias:'female', causalParent:null, causalChildren:[], exclusiveGroup:'mucosa_autoimmune' },
+        radiation_stomatitis: { name:'放射性口炎', cat:'mucosa', urgency:'red', emoji:'☢️', desc:'头颈部放疗后嘴里全部发红、糜烂、疼得吃不了东西、口干得厉害。', advice:'放疗前一定要把口腔问题处理好！放疗期间做好口腔护理、止痛、营养支持。', ageRange:[40,80], genderBias:null, causalParent:null, causalChildren:['xerostomia','caries_rampant','candidiasis'], exclusiveGroup:'mucosa_infectious' },
+
+        // ============ 颌面/其他 新增4种 ============
+        mronj: { name:'药物相关性颌骨坏死(MRONJ)', cat:'joint', urgency:'red', emoji:'🦴', desc:'正在用或曾用过双膦酸盐/地舒单抗（治疗骨质疏松或骨转移的药），颌骨露出来了超过8周不愈合，可能伴有疼痛流脓。', advice:'马上去口腔颌面外科！用这类药之前一定要先完成所有口腔治疗，用药期间绝对不能拔牙。', ageRange:[50,85], genderBias:null, causalParent:null, causalChildren:['osteomyelitis_jaw'], exclusiveGroup:'osteomyelitis' },
+        garre_osteomyelitis: { name:'Garré骨髓炎（增生性骨膜炎）', cat:'joint', urgency:'yellow', emoji:'🦴', desc:'下颌骨不疼但硬邦邦地肿起来了，拍片子看到骨皮质外面有"洋葱皮"一样的新骨。小孩和青少年比较多见。', advice:'把感染来源的牙处理掉（通常是下排大牙的根尖周炎），配合用抗生素。', ageRange:[5,20], genderBias:null, causalParent:'apical_periodontitis', causalChildren:[], exclusiveGroup:'osteomyelitis' },
+        root_caries: { name:'根面龋', cat:'tooth', urgency:'yellow', emoji:'🪥', desc:'牙龈退缩后露出来的牙根表面变软、颜色变黄褐色，发展起来很快，老年人和口干的人最容易得。', advice:'涂含氟保护漆加树脂充填，控制好口干问题，加强牙根面的清洁。', ageRange:[45,99], genderBias:null, causalParent:'gingival_recession', causalChildren:['caries_deep','pulp_necrosis'], exclusiveGroup:'caries_spectrum' },
+        oral_lymphoma: { name:'口腔淋巴瘤（结外型）', cat:'mucosa', urgency:'red', emoji:'🟣', desc:'口腔黏膜或牙龈上不明原因肿起来、溃烂、坏死，质地偏软，按常规治疗怎么都不好，可能还发烧盗汗变瘦。', advice:'赶紧做活检确诊，需要血液科或肿瘤科综合治疗。淋巴瘤有可能最先出现在口腔里。', ageRange:[40,75], genderBias:'male', causalParent:null, causalChildren:[], exclusiveGroup:'mucosa_malignant' },
       };
 
       // ==================== 疾病关系图谱 ====================
@@ -365,6 +399,45 @@
         ],
       };
 
+      // 关系图谱增量——合并到 DISEASE_GRAPH
+      DISEASE_GRAPH.causalChains.push(
+        ['reversible_pulpitis','irreversible_pulpitis','apical_periodontitis'],
+        ['internal_resorption','residual_root'],
+        ['dentinogenesis_imperfecta','tooth_wear_attrition','dentin_hypersensitivity'],
+        ['gingival_recession','root_caries','caries_deep','pulp_necrosis'],
+        ['periodontitis','furcation_involvement','perio_endo_lesion'],
+        ['periodontitis','periodontal_abscess'],
+        ['radiation_stomatitis','xerostomia','caries_rampant'],
+        ['apical_periodontitis','garre_osteomyelitis'],
+        ['vertical_root_fracture','apical_periodontitis'],
+        ['mronj','osteomyelitis_jaw']
+      );
+      DISEASE_GRAPH.mutualExclusionGroups.push(
+        ['reversible_pulpitis','irreversible_pulpitis','pulp_necrosis','pulp_calcification'],
+        ['anug','gingivitis','periodontitis'],
+        ['gingival_hyperplasia','gingival_fibromatosis','epulis'],
+        ['behcet_disease','erythema_multiforme','pemphigus','pemphigoid','lupus_erythematosus_oral'],
+        ['traumatic_ulcer','oral_ulcer','behcet_disease','oral_cancer'],
+        ['osteomyelitis_jaw','garre_osteomyelitis','mronj'],
+        ['dental_erosion','tooth_wear_attrition','wedge_defect'],
+        ['fluorosis','tetracycline_teeth','enamel_hypoplasia','dentinogenesis_imperfecta'],
+        ['herpes_stomatitis','pemphigus','pemphigoid','erythema_multiforme','hfmd']
+      );
+      DISEASE_GRAPH.comorbidityPairs.push(
+        ['periodontitis','furcation_involvement'],
+        ['periodontitis','gingival_recession'],
+        ['gingival_recession','root_caries'],
+        ['gingival_recession','dentin_hypersensitivity'],
+        ['radiation_stomatitis','xerostomia'],
+        ['radiation_stomatitis','candidiasis'],
+        ['anug','periodontitis'],
+        ['perio_endo_lesion','apical_periodontitis'],
+        ['bruxism','tooth_wear_attrition'],
+        ['xerostomia','root_caries'],
+        ['allergic_stomatitis','lichen_planus'],
+        ['behcet_disease','oral_ulcer']
+      );
+
       // ==================== DAG 问诊二叉树网络 ====================
       const QUESTION_TREE = {
         // ---- 根节点（入口）----
@@ -372,7 +445,7 @@
           id:'q_entry', text:'你的牙齿或嘴巴最近主要在闹什么"小情绪"？', stage:'complaint',
           branches:[
             { emoji:'🦷', text:'牙疼 / 遇冷遇热疼 / 咬东西疼', next:['q_pain_spontaneous'], delta:{caries_deep:3,irreversible_pulpitis:2,dentin_hypersensitivity:2}, lock:['gingivitis','periodontitis','leukoplakia','oral_ulcer','malocclusion'] },
-            { emoji:'🩸', text:'牙龈出血 / 红肿 / 长脓包 / 牙齿松动', next:['q_perio_bleeding_type'], delta:{gingivitis:4,periodontitis:3,aggressive_periodontitis:2}, lock:['dentin_hypersensitivity','cracked_tooth','pemphigus'] },
+            { emoji:'🩸', text:'牙龈出血 / 红肿 / 长脓包 / 牙齿松动', next:['q_perio_necrosis_smell'], delta:{gingivitis:4,periodontitis:3,aggressive_periodontitis:2}, lock:['dentin_hypersensitivity','cracked_tooth','pemphigus'] },
             { emoji:'👄', text:'长溃疡了 / 有白斑 / 糜烂 / 舌头不对劲 / 嘴角裂', next:['q_mucosa_can_scrape'], delta:{oral_ulcer:3,leukoplakia:2,candidiasis:2}, lock:['caries_shallow','caries_deep','wedge_defect','irreversible_pulpitis'] },
             { emoji:'🕳️', text:'牙齿有个黑洞 / 缺了一块 / 变色 / 裂纹 / 形态不太对', next:['q_hard_acquired_or_dev'], delta:{caries_shallow:3,wedge_defect:2,caries_recurrent:2,fluorosis:1}, lock:['gingivitis','periodontitis','oral_ulcer','pemphigus'] },
             { emoji:'🗣️', text:'下巴关节咔咔响 / 腮帮子酸 / 张嘴费劲 / 脸肿了', next:['q_jaw_recent_extraction'], delta:{tmd:3,bruxism:2,sialolithiasis:2,parotitis:2}, lock:['caries_shallow','dentin_hypersensitivity','oral_ulcer','leukoplakia'] },
@@ -385,7 +458,7 @@
           id:'q_pain_spontaneous', text:'这种疼是自己突然就疼起来的，还是碰到什么东西才疼？', stage:'symptom',
           branches:[
             { emoji:'🔥', text:'自己就疼——没刺激也疼，尤其晚上更严重', next:['q_pain_cold_relief'], delta:{irreversible_pulpitis:8,apical_periodontitis:2}, lock:['dentin_hypersensitivity','caries_shallow','wedge_defect'] },
-            { emoji:'🥶', text:'碰到才疼——只有喝冷水/吃甜的/咬东西的时候才疼', next:['q_pain_trigger_main'], delta:{dentin_hypersensitivity:3,caries_deep:3,cracked_tooth:2}, lock:['irreversible_pulpitis','pulp_necrosis'] },
+            { emoji:'🥶', text:'碰到才疼——只有喝冷水/吃甜的/咬东西的时候才疼', next:['q_pain_cold_hot_diff'], delta:{dentin_hypersensitivity:3,caries_deep:3,cracked_tooth:2}, lock:['irreversible_pulpitis','pulp_necrosis'] },
           ]
         },
         q_pain_cold_relief: {
@@ -414,7 +487,7 @@
         q_pain_lightning_duration: {
           id:'q_pain_lightning_duration', text:'这种"过电"一样的痛大概持续多久？', stage:'symptom',
           branches:[
-            { emoji:'⚡', text:'几秒到几十秒，突然来突然走', delta:{trigeminal_neuralgia:10}, lock:['cracked_tooth','caries_deep'] },
+            { emoji:'⚡', text:'几秒到几十秒，突然来突然走', next:['q_pain_xray_finding'], delta:{trigeminal_neuralgia:10}, lock:['cracked_tooth','caries_deep'] },
             { emoji:'💢', text:'只有咬到那一下剧痛，松开就不疼了', delta:{cracked_tooth:10}, lock:['trigeminal_neuralgia'] },
           ]
         },
@@ -455,7 +528,7 @@
           id:'q_mucosa_white_or_ulcer', text:'它主要长什么样？', stage:'symptom',
           branches:[
             { emoji:'⬜', text:'白色的斑块或者白色条纹，没有破皮', next:['q_mucosa_white_risk'], delta:{leukoplakia:6,lichen_planus:5,osf:4}, lock:['oral_ulcer','herpes_stomatitis','pemphigus'] },
-            { emoji:'😖', text:'凹陷的坑/糜烂面/水疱，碰到就很疼', next:['q_mucosa_ulcer_duration'], delta:{oral_ulcer:6,herpes_stomatitis:4,pemphigus:3}, lock:['leukoplakia','osf'] },
+            { emoji:'😖', text:'凹陷的坑/糜烂面/水疱，碰到就很疼', next:['q_mucosa_hand_foot_rash'], delta:{oral_ulcer:6,herpes_stomatitis:4,pemphigus:3}, lock:['leukoplakia','osf'] },
             { emoji:'🗺️', text:'舌头表面有游走的红斑白边，倒是不怎么疼', delta:{geographic_tongue:12}, lock:['leukoplakia','oral_ulcer','pemphigus','oral_cancer'] },
             { emoji:'😬', text:'就嘴角裂开/发红/起皮结痂', delta:{angular_cheilitis:10}, lock:['oral_ulcer','leukoplakia','pemphigus','oral_cancer'] },
           ]
@@ -503,6 +576,7 @@
             { emoji:'🥤', text:'牙齿表面光滑凹陷/变透明了，舌头那面比较明显', delta:{dental_erosion:10}, lock:['caries_shallow','wedge_defect'] },
             { emoji:'💥', text:'撞到/摔倒/咬硬东西后崩掉一块', next:['q_hard_trauma_type'], delta:{trauma:10}, lock:['caries_shallow','wedge_defect','dental_erosion'] },
             { emoji:'🔁', text:'以前补过的牙边缘又黑了，补的材料有点晃', delta:{caries_recurrent:11}, lock:['caries_shallow','wedge_defect'] },
+            { emoji:'🪥', text:'牙龈退了，露出来的牙根面变软/有洞/发黄', delta:{root_caries:10,gingival_recession:5}, lock:['caries_shallow'] },
           ]
         },
         q_hard_trauma_type: {
@@ -534,7 +608,7 @@
           id:'q_jaw_recent_extraction', text:'最近一周内有没有拔过牙？', stage:'symptom',
           branches:[
             { emoji:'💀', text:'刚拔完牙两三天！突然疼得要命，止痛药完全没用，有臭味', delta:{dry_socket:12}, lock:['tmd','bruxism','sialolithiasis','parotitis','trigeminal_neuralgia'], forceRed:true },
-            { emoji:'❌', text:'没有拔牙，或者拔牙后正常恢复中', next:['q_jaw_pain_or_noise'], delta:{} },
+            { emoji:'❌', text:'没有拔牙，或者拔牙后正常恢复中', next:['q_jaw_bisphosphonate'], delta:{} },
           ]
         },
         q_jaw_pain_or_noise: {
@@ -602,7 +676,8 @@
             { emoji:'🫀', text:'高血压/心脏病，在吃降压药', riskTag:{gingival_hyperplasia:4,xerostomia:1.5,periodontitis:1.3} },
             { emoji:'🧬', text:'干燥综合征/红斑狼疮/类风湿等自身免疫病', riskTag:{xerostomia:3,candidiasis:2.5,lichen_planus:2,pemphigus:3,burning_mouth:2} },
             { emoji:'💊', text:'长期吃抗癫痫药/抗抑郁药/环孢素', riskTag:{gingival_hyperplasia:4,xerostomia:2} },
-            { emoji:'☢️', text:'做过头部或颈部放射治疗', riskTag:{xerostomia:5,caries_rampant:6,candidiasis:4,osteomyelitis_jaw:3}, forceRed:true },
+            { emoji:'☢️', text:'做过头部或颈部放射治疗', riskTag:{xerostomia:5,caries_rampant:6,candidiasis:4,radiation_stomatitis:8,osteomyelitis_jaw:3,mronj:5}, forceRed:true },
+            { emoji:'🦴', text:'在用或曾用过双膦酸盐/地舒单抗（治骨质疏松/骨转移的）', riskTag:{mronj:8,osteomyelitis_jaw:3}, forceRed:true },
             { emoji:'✅', text:'以上都没有', riskTag:{} },
           ]
         },
@@ -661,6 +736,64 @@
           branches:[
             { emoji:'🪥', text:'每天都用含氟牙膏', riskTag:{caries_shallow:0.5,caries_deep:0.5,caries_recurrent:0.6,dentin_hypersensitivity:0.7}, protect:true },
             { emoji:'❓', text:'不太清楚 / 没用含氟牙膏', riskTag:{} },
+          ]
+        },
+
+        // ============ 新增问题节点 ============
+        q_pain_cold_hot_diff: {
+          id:'q_pain_cold_hot_diff', text:'碰到冷水或热水的时候，疼痛持续多久？', stage:'symptom',
+          branches:[
+            { emoji:'⏱️', text:'刺激一拿掉疼痛马上消失（几秒内就不疼了）', delta:{reversible_pulpitis:10,dentin_hypersensitivity:3}, lock:['irreversible_pulpitis','pulp_necrosis'], next:['q_pain_trigger_main'] },
+            { emoji:'🔥', text:'刺激拿走之后疼痛还持续好几十秒甚至几分钟', delta:{irreversible_pulpitis:8,reversible_pulpitis:2}, lock:['reversible_pulpitis','dentin_hypersensitivity'], next:['q_pain_cold_relief'] },
+          ]
+        },
+        q_pain_xray_finding: {
+          id:'q_pain_xray_finding', text:'有没有拍过牙片，医生有没有说牙髓腔里有异常钙化或者"小石头"？', stage:'symptom',
+          branches:[
+            { emoji:'🪨', text:'有，医生说过髓腔里有钙化/髓石', delta:{pulp_calcification:10}, lock:['trigeminal_neuralgia','atypical_odontalgia'] },
+            { emoji:'❓', text:'没拍过 / 不清楚', delta:{trigeminal_neuralgia:3,pulp_calcification:2} },
+          ]
+        },
+        q_perio_necrosis_smell: {
+          id:'q_perio_necrosis_smell', text:'牙龈有没有溃烂、像被"挖掉"一块似的，而且嘴里有一股特别难闻的腐败臭味？', stage:'symptom',
+          branches:[
+            { emoji:'☠️', text:'有！牙龈烂了、疼得要死、口臭特别重', delta:{anug:12}, lock:['gingivitis','periodontitis','puberty_gingivitis','pregnancy_gingivitis'], forceRed:true },
+            { emoji:'❌', text:'没有，就是普通红肿出血', delta:{}, next:['q_perio_bleeding_type'] },
+          ]
+        },
+        q_mucosa_hand_foot_rash: {
+          id:'q_mucosa_hand_foot_rash', text:'嘴里长水疱或溃疡的同时，手心脚底有没有出现红色疹子或小水疱？', stage:'symptom',
+          branches:[
+            { emoji:'🖐️', text:'有！手脚都有红色疹子/小水疱，可能还有点发烧', delta:{hfmd:12}, lock:['herpes_stomatitis','oral_ulcer','pemphigus'] },
+            { emoji:'❌', text:'没有，只有嘴里的问题', delta:{herpes_stomatitis:5}, lock:['hfmd'], next:['q_mucosa_behcet_triad'] },
+          ]
+        },
+        q_mucosa_behcet_triad: {
+          id:'q_mucosa_behcet_triad', text:'除了嘴里反复长溃疡，私密部位是不是也反复出现溃疡？眼睛有没有反反复复发红疼痛或者视力模糊？', stage:'symptom',
+          branches:[
+            { emoji:'🔴', text:'私处也有反复溃疡，或眼睛反复发炎', delta:{behcet_disease:12}, lock:['oral_ulcer'], forceRed:true },
+            { emoji:'❌', text:'都没有', delta:{oral_ulcer:5}, lock:['behcet_disease'], next:['q_mucosa_drug_trigger'] },
+          ]
+        },
+        q_mucosa_drug_trigger: {
+          id:'q_mucosa_drug_trigger', text:'嘴里大面积糜烂/血痂是不是最近吃了什么新药之后出现的？皮肤上有"靶子形的"环形红斑吗？', stage:'history',
+          branches:[
+            { emoji:'💊', text:'是的！吃新药后突然发作，嘴唇上全是血痂', delta:{erythema_multiforme:12}, lock:['pemphigus','oral_ulcer','herpes_stomatitis'], forceRed:true },
+            { emoji:'❌', text:'没有明显的药物诱因', delta:{pemphigus:3,pemphigoid:3}, next:['q_mucosa_gingival_desquamation'] },
+          ]
+        },
+        q_mucosa_gingival_desquamation: {
+          id:'q_mucosa_gingival_desquamation', text:'牙龈是不是大面积发红、像被"烫掉一层皮"一样脱皮，轻轻一碰就破或脱落？', stage:'symptom',
+          branches:[
+            { emoji:'🩹', text:'是的，牙龈脱皮、一碰就疼，烂得很广泛', delta:{pemphigoid:10,pemphigus:4,lichen_planus:3}, lock:['gingivitis','periodontitis','anug'] },
+            { emoji:'❌', text:'牙龈没有脱皮烂皮', lock:['pemphigoid'], next:['q_mucosa_ulcer_duration'] },
+          ]
+        },
+        q_jaw_bisphosphonate: {
+          id:'q_jaw_bisphosphonate', text:'有没有在用或者用过双膦酸盐类药物？（治骨质疏松、骨转移、多发性骨髓瘤的那种针或药）', stage:'history',
+          branches:[
+            { emoji:'💊', text:'是的，在打针或者吃过这类药（打静脉的尤其要注意）', delta:{mronj:10}, lock:['osteomyelitis_jaw','garre_osteomyelitis'], forceRed:true },
+            { emoji:'❌', text:'没有用过', delta:{}, next:['q_jaw_pain_or_noise'] },
           ]
         },
       };
@@ -789,6 +922,23 @@
             if (finalScores[b] > 20 && finalScores[a] > 0) finalScores[a] *= 1.2;
           });
 
+          // 智能互斥增强：部位不同的疾病可共存但降权
+          if (finalScores['root_caries'] > 10 && finalScores['caries_shallow'] > 10) {
+            finalScores['root_caries'] *= 0.7; finalScores['caries_shallow'] *= 0.7;
+          }
+          if (finalScores['reversible_pulpitis'] > finalScores['irreversible_pulpitis']) {
+            finalScores['irreversible_pulpitis'] *= 0.1;
+          } else if (finalScores['irreversible_pulpitis'] > finalScores['reversible_pulpitis']) {
+            finalScores['reversible_pulpitis'] *= 0.15;
+          }
+          if (finalScores['anug'] > 20) {
+            ['gingivitis','periodontitis','puberty_gingivitis'].forEach(k => { finalScores[k] *= 0.15; });
+          }
+          if (finalScores['pemphigus'] > 15 && finalScores['pemphigoid'] > 15) {
+            if (finalScores['pemphigus'] > finalScores['pemphigoid']) { finalScores['pemphigoid'] *= 0.2; }
+            else { finalScores['pemphigus'] *= 0.2; }
+          }
+
           this.scores = finalScores;
           return this.ranking();
         }
@@ -839,7 +989,7 @@
             <div class="subhead">DAG二叉树网络 · AI预问诊</div>
             ${renderThemeDots()}
             <div style="text-align:center;line-height:1.8;font-size:0.9rem;margin:6px 0;">
-              <div style="color:var(--accent-purple)">📊 覆盖 <b>46</b> 种口腔疾病</div>
+              <div style="color:var(--accent-purple)">📊 覆盖 <b>72</b> 种口腔疾病</div>
               <div style="color:#6ee7b7">🧬 疾病因果关系感知引擎</div>
               <div style="color:var(--accent-yellow)">⏱️ 约3分钟 · DAG智能分析</div>
             </div>
