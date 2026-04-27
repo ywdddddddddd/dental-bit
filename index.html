@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="description" content="口腔健康解密卡 - 基于SBTI多维加权算法的AI预问诊系统，覆盖38种口腔疾病">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1a1535">
+  <title>口腔健康解密卡 · AI预问诊</title>
+  <style>
+    :root {
+      --bg-deep: #0f0c24;
+      --bg-card: rgba(25, 20, 50, 0.75);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --text-primary: #f0eef9;
+      --text-secondary: #b9b1dc;
+      --accent-purple: #a78bfa;
+      --accent-pink: #f472b6;
+      --accent-yellow: #facc15;
+      --accent-orange: #f97316;
+      --green: #10b981;
+      --red: #ef4444;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --shadow-card: 0 15px 30px rgba(0,0,0,0.45);
+      --body-bg: linear-gradient(155deg, #0f0c24 0%, #1a1540 40%, #1a1535 100%);
+      --app-bg: rgba(255, 255, 255, 0.04);
+      --gradient-title: linear-gradient(135deg, #c3b5fd, #f9a8d4);
+      --option-bg: rgba(255,255,255,0.05);
+      --option-border: rgba(255,255,255,0.1);
+      --option-active-bg: rgba(192,132,252,0.22);
+      --option-hover-bg: rgba(192,132,252,0.14);
+      --btn-grad: linear-gradient(135deg, #8b5cf6, #ec4899);
+      --theme-switcher-bg: rgba(255,255,255,0.06);
+    }
+    body.theme-purple { --body-bg: linear-gradient(155deg, #0f0c24 0%, #1a1540 40%, #1a1535 100%); --accent-purple: #a78bfa; --accent-pink: #f472b6; --accent-yellow: #facc15; --accent-orange: #f97316; --gradient-title: linear-gradient(135deg, #c3b5fd, #f9a8d4); --btn-grad: linear-gradient(135deg, #8b5cf6, #ec4899); }
+    body.theme-ocean { --body-bg: linear-gradient(155deg, #0a1628 0%, #0d2137 40%, #0f2744 100%); --accent-purple: #67c3f3; --accent-pink: #38bdf8; --accent-yellow: #fde68a; --accent-orange: #fbbf24; --gradient-title: linear-gradient(135deg, #7dd3fc, #a5f3fc); --btn-grad: linear-gradient(135deg, #0369a1, #0284c7); }
+    body.theme-emerald { --body-bg: linear-gradient(155deg, #0a1a13 0%, #0d2818 40%, #0f301c 100%); --accent-purple: #34d399; --accent-pink: #10b981; --accent-yellow: #fbbf24; --accent-orange: #f59e0b; --gradient-title: linear-gradient(135deg, #6ee7b7, #a7f3d0); --btn-grad: linear-gradient(135deg, #047857, #059669); }
+    body.theme-sunset { --body-bg: linear-gradient(155deg, #1c0f0f 0%, #2a1a0f 40%, #351a15 100%); --accent-purple: #fbbf24; --accent-pink: #f59e0b; --accent-yellow: #facc15; --accent-orange: #ea580c; --gradient-title: linear-gradient(135deg, #fcd34d, #fdba74); --btn-grad: linear-gradient(135deg, #c2410c, #ea580c); }
+    body.theme-light { --body-bg: linear-gradient(155deg, #e8e8ec 0%, #dde4f0 40%, #eef1f5 100%); --app-bg: rgba(255, 255, 255, 0.55); --bg-card: rgba(255, 255, 255, 0.7); --border-subtle: rgba(0, 0, 0, 0.08); --text-primary: #1e1b3a; --text-secondary: #5a5480; --option-bg: rgba(0,0,0,0.03); --option-border: rgba(0,0,0,0.08); --option-active-bg: rgba(139,92,246,0.12); --option-hover-bg: rgba(139,92,246,0.08); --accent-purple: #7c3aed; --accent-pink: #db2777; --accent-yellow: #ca8a04; --accent-orange: #ea580c; --gradient-title: linear-gradient(135deg, #7c3aed, #db2777); --btn-grad: linear-gradient(135deg, #7c3aed, #db2777); --theme-switcher-bg: rgba(0,0,0,0.04); --shadow-card: 0 10px 25px rgba(0,0,0,0.1); --green: #059669; --red: #dc2626; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+      background: var(--body-bg);
+      background-attachment: fixed;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--app-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 36px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+      padding: 24px 18px 28px;
+      color: var(--text-primary);
+      max-height: 96vh;
+      max-height: 96dvh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .app-container::-webkit-scrollbar { width: 4px; }
+    .app-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+    .screen { display: flex; flex-direction: column; gap: 18px; animation: fadeSlideIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
+    @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.65; } }
+
+    h1 { font-size: 1.9rem; font-weight: 700; background: var(--gradient-title); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
+    .subhead { text-align: center; color: var(--text-secondary); font-size: 0.9rem; }
+
+    .theme-switcher { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding: 8px 0; }
+    .theme-dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+    .theme-dot:active { transform: scale(0.9); }
+    .theme-dot.active { border-color: #fff; box-shadow: 0 0 12px rgba(255,255,255,0.3); }
+    .theme-dot.purple { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+    .theme-dot.ocean { background: linear-gradient(135deg, #0369a1, #7dd3fc); }
+    .theme-dot.emerald { background: linear-gradient(135deg, #047857, #6ee7b7); }
+    .theme-dot.sunset { background: linear-gradient(135deg, #c2410c, #fcd34d); }
+    .theme-dot.light { background: linear-gradient(135deg, #cbd5e1, #f1f5f9); border-color: #d1d5db !important; }
+    body.theme-light .theme-dot.active { border-color: #6366f1; box-shadow: 0 0 10px rgba(99,102,241,0.4); }
+    .tooth-icon { font-size: 3.2rem; text-align: center; filter: drop-shadow(0 8px 12px rgba(0,0,0,0.5)); }
+
+    .progress-section { display: flex; align-items: center; gap: 10px; }
+    .progress-stage { font-size: 0.75rem; color: var(--text-secondary); min-width: 48px; font-weight: 500; }
+    body.theme-light .progress-stage { color: #6b7280; }
+    .progress-bar-bg { flex: 1; height: 7px; background: rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; }
+    body.theme-light .progress-bar-bg { background: rgba(0,0,0,0.1); }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); border-radius: 20px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 14px rgba(192,132,252,0.7); }
+
+    .question-card { background: var(--bg-card); backdrop-filter: blur(12px); border-radius: var(--radius-lg); padding: 22px 16px; border: 1px solid var(--border-subtle); box-shadow: var(--shadow-card); }
+    .question-stage-tag { display: inline-block; font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.3px; }
+    .tag-complaint { background: rgba(244,114,182,0.2); color: #f9a8d4; border: 1px solid rgba(244,114,182,0.3); }
+    .tag-symptom { background: rgba(168,139,250,0.2); color: #c4b5fd; border: 1px solid rgba(168,139,250,0.3); }
+    .tag-lifestyle { background: rgba(52,211,153,0.2); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.3); }
+    .tag-history { background: rgba(251,191,36,0.2); color: #fcd34d; border: 1px solid rgba(251,191,36,0.3); }
+
+    .question-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 18px; line-height: 1.45; color: var(--text-primary); }
+    body.theme-light .question-text { color: #1e1b3a; }
+    .question-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 14px; font-weight: 400; }
+
+    .disease-desc { font-size: 0.9rem; line-height: 1.55; color: var(--text-secondary); }
+    body.theme-light .disease-desc { color: #4a4468; }
+    .disease-advice { margin-top: 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 12px; font-size: 0.9rem; }
+    body.theme-light .disease-advice { background: rgba(0,0,0,0.05); }
+    .disease-advice strong { color: var(--accent-yellow); }
+
+    .options-grid { display: flex; flex-direction: column; gap: 10px; }
+    .option-btn {
+      background: var(--option-bg); border: 1px solid var(--option-border);
+      border-radius: var(--radius-md); padding: 14px 16px; font-size: 0.92rem;
+      font-weight: 500; color: var(--text-primary); text-align: left; display: flex;
+      align-items: center; gap: 10px; transition: all 0.22s ease; cursor: pointer; line-height: 1.35;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .option-btn:active { background: var(--option-active-bg); border-color: var(--accent-purple); transform: scale(0.98); }
+    .option-btn:hover { background: var(--option-hover-bg); border-color: rgba(192,132,252,0.5); transform: translateY(-1px); }
+    .option-emoji { font-size: 1.5rem; min-width: 30px; text-align: center; flex-shrink: 0; }
+    .option-text { flex: 1; min-width: 0; }
+    .option-score-hint { font-size: 0.7rem; color: #8a84b8; opacity: 0; transition: opacity 0.2s; }
+    .option-btn:active .option-score-hint { opacity: 1; }
+
+    /* Result Styles */
+    .result-header { text-align: center; }
+    .result-header h2 { font-size: 1.4rem; font-weight: 700; color: #f0eef9; }
+
+    .urgency-panel {
+      text-align: center; padding: 14px 20px; border-radius: var(--radius-md);
+      font-weight: 700; font-size: 0.88rem; margin-bottom: 6px; letter-spacing: 0.3px;
+    }
+    .urgency-green { background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+    .urgency-yellow { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+    .urgency-red { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); animation: pulse 2s ease infinite; }
+
+    .main-diagnosis {
+      background: rgba(255,255,255,0.06); border-radius: var(--radius-lg); padding: 18px;
+      border-left: 5px solid var(--accent-pink); margin: 4px 0;
+    }
+    .disease-name {
+      font-size: 1.5rem; font-weight: 700;
+      background: linear-gradient(to right, var(--accent-yellow), var(--accent-orange));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px;
+    }
+    .disease-desc { font-size: 0.9rem; line-height: 1.55; color: #cfc8ed; }
+    .disease-advice { margin-top: 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 12px; font-size: 0.9rem; }
+    .disease-advice strong { color: var(--accent-yellow); }
+
+    .section-title { font-weight: 700; font-size: 0.88rem; color: var(--text-secondary); margin: 4px 0; display: flex; align-items: center; gap: 6px; }
+    body.theme-light .section-title { color: #5a5480; }
+
+    .rank-list { display: flex; flex-direction: column; gap: 8px; }
+    .rank-item {
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(0,0,0,0.22); border-radius: var(--radius-sm); padding: 10px 12px;
+      font-weight: 500; font-size: 0.85rem; gap: 8px; color: var(--text-primary);
+    }
+    body.theme-light .rank-item { background: rgba(0,0,0,0.05); }
+    .rank-name { flex: 0 0 115px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.78rem; }
+    .prob-bar-container { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px; margin: 0 8px; }
+    body.theme-light .prob-bar-container { background: rgba(0,0,0,0.08); }
+    .prob-bar-fill { height: 100%; background: linear-gradient(90deg, #a78bfa, #c4b5fd); border-radius: 10px; transition: width 0.6s ease; }
+    .rank-pct { font-weight: 700; color: #c4b5fd; width: 36px; text-align: right; font-size: 0.82rem; flex-shrink: 0; }
+
+    .category-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .cat-chip {
+      background: rgba(255,255,255,0.05); border-radius: var(--radius-sm); padding: 10px 12px;
+      text-align: center; font-size: 0.78rem; border: 1px solid rgba(255,255,255,0.06);
+    }
+    .cat-chip .cat-name { color: var(--text-secondary); margin-bottom: 3px; }
+    .cat-chip .cat-pct { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+
+    .radar-chart { display: block; margin: 8px auto; max-width: 100%; width: 100%; }
+
+    .btn {
+      background: var(--btn-grad); border: none; border-radius: 40px;
+      padding: 15px 20px; font-weight: 700; font-size: 1.05rem; color: white; cursor: pointer;
+      box-shadow: 0 8px 22px rgba(168,85,247,0.4); transition: 0.2s; text-align: center;
+      margin-top: 6px; -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { transform: scale(0.97); box-shadow: 0 4px 12px rgba(168,85,247,0.5); }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(236,72,153,0.55); }
+    .btn-secondary {
+      background: var(--theme-switcher-bg); border: 1px solid var(--border-subtle);
+      box-shadow: none; color: var(--text-primary); font-size: 0.9rem; padding: 12px 18px;
+    }
+
+    .disclaimer { font-size: 0.7rem; color: var(--text-secondary); text-align: center; margin-top: 10px; opacity: 0.8; line-height: 1.5; }
+    body.theme-light .disclaimer { color: #6b7280; }
+
+    .share-row { display: flex; gap: 8px; margin-top: 4px; }
+    .share-row .btn { flex: 1; }
+
+    @media (max-width: 400px) {
+      .app-container { border-radius: 28px; padding: 18px 14px 22px; }
+      h1 { font-size: 1.6rem; }
+      .question-text { font-size: 1.1rem; }
+      .option-btn { padding: 12px 14px; font-size: 0.85rem; }
+      .category-breakdown { grid-template-columns: 1fr 1fr; gap: 6px; }
+      .cat-chip { padding: 8px 6px; font-size: 0.72rem; }
+      .cat-chip .cat-pct { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container" id="appContainer"></div>
+
+  <script>
+    (function() {
+      // ==================== 主题系统 ====================
+      const THEMES = ['purple', 'ocean', 'emerald', 'sunset', 'light'];
+      const DEFAULT_THEME = 'purple';
+
+      function applyTheme(name) {
+        document.body.className = `theme-${name}`;
+        try { localStorage.setItem('dental_sbti_theme', name); } catch(e) {}
+        document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.classList.contains(name)));
+      }
+
+      function initTheme() {
+        let saved = DEFAULT_THEME;
+        try { const s = localStorage.getItem('dental_sbti_theme'); if (s && THEMES.includes(s)) saved = s; } catch(e) {}
+        applyTheme(saved);
+      }
+
+      function renderThemeDots() {
+        const colors = [
+          { name: 'purple', label: '夜空紫' },
+          { name: 'ocean', label: '深海蓝' },
+          { name: 'emerald', label: '翡翠绿' },
+          { name: 'sunset', label: '日落橙' },
+          { name: 'light', label: '极简白' }
+        ];
+        return `<div class="theme-switcher">${colors.map(c =>
+          `<div class="theme-dot ${c.name}" data-theme="${c.name}" title="${c.label}"></div>`
+        ).join('')}</div>`;
+      }
+
+      function bindThemeEvents() {
+        document.querySelectorAll('.theme-dot').forEach(dot => {
+          dot.addEventListener('click', () => {
+            applyTheme(dot.dataset.theme);
+          });
+        });
+      }
+
+      initTheme();
+      const DISEASE_CATEGORIES = {
+        tooth: { label: '牙体牙髓', color: '#f472b6', keys: [] },
+        perio: { label: '牙周', color: '#a78bfa', keys: [] },
+        mucosa: { label: '黏膜', color: '#34d399', keys: [] },
+        joint: { label: '颌面/关节/神经', color: '#fbbf24', keys: [] },
+        other: { label: '其他/系统', color: '#f97316', keys: [] }
+      };
+
+      const DISEASES = {
+        // === 牙体牙髓 ===
+        caries_shallow: { name:'浅/中龋齿', desc:'牙齿表面有黑线或小洞，吃甜食微酸不适。', urgency:'green', advice:'尽早补牙，花费最少痛苦最小。', emoji:'🕳️', cat:'tooth' },
+        caries_deep: { name:'深龋', desc:'冷热酸甜刺激时酸痛明显，刺激去除后痛感消失。', urgency:'yellow', advice:'需尽快补牙，可能需垫底保护牙神经。', emoji:'🦷', cat:'tooth' },
+        dentin_hypersensitivity: { name:'牙本质敏感', desc:'遇冷热酸甜或刷牙时短暂尖锐刺痛。', urgency:'green', advice:'使用抗敏感牙膏，避免横向暴力刷牙。', emoji:'🧊', cat:'tooth' },
+        wedge_defect: { name:'楔状缺损', desc:'牙颈部出现"V"型深沟，常由横向刷牙引起。', urgency:'yellow', advice:'较浅可脱敏治疗，深则需树脂充填。改用巴氏刷牙法。', emoji:'🪥', cat:'tooth' },
+        cracked_tooth: { name:'牙隐裂', desc:'咬到特定点（如花椒）突然剧烈刺痛。', urgency:'yellow', advice:'切勿用患侧咬硬物！可能需要全冠保护或根管治疗。', emoji:'⚡', cat:'tooth' },
+        irreversible_pulpitis: { name:'急性牙髓炎', desc:'自发痛、夜间痛加重、冷热刺激剧痛且持续。', urgency:'red', advice:'尽快找牙医进行根管治疗（抽神经）。', emoji:'🔥', cat:'tooth' },
+        apical_periodontitis: { name:'根尖周炎', desc:'牙齿有"浮起感"，不敢咬合，牙龈可能起脓包。', urgency:'yellow', advice:'需要进行完善的根管治疗。', emoji:'🎈', cat:'tooth' },
+        pulp_necrosis: { name:'牙髓坏死', desc:'牙齿变色（发灰/发黄），对冷热无感觉，但牙龈可能反复起包。', urgency:'yellow', advice:'需根管治疗或拔除后修复，否则可能引起颌骨感染。', emoji:'⚫', cat:'tooth' },
+        residual_root: { name:'残根残冠', desc:'牙齿大面积缺损，仅剩牙根露在牙龈外。', urgency:'yellow', advice:'若牙根健康可桩冠修复，否则需拔除后种植或镶牙。', emoji:'🏚️', cat:'tooth' },
+        dental_erosion: { name:'牙酸蚀症', desc:'牙齿表面呈光滑凹陷，常见于舌侧，与长期接触酸性物质有关。', urgency:'green', advice:'减少碳酸饮料摄入，用吸管喝酸性饮料，使用含氟牙膏。', emoji:'🥤', cat:'tooth' },
+        caries_recurrent: { name:'继发龋', desc:'以前补过的牙边缘又变黑，或充填物松动。', urgency:'yellow', advice:'需去除旧充填物后重新充填，检查咬合关系。', emoji:'🔁', cat:'tooth' },
+        root_resorption: { name:'牙根吸收', desc:'牙齿无明显龋坏却逐渐松动，X光可见牙根变短。', urgency:'yellow', advice:'需拍片确诊，明确原因后制定治疗方案。', emoji:'📉', cat:'tooth' },
+
+        // === 牙周 ===
+        gingivitis: { name:'牙龈炎', desc:'牙龈红肿，刷牙容易出血，通常无明显疼痛。', urgency:'green', advice:'去诊所洗牙，掌握正确使用牙线方法。', emoji:'🩸', cat:'perio' },
+        periodontitis: { name:'牙周炎', desc:'牙龈萎缩，牙根暴露，牙齿松动，伴有口臭。', urgency:'yellow', advice:'口腔的隐形杀手。需系统牙周刮治。', emoji:'🍂', cat:'perio' },
+        gingival_hyperplasia: { name:'牙龈增生', desc:'牙龈肥大覆盖牙齿，可能与长期服药或激素有关。', urgency:'green', advice:'排查高血压/癫痫药物史，注意口腔卫生，必要时手术切除。', emoji:'🥩', cat:'perio' },
+        pregnancy_gingivitis: { name:'妊娠期龈炎', desc:'怀孕期间牙龈明显红肿、易出血，牙龈瘤样增生。', urgency:'green', advice:'孕期激素变化所致，分娩后多可缓解。注意口腔清洁，定期产检时看牙。', emoji:'🤰', cat:'perio' },
+        pericoronitis: { name:'智齿冠周炎', desc:'最里面牙龈肿痛，吞咽痛，严重时张不开嘴。', urgency:'yellow', advice:'局部冲洗消炎后，强烈建议拔除智齿！', emoji:'🤕', cat:'perio' },
+
+        // === 黏膜 ===
+        oral_ulcer: { name:'复发性溃疡', desc:'黏膜上出现圆形小坑，表面黄白，周围红，触痛明显。', urgency:'green', advice:'1-2周自愈。注意休息，多补充维生素B族。', emoji:'😖', cat:'mucosa' },
+        herpes_stomatitis: { name:'疱疹性口炎', desc:'成簇的小水疱，破溃连成片，多发于唇部/上颚。', urgency:'yellow', advice:'病毒感染，注意隔离，可抗病毒治疗。', emoji:'🦠', cat:'mucosa' },
+        leukoplakia: { name:'口腔白斑', desc:'擦不掉的白色斑块，可能伴有粗糙感。', urgency:'red', advice:'癌前病变预警！需立即前往黏膜科活检。', emoji:'⬜', cat:'mucosa' },
+        candidiasis: { name:'口腔念珠菌病', desc:'口腔内满布白色伪膜（像奶酪），擦去可见红斑，多见于老人/免疫力低下者。', urgency:'yellow', advice:'真菌感染，需使用抗真菌药物漱口或涂抹。', emoji:'🍄', cat:'mucosa' },
+        geographic_tongue: { name:'地图舌', desc:'舌头表面出现游走性的红斑和白色边缘，像地图。', urgency:'green', advice:'通常无害，无需特殊治疗，避免辛辣刺激即可。', emoji:'🗺️', cat:'mucosa' },
+        lichen_planus: { name:'口腔扁平苔藓', desc:'口腔内白色网状条纹或糜烂区，多见于中年女性，常反复发作。', urgency:'yellow', advice:'免疫功能相关疾病，需定期随访观察恶变风险。', emoji:'🕸️', cat:'mucosa' },
+        osf: { name:'口腔黏膜下纤维化', desc:'口腔黏膜变白变硬，张口困难，与嚼槟榔密切相关。', urgency:'red', advice:'癌前病变！立即停止嚼槟榔，前往口腔黏膜科。', emoji:'🚫', cat:'mucosa' },
+        burning_mouth: { name:'灼口综合征', desc:'口腔持续灼烧感，但肉眼检查无异常，更年期女性多见。', urgency:'green', advice:'与精神因素/内分泌相关，需排除其他器质性病变后对症处理。', emoji:'🔥', cat:'mucosa' },
+        angular_cheilitis: { name:'口角炎', desc:'口角处发红、皲裂、起痂，说话或张嘴时疼痛。', urgency:'green', advice:'局部抗真菌+抗菌软膏，补充维生素B2，避免舔舐。', emoji:'😬', cat:'mucosa' },
+
+        // === 颌面/关节/神经 ===
+        tmd: { name:'颞下颌关节紊乱(TMD)', desc:'张闭口时关节咔咔响，咀嚼酸痛，甚至张口受限。', urgency:'green', advice:'避免大张口、咬硬物，局部热敷，精神放松。', emoji:'🗣️', cat:'joint' },
+        bruxism: { name:'夜磨牙/紧咬牙', desc:'早晨醒来腮帮子酸痛，牙齿磨平，伴随头痛或关节痛。', urgency:'yellow', advice:'精神压力大是主因。建议定制夜磨牙垫保护牙齿。', emoji:'😬', cat:'joint' },
+        trigeminal_neuralgia: { name:'三叉神经痛', desc:'面部闪电般、刀割样的剧痛，洗脸刷牙易触发。', urgency:'yellow', advice:'易被误诊为牙痛！需神经内科确诊。', emoji:'💢', cat:'joint' },
+        trauma: { name:'牙齿外伤', desc:'受过撞击，牙齿折断、松动或完全脱出。', urgency:'red', advice:'脱落的恒牙泡在牛奶中，30分钟内急诊！', emoji:'💥', cat:'joint' },
+        dry_socket: { name:'干槽症', desc:'拔牙后2-3天极度剧痛，止痛药无效，伴恶臭。', urgency:'red', advice:'立刻复诊！需医生局麻下清创填塞。', emoji:'💀', cat:'joint' },
+        malocclusion: { name:'错颌畸形', desc:'牙齿排列不齐、咬合关系异常、面型不对称。', urgency:'green', advice:'儿童期干预最佳，成人也可通过正畸矫正。', emoji:'🧩', cat:'joint' },
+        sialolithiasis: { name:'涎石症', desc:'吃饭时颌下/腮腺区突然肿胀疼痛，饭后逐渐缓解。', urgency:'yellow', advice:'唾液腺导管结石，小者可自行排出，大则需手术取石。', emoji:'🪨', cat:'joint' },
+        parotitis: { name:'腮腺炎', desc:'耳垂下方/前方肿胀压痛，可能伴有发热、口干。', urgency:'yellow', advice:'需区分病毒性还是细菌性，保持口腔卫生，清淡饮食。', emoji:'🐹', cat:'joint' },
+        sinusitis_odontogenic: { name:'牙源性上颌窦炎', desc:'一侧上颌后牙区牙痛，同时同侧鼻塞，流黄色脓涕。', urgency:'yellow', advice:'需同时处理病源牙和上颌窦感染。', emoji:'🤧', cat:'joint' },
+
+        // === 其他/系统 ===
+        halitosis: { name:'非口源性口臭', desc:'口腔清洁良好但仍有严重异味，可能伴有反酸、胃胀。', urgency:'green', advice:'建议前往消化内科排查幽门螺杆菌或胃食管反流。', emoji:'🤢', cat:'other' },
+        fluorosis: { name:'氟斑牙/四环素牙', desc:'牙齿表面呈白垩色、黄褐色甚至缺损，多为幼年时期水质或药物导致。', urgency:'green', advice:'影响美观可通过贴面或全冠修复。', emoji:'🟤', cat:'other' },
+        xerostomia: { name:'口干症', desc:'长期口干舌燥，喝水难缓解，说话/吞咽困难，多发龋齿。', urgency:'yellow', advice:'排查干燥综合征、糖尿病或药物副作用。咀嚼无糖口香糖刺激唾液。', emoji:'🏜️', cat:'other' }
+      };
+
+      // 归类疾病
+      Object.entries(DISEASES).forEach(([key, d]) => {
+        if (DISEASE_CATEGORIES[d.cat]) {
+          DISEASE_CATEGORIES[d.cat].keys.push(key);
+        }
+      });
+
+      const QUESTIONS = {
+        // ======= 主诉题 (起点) =======
+        q_start: {
+          text: '你的口腔最近主要在闹什么脾气？',
+          stage: 'complaint',
+          options: [
+            { emoji:'🦷', text:'牙痛 / 喝冷热水痛 / 咬东西痛', next:['q_pain_type','q_pain_trigger'], delta:{caries_deep:2,irreversible_pulpitis:2,dentin_hypersensitivity:1} },
+            { emoji:'🩸', text:'牙龈出血 / 红肿 / 长脓包', next:['q_gum_detail','q_gum_history'], delta:{gingivitis:3,periodontitis:3,apical_periodontitis:2} },
+            { emoji:'👄', text:'长了溃疡 / 奇怪斑块 / 舌头异常 / 口角裂开', next:['q_mucosa_look'], delta:{oral_ulcer:3,leukoplakia:2,angular_cheilitis:1} },
+            { emoji:'🕳️', text:'牙齿有黑洞 / 缺损 / 变色 / 裂纹', next:['q_hard_detail'], delta:{caries_shallow:3,wedge_defect:2,caries_recurrent:2} },
+            { emoji:'🗣️', text:'关节咔咔响 / 腮帮子酸 / 张嘴受限 / 面部肿痛', next:['q_jaw_detail'], delta:{tmd:3,bruxism:2,sialolithiasis:1} },
+            { emoji:'🏜️', text:'口干舌燥 / 口臭严重 / 牙齿整体状况担忧', next:['q_other_detail'], delta:{xerostomia:3,halitosis:2} }
+          ]
+        },
+
+        // ======= 症状深挖题 (动态插入) =======
+        // 牙痛分支
+        q_pain_type: {
+          text: '如果疼痛会说话，它更符合哪种描述？',
+          stage: 'symptom',
+          options: [
+            { emoji:'🥶', text:'一碰冷热就酸痛，几秒钟就缓过来了', delta:{dentin_hypersensitivity:5,caries_deep:4} },
+            { emoji:'🔥', text:'没受刺激自己就疼，晚上疼得睡不着', delta:{irreversible_pulpitis:10} },
+            { emoji:'🎈', text:'牙齿有"浮起感"，一咬合就剧痛', delta:{apical_periodontitis:6,pericoronitis:3,cracked_tooth:2} },
+            { emoji:'💢', text:'咬到特定点突然触电般钻心痛，闪电样', delta:{cracked_tooth:8,trigeminal_neuralgia:3} },
+            { emoji:'🏚️', text:'牙齿不疼但烂得很厉害，只剩残根了', delta:{residual_root:8,pulp_necrosis:4} }
+          ]
+        },
+        q_pain_trigger: {
+          text: '这种不舒服通常在什么时候最明显？',
+          stage: 'symptom',
+          options: [
+            { emoji:'🍬', text:'吃甜食或酸的食物时', delta:{caries_shallow:4,caries_deep:5,dental_erosion:2} },
+            { emoji:'🪥', text:'刷牙碰到牙齿根部时', delta:{wedge_defect:7,dentin_hypersensitivity:3} },
+            { emoji:'💢', text:'洗脸、微风吹过脸颊时（刀割样/过电感）', delta:{trigeminal_neuralgia:10} },
+            { emoji:'🤕', text:'最里面的牙龈肿痛，连带喉咙痛，张不开嘴', delta:{pericoronitis:8} },
+            { emoji:'🤧', text:'一侧上牙痛同时同侧鼻塞、流黄涕', delta:{sinusitis_odontogenic:8} }
+          ]
+        },
+
+        // 牙龈分支
+        q_gum_detail: {
+          text: '牙龈的具体表现是什么？',
+          stage: 'symptom',
+          options: [
+            { emoji:'🍎', text:'刷牙/啃苹果时出血，平时不疼，轻微红肿', delta:{gingivitis:7} },
+            { emoji:'🍂', text:'牙缝变大，牙龈萎缩牙齿显长，甚至有些松动', delta:{periodontitis:8} },
+            { emoji:'🩸', text:'牙龈鼓起脓包，一按有脓流出，反复发作', delta:{apical_periodontitis:7,pulp_necrosis:3} },
+            { emoji:'🥩', text:'牙龈肥大增生，快把牙齿盖住了', delta:{gingival_hyperplasia:8} }
+          ]
+        },
+        q_gum_history: {
+          text: '关于牙龈不适，以下哪些情况符合你？',
+          stage: 'symptom',
+          options: [
+            { emoji:'🤢', text:'口腔清洁很好但还是有口臭/反酸/胃胀', delta:{halitosis:6} },
+            { emoji:'💊', text:'长期服用降压药/抗癫痫药（如硝苯地平/苯妥英钠）', delta:{gingival_hyperplasia:7} },
+            { emoji:'🤰', text:'目前处于孕期，牙龈比平时红肿很多', delta:{pregnancy_gingivitis:9} },
+            { emoji:'🌿', text:'以上都没有，就是偶尔局部牙龈不适', delta:{gingivitis:2} }
+          ]
+        },
+
+        // 黏膜分支
+        q_mucosa_look: {
+          text: '口腔里的异常长什么样子？',
+          stage: 'symptom',
+          options: [
+            { emoji:'😖', text:'圆/椭圆形小坑，表面黄白周围红，很疼', delta:{oral_ulcer:8} },
+            { emoji:'🦠', text:'一簇簇小水疱，破了连成一片疼，反复发作', delta:{herpes_stomatitis:8} },
+            { emoji:'⬜', text:'擦不掉的白色斑块，有粗糙感（尤其长期吸烟者）', delta:{leukoplakia:10} },
+            { emoji:'🍄', text:'像奶酪一样的白色膜，擦掉下面是红斑', delta:{candidiasis:8} },
+            { emoji:'🗺️', text:'舌头上游走的不规则红斑白边，像地图', delta:{geographic_tongue:9} },
+            { emoji:'🕸️', text:'口腔两颊内侧有白色网状条纹，有时糜烂', delta:{lichen_planus:8} },
+            { emoji:'🚫', text:'口腔黏膜变白变硬，张口越来越困难（嚼槟榔史）', delta:{osf:10}, forceRed:true },
+            { emoji:'😬', text:'口角处发红皲裂，张合嘴时疼', delta:{angular_cheilitis:8} }
+          ]
+        },
+
+        // 硬组织分支
+        q_hard_detail: {
+          text: '牙齿表面的异常是怎样的？',
+          stage: 'symptom',
+          options: [
+            { emoji:'🕳️', text:'咬合面有黑线/黑洞，偶尔塞牙', delta:{caries_shallow:8} },
+            { emoji:'🔁', text:'以前补过的牙边缘又变黑了或充填物松动', delta:{caries_recurrent:8} },
+            { emoji:'🪥', text:'牙根靠近牙龈处缺了一块，像V型沟槽', delta:{wedge_defect:8} },
+            { emoji:'🥤', text:'牙齿表面光滑凹陷/变透明，长期喝碳酸饮料/吃酸', delta:{dental_erosion:8} },
+            { emoji:'🟤', text:'牙齿从小发黄/发白垩色，有不规则斑点', delta:{fluorosis:9} },
+            { emoji:'💥', text:'不小心磕断/吃硬物崩掉/牙齿松动移位', delta:{trauma:10}, forceRed:true },
+            { emoji:'⚫', text:'某颗牙明显变色（发灰/发黑），但对冷热没感觉', delta:{pulp_necrosis:8} },
+            { emoji:'🧩', text:'牙齿排列不齐，咬合错乱，影响美观/咀嚼', delta:{malocclusion:7} }
+          ]
+        },
+
+        // 关节/颌面分支
+        q_jaw_detail: {
+          text: '具体是哪种情况？',
+          stage: 'symptom',
+          options: [
+            { emoji:'💀', text:'刚拔完牙2-3天，突然剧痛恶臭，止疼药无效', delta:{dry_socket:10}, forceRed:true },
+            { emoji:'🗣️', text:'张闭口时耳朵前关节咔咔响，咀嚼酸痛', delta:{tmd:8} },
+            { emoji:'😬', text:'早晨醒来腮帮子酸痛，听别人说自己晚上磨牙', delta:{bruxism:9} },
+            { emoji:'🪨', text:'吃饭时颌下/腮帮子突然肿起来，饭后消退', delta:{sialolithiasis:8} },
+            { emoji:'🐹', text:'腮帮子肿胀压痛，可能还有发热乏力', delta:{parotitis:8} },
+            { emoji:'🧩', text:'孩子牙齿排列不齐，咬合不对，面型偏斜', delta:{malocclusion:6} }
+          ]
+        },
+
+        // 其他/系统分支
+        q_other_detail: {
+          text: '具体是哪种困扰？',
+          stage: 'symptom',
+          options: [
+            { emoji:'🏜️', text:'长期口干舌燥，喝水也难解渴，说话久了就难受', delta:{xerostomia:8} },
+            { emoji:'🔥', text:'口腔持续灼烧感，但照镜子看不出发红/破溃', delta:{burning_mouth:9} },
+            { emoji:'🤢', text:'刷牙很认真但还是有严重口臭', delta:{halitosis:8} },
+            { emoji:'🟤', text:'牙齿从小颜色就不均匀，影响自信微笑', delta:{fluorosis:7} }
+          ]
+        },
+
+        // ======= 人口学/病史题 =======
+        q_age: {
+          text: '你目前所处的年龄段是？',
+          stage: 'history',
+          options: [
+            { emoji:'👶', text:'12岁以下（儿童期）', riskTag:{fluorosis:1.3,caries_shallow:1.4,trauma:1.3} },
+            { emoji:'🧑', text:'13-45岁（青壮年）', riskTag:{} },
+            { emoji:'👨', text:'46-60岁（中年）', riskTag:{periodontitis:1.5,leukoplakia:1.5,xerostomia:1.3} },
+            { emoji:'👴', text:'60岁以上（老年）', riskTag:{candidiasis:2,xerostomia:2,leukoplakia:1.5,halitosis:1.5} }
+          ]
+        },
+        q_medical: {
+          text: '你是否有以下全身健康状况？（可影响口腔健康）',
+          stage: 'history',
+          options: [
+            { emoji:'🍬', text:'确诊糖尿病/血糖偏高', riskTag:{periodontitis:2,gingivitis:1.5,candidiasis:1.5,halitosis:1.3} },
+            { emoji:'🫀', text:'确诊高血压/心血管疾病', riskTag:{gingival_hyperplasia:2,gingivitis:1.3,xerostomia:1.2} },
+            { emoji:'🧬', text:'确诊自身免疫病（如干燥综合征/红斑狼疮/甲状腺疾病）', riskTag:{xerostomia:2.5,candidiasis:2,lichen_planus:2,burning_mouth:1.8} },
+            { emoji:'💊', text:'长期服用某些药物（钙通道阻滞剂/抗癫痫药/抗抑郁药）', riskTag:{gingival_hyperplasia:3,xerostomia:1.8} },
+            { emoji:'✅', text:'身体健康，无以上情况', riskTag:{} }
+          ]
+        },
+
+        // ======= 生活习惯题 =======
+        q_smoking: {
+          text: '你有以下生活习惯吗？',
+          stage: 'lifestyle',
+          options: [
+            { emoji:'🚬', text:'经常抽烟（每天≥5支）', riskTag:{periodontitis:2,leukoplakia:3,halitosis:1.5,gingivitis:1.3} },
+            { emoji:'🍺', text:'经常饮酒（每周≥3次）', riskTag:{halitosis:1.5,leukoplakia:1.5,dental_erosion:1.2} },
+            { emoji:'🫒', text:'经常嚼槟榔', riskTag:{osf:5,leukoplakia:3,periodontitis:1.5}, forceRed:true },
+            { emoji:'✅', text:'不抽烟不喝酒不嚼槟榔', riskTag:{} }
+          ]
+        },
+        q_life_brush: {
+          text: '你日常的刷牙习惯是怎样的？',
+          stage: 'lifestyle',
+          options: [
+            { emoji:'🪚', text:'喜欢用力横向拉锯式刷牙', riskTag:{wedge_defect:3,dentin_hypersensitivity:2} },
+            { emoji:'⏱️', text:'随便刷刷，不到1分钟，很少用牙线', riskTag:{periodontitis:3,gingivitis:3,caries_shallow:2} },
+            { emoji:'✨', text:'每天巴氏刷牙法≥2分钟，也使用牙线/冲牙器', riskTag:{} }
+          ]
+        },
+        q_life_stress: {
+          text: '最近的生活作息和精神状态如何？',
+          stage: 'lifestyle',
+          options: [
+            { emoji:'😫', text:'压力很大、经常熬夜/失眠、情绪紧张焦虑', riskTag:{oral_ulcer:3,bruxism:4,tmd:2,pericoronitis:2,burning_mouth:2} },
+            { emoji:'🌙', text:'作息不规律、饮食不均衡、外卖为主', riskTag:{caries_shallow:2,dental_erosion:1.5,gingivitis:1.5} },
+            { emoji:'🧘', text:'作息规律、饮食均衡、情绪稳定', riskTag:{} }
+          ]
+        },
+        q_diet: {
+          text: '你的饮食习惯偏好偏向哪种？',
+          stage: 'lifestyle',
+          options: [
+            { emoji:'🍰', text:'爱吃甜食/甜饮料/零食，一天不甜不快乐', riskTag:{caries_shallow:3,caries_deep:2,caries_recurrent:1.5} },
+            { emoji:'🍋', text:'爱吃酸/喝碳酸饮料/喝醋，每天都要喝饮料', riskTag:{dental_erosion:4,dentin_hypersensitivity:2} },
+            { emoji:'🥩', text:'偏好硬食（坚果/啃骨头/嚼冰块/脆骨）', riskTag:{cracked_tooth:3,wedge_defect:1.5,trauma:1.5} },
+            { emoji:'🥗', text:'饮食均衡、荤素搭配、不过分偏食', riskTag:{} }
+          ]
+        }
+      };
+
+      // ==================== SBTI 核心引擎 ====================
+      let scores = {};
+      let rawScores = {};      // 原始未乘权重的分数
+      let riskTagAccum = {};   // 累计的风险标签
+      let questionQueue = [];
+      let answeredCount = 0;
+      let totalEstimated = 5;
+      let hasRedFlag = false;
+      let userAnswers = [];    // 记录用户回答
+
+      function initTest() {
+        scores = {};
+        rawScores = {};
+        riskTagAccum = {};
+        answeredCount = 0;
+        hasRedFlag = false;
+        userAnswers = [];
+        questionQueue = ['q_start', 'q_age', 'q_medical', 'q_smoking', 'q_life_brush', 'q_life_stress', 'q_diet'];
+        totalEstimated = questionQueue.length;
+        renderNextQuestion();
+      }
+
+      function applyDelta(delta) {
+        if (!delta) return;
+        Object.entries(delta).forEach(([diseaseId, value]) => {
+          rawScores[diseaseId] = (rawScores[diseaseId] || 0) + value;
+          scores[diseaseId] = (scores[diseaseId] || 0) + value;
+        });
+      }
+
+      function applyRiskTag(riskTag) {
+        if (!riskTag || Object.keys(riskTag).length === 0) return;
+        Object.entries(riskTag).forEach(([diseaseId, multiplier]) => {
+          riskTagAccum[diseaseId] = Math.max(riskTagAccum[diseaseId] || 1, multiplier);
+        });
+      }
+
+      function getStageInfo(stage) {
+        const map = {
+          complaint: { tag:'主诉·初筛', cls:'tag-complaint' },
+          symptom: { tag:'症状·深挖', cls:'tag-symptom' },
+          history: { tag:'病史·维度', cls:'tag-history' },
+          lifestyle: { tag:'生活·维度', cls:'tag-lifestyle' }
+        };
+        return map[stage] || { tag:'', cls:'' };
+      }
+
+      function renderWelcome() {
+        const container = document.getElementById('appContainer');
+        container.innerHTML = `
+          <div class="screen" id="welcomeScreen">
+            <div class="tooth-icon">🦷✨</div>
+            <h1>口腔健康解密卡</h1>
+            <div class="subhead">AI预问诊 · SBTI多维加权分析</div>
+            ${renderThemeDots()}
+            <div style="text-align:center;line-height:1.8;font-size:0.9rem;margin:6px 0;">
+              <div style="color:var(--accent-purple)">📊 覆盖 <b>38</b> 种口腔疾病</div>
+              <div style="color:#6ee7b7">🧠 MBTI式多维积分算法</div>
+              <div style="color:var(--accent-yellow)">⏱️ 约2分钟 · 7个维度 · 智能分析</div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-size:0.75rem;margin:4px 0;">
+              <span style="background:rgba(244,114,182,0.15);color:#f9a8d4;padding:4px 10px;border-radius:20px;">牙体牙髓</span>
+              <span style="background:rgba(168,139,250,0.15);color:#c4b5fd;padding:4px 10px;border-radius:20px;">牙周</span>
+              <span style="background:rgba(52,211,153,0.15);color:#6ee7b7;padding:4px 10px;border-radius:20px;">黏膜</span>
+              <span style="background:rgba(251,191,36,0.15);color:#fcd34d;padding:4px 10px;border-radius:20px;">颌面关节</span>
+              <span style="background:rgba(249,115,22,0.15);color:#fdba74;padding:4px 10px;border-radius:20px;">系统性因素</span>
+            </div>
+            <button class="btn" id="startBtn">🧬 开始解密我的口腔成分</button>
+            <div class="disclaimer">* 本测试基于临床概率模型设计<br/>仅供健康参考，绝不能替代专业医师面诊。</div>
+          </div>
+        `;
+        document.getElementById('startBtn').addEventListener('click', initTest);
+        bindThemeEvents();
+      }
+
+      function renderNextQuestion() {
+        if (questionQueue.length === 0) {
+          applyRiskMultipliers();
+          showResult();
+          return;
+        }
+
+        const currentQId = questionQueue.shift();
+        const qData = QUESTIONS[currentQId];
+
+        // 如果是主诉题，重新计算总进度（主诉+深挖+通用）
+        if (currentQId === 'q_start') {
+          totalEstimated = answeredCount + questionQueue.length + 1;
+          // 根据主诉选项动态调整
+        }
+
+        answeredCount++;
+        let progress = Math.round((answeredCount / totalEstimated) * 100);
+        if (progress > 100) progress = Math.min(100, answeredCount / (totalEstimated + 2) * 100);
+        progress = Math.min(100, Math.max(progress, 5));
+
+        const stage = getStageInfo(qData.stage);
+
+        const container = document.getElementById('appContainer');
+        container.innerHTML = `
+          <div class="screen" id="questionScreen">
+            <div class="progress-section">
+              <span class="progress-stage">${stage.tag}</span>
+              <div class="progress-bar-bg">
+                <div class="progress-fill" style="width:${Math.round(progress)}%;"></div>
+              </div>
+              <span style="font-size:0.75rem;color:var(--text-secondary);min-width:32px;text-align:right;">${Math.round(progress)}%</span>
+            </div>
+            <div class="question-card">
+              <span class="question-stage-tag ${stage.cls}">${stage.tag}</span>
+              <div class="question-text">${qData.text}</div>
+              ${qData.subtitle ? `<div class="question-subtitle">${qData.subtitle}</div>` : ''}
+              <div class="options-grid" id="optionsContainer"></div>
+            </div>
+          </div>
+        `;
+
+        const optionsContainer = document.getElementById('optionsContainer');
+        qData.options.forEach((opt, idx) => {
+          const btn = document.createElement('div');
+          btn.className = 'option-btn';
+          btn.innerHTML = `<span class="option-emoji">${opt.emoji}</span><span class="option-text">${opt.text}</span>`;
+
+          btn.addEventListener('click', () => {
+            userAnswers.push({ qid: currentQId, text: opt.text });
+
+            if (opt.delta) applyDelta(opt.delta);
+            if (opt.riskTag) applyRiskTag(opt.riskTag);
+            if (opt.forceRed) hasRedFlag = true;
+
+            // 动态插入深挖题（插在通用题之前）
+            if (opt.next && opt.next.length > 0) {
+              questionQueue = opt.next.concat(questionQueue);
+              totalEstimated += opt.next.length;
+            }
+
+            renderNextQuestion();
+          });
+          optionsContainer.appendChild(btn);
+        });
+      }
+
+      function applyRiskMultipliers() {
+        Object.entries(riskTagAccum).forEach(([diseaseId, multiplier]) => {
+          if (scores[diseaseId] !== undefined) {
+            scores[diseaseId] = Math.round(scores[diseaseId] * multiplier);
+          }
+        });
+      }
+
+      // 计算分类汇总
+      function getCategoryScores() {
+        const catScores = {};
+        Object.entries(DISEASE_CATEGORIES).forEach(([catKey, cat]) => {
+          let total = 0;
+          cat.keys.forEach(key => {
+            total += (scores[key] || 0);
+          });
+          catScores[catKey] = total;
+        });
+        return catScores;
+      }
+
+      // 渲染 SVG 雷达图
+      function renderRadarChart(catScores) {
+        const cats = Object.entries(DISEASE_CATEGORIES);
+        const labels = cats.map(([_, c]) => c.label);
+        const rawValues = cats.map(([key]) => catScores[key] || 0);
+        const maxVal = Math.max(1, ...rawValues);
+        const values = rawValues.map(v => Math.max(v / maxVal, 0.02));
+
+        const size = 340, cx = size / 2, cy = size / 2, r = 85;
+        const angleStep = (2 * Math.PI) / labels.length;
+        const startAngle = -Math.PI / 2;
+
+        let points = [];
+        let polygonPoints = [];
+        for (let i = 0; i < labels.length; i++) {
+          const angle = startAngle + i * angleStep;
+          const v = values[i];
+          const px = cx + r * v * Math.cos(angle);
+          const py = cy + r * v * Math.sin(angle);
+          points.push({ angle, x: px, y: py, val: v });
+          polygonPoints.push(`${px.toFixed(1)},${py.toFixed(1)}`);
+        }
+
+        let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" class="radar-chart">`;
+        svg += `<defs><clipPath id="rcCrop"><rect x="0" y="0" width="${size}" height="${size}"/></clipPath></defs>`;
+        svg += `<g clip-path="url(#rcCrop)">`;
+
+        // 背景网格
+        for (let level = 1; level <= 4; level++) {
+          const gridR = r * (level / 4);
+          let gridPts = [];
+          for (let i = 0; i < labels.length; i++) {
+            const angle = startAngle + i * angleStep;
+            gridPts.push(`${(cx + gridR * Math.cos(angle)).toFixed(1)},${(cy + gridR * Math.sin(angle)).toFixed(1)}`);
+          }
+          svg += `<polygon points="${gridPts.join(' ')}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>`;
+        }
+
+        // 轴线
+        for (let i = 0; i < labels.length; i++) {
+          const angle = startAngle + i * angleStep;
+          svg += `<line x1="${cx}" y1="${cy}" x2="${(cx + r * Math.cos(angle)).toFixed(1)}" y2="${(cy + r * Math.sin(angle)).toFixed(1)}" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>`;
+        }
+
+        // 数据区域
+        svg += `<polygon points="${polygonPoints.join(' ')}" fill="rgba(168,139,250,0.2)" stroke="#a78bfa" stroke-width="1.8" stroke-linejoin="round"/>`;
+
+        // 数据点
+        for (const p of points) {
+          svg += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3" fill="#c4b5fd" stroke="#fff" stroke-width="0.8"/>`;
+        }
+
+        // 标签 - 带智能换行和防溢出
+        const labelDist = r + 36;
+        for (let i = 0; i < labels.length; i++) {
+          const angle = startAngle + i * angleStep;
+          const cos = Math.cos(angle);
+          const sin = Math.sin(angle);
+          let lx = cx + labelDist * cos;
+          let ly = cy + labelDist * sin;
+
+          const labelText = labels[i];
+          const parts = labelText.split('/');
+          const shortLabel = parts[0];
+          const hasSub = parts.length > 1;
+
+          let txtAnchor;
+          if (i === 0) txtAnchor = 'middle'; // top
+          else if (i === labels.length - 1) txtAnchor = 'middle'; // top-right/left
+          else txtAnchor = lx < cx - 5 ? 'end' : lx > cx + 5 ? 'start' : 'middle';
+
+          // 微调位置确保不溢出
+          const margin = 18;
+          lx = Math.max(margin, Math.min(size - margin, lx));
+          ly = Math.max(margin, Math.min(size - margin, ly));
+
+          if (hasSub) {
+            svg += `<text x="${lx.toFixed(1)}" y="${(ly - 6).toFixed(1)}" text-anchor="${txtAnchor}" dominant-baseline="auto" fill="#b9b1dc" font-size="12" font-weight="600">${shortLabel}</text>`;
+            svg += `<text x="${lx.toFixed(1)}" y="${(ly + 10).toFixed(1)}" text-anchor="${txtAnchor}" dominant-baseline="auto" fill="#8a84b8" font-size="9" font-weight="400">${parts.slice(1).join('/')}</text>`;
+          } else {
+            svg += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${txtAnchor}" dominant-baseline="middle" fill="#b9b1dc" font-size="12" font-weight="600">${labelText}</text>`;
+          }
+        }
+
+        svg += '</g></svg>';
+        return svg;
+      }
+
+      function showResult() {
+        const entries = Object.entries(scores).filter(([_, s]) => s > 0);
+        if (entries.length === 0) {
+          renderHealthy();
+          return;
+        }
+
+        const totalScore = entries.reduce((sum, [_, s]) => sum + s, 0);
+        const results = entries
+          .map(([id, score]) => ({
+            id,
+            data: DISEASES[id],
+            prob: Math.round((score / totalScore) * 100)
+          }))
+          .sort((a, b) => b.prob - a.prob);
+
+        const primary = results[0];
+        const secondary = results.slice(1, 6).filter(r => r.prob >= 5);
+
+        let finalUrgency = primary.data.urgency;
+        if (hasRedFlag && finalUrgency !== 'red') finalUrgency = 'red';
+
+        const urgencyLabel = {
+          green: '🟢 居家观察 · 择期就诊',
+          yellow: '🟡 存在隐患 · 建议尽快就诊',
+          red: '🔴 紧急！请立即就医'
+        };
+
+        const catScores = getCategoryScores();
+        const catEntries = Object.entries(DISEASE_CATEGORIES).map(([key, c]) => ({
+          key, label: c.label, color: c.color, score: catScores[key] || 0
+        }));
+        const catMax = Math.max(1, ...catEntries.map(c => c.score));
+
+        const container = document.getElementById('appContainer');
+        container.innerHTML = `
+          <div class="screen" id="resultScreen">
+            <div class="tooth-icon">${primary.data.emoji}</div>
+            <div class="result-header">
+              <h2>你的口腔成分报告</h2>
+            </div>
+
+            <div class="urgency-panel urgency-${finalUrgency}">${urgencyLabel[finalUrgency]}</div>
+
+            <div class="main-diagnosis">
+              <div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:4px;">📌 主要风险指向 (${primary.prob}%)</div>
+              <div class="disease-name">${primary.data.name}</div>
+              <div class="disease-desc">${primary.data.desc}</div>
+              <div class="disease-advice">
+                <strong>💡 建议方案：</strong><br/>
+                <span style="color:#e2dcf4;display:inline-block;margin-top:6px;">${primary.data.advice}</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="section-title">🎯 疾病维度雷达图</div>
+              ${renderRadarChart(catScores)}
+            </div>
+
+            <div>
+              <div class="section-title">📊 疾病分类占比</div>
+              <div class="category-breakdown">
+                ${catEntries.map(c => {
+                  const pct = c.score > 0 ? Math.round((c.score / catMax) * 100) : 0;
+                  return `
+                    <div class="cat-chip">
+                      <div class="cat-name" style="color:${c.color}">${c.label}</div>
+                      <div class="cat-pct" style="color:${c.color}">${pct}%</div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            ${secondary.length > 0 ? `
+            <div>
+              <div class="section-title">🔍 其他需关注的风险</div>
+              <div class="rank-list">
+                ${secondary.map(r => `
+                  <div class="rank-item">
+                    <span class="rank-name">${r.data.emoji} ${r.data.name}</span>
+                    <div class="prob-bar-container">
+                      <div class="prob-bar-fill" style="width:${r.prob}%;opacity:${0.3 + r.prob/180}"></div>
+                    </div>
+                    <span class="rank-pct">${r.prob}%</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+
+            <div class="share-row">
+              <button class="btn" id="restartBtn" style="flex:1;">🔄 重新测试</button>
+              <button class="btn btn-secondary" id="shareBtn" style="flex:0 0 auto;padding:15px 18px;">📋 复制结果</button>
+            </div>
+            <div class="disclaimer">
+              ⚠️ 医疗免责声明：本问卷采用多维加权算法分析症状倾向，仅作科普参考，不具备临床诊断效力。请以专业医师的面诊及影像学检查结果为准。
+            </div>
+          </div>
+        `;
+
+        document.getElementById('restartBtn').addEventListener('click', renderWelcome);
+        document.getElementById('shareBtn').addEventListener('click', () => {
+          const text = `🦷 口腔健康解密卡报告\n📌 主要风险：${primary.data.name} (${primary.prob}%)\n${urgencyLabel[finalUrgency]}\n💡 ${primary.data.advice}\n\n⚕️ 本报告仅为AI参考，请咨询专业牙医。`;
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+              const btn = document.getElementById('shareBtn');
+              btn.textContent = '✅ 已复制';
+              setTimeout(() => { btn.textContent = '📋 复制结果'; }, 2000);
+            });
+          }
+        });
+      }
+
+      function renderHealthy() {
+        const container = document.getElementById('appContainer');
+        container.innerHTML = `
+          <div class="screen" id="resultScreen">
+            <div class="tooth-icon">✨🦷✨</div>
+            <div class="result-header"><h2>口腔状态极佳！</h2></div>
+            <div class="urgency-panel urgency-green">🟢 健康达人 · 继续保持</div>
+            <div class="main-diagnosis" style="border-left-color:#34d399;">
+              <div class="disease-name" style="background:linear-gradient(to right,#34d399,#10b981);-webkit-background-clip:text;">口腔健康达人</div>
+              <div class="disease-desc">根据你的回答，目前没有发现明显的口腔疾病风险。你的刷牙习惯、生活作息和饮食习惯都很棒！</div>
+              <div class="disease-advice">
+                <strong>💡 牙医的建议：</strong><br/>
+                <span style="color:#e2dcf4;display:inline-block;margin-top:6px;">建议每半年至一年进行一次常规洗牙和口腔检查，防患于未然。小小的习惯带来大大的健康！</span>
+              </div>
+            </div>
+            <button class="btn" id="restartBtn">🔄 重新测试</button>
+            <div class="disclaimer">* 本结果仅供参考，定期牙科检查不可替代。</div>
+          </div>
+        `;
+        document.getElementById('restartBtn').addEventListener('click', renderWelcome);
+      }
+
+      renderWelcome();
+    })();
+  </script>
+</body>
+</html>
