@@ -281,6 +281,36 @@
       .cat-chip { padding: 8px 6px; font-size: 0.72rem; }
       .cat-chip .cat-pct { font-size: 0.95rem; }
     }
+    /* AI深度分析系统 */
+    .ai-section { margin-top:16px; background:rgba(168,139,250,0.08); border-radius:var(--radius-lg); padding:18px 16px; border:1px solid rgba(168,139,250,0.2); animation:fadeSlideIn 0.5s 0.85s both cubic-bezier(0.22,0.61,0.36,1); }
+    .ai-section .ai-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .ai-section .ai-icon { font-size:2rem; }
+    .ai-section .ai-title { font-size:1rem; font-weight:700; color:#c4b5fd; }
+    .ai-section .ai-subtitle { font-size:0.75rem; color:var(--text-secondary); margin-top:2px; }
+    .ai-section .ai-model-badge { font-size:0.65rem; background:linear-gradient(135deg,#8b5cf6,#ec4899); color:#fff; padding:3px 10px; border-radius:20px; margin-left:auto; font-weight:600; }
+    .ai-section .ai-pricing { display:flex; align-items:center; gap:10px; margin:10px 0; }
+    .ai-section .ai-price-current { font-size:1.4rem; font-weight:700; color:#fbbf24; }
+    .ai-section .ai-price-original { font-size:0.8rem; color:var(--text-secondary); text-decoration:line-through; }
+    .ai-section .ai-price-badge { font-size:0.65rem; background:#ef4444; color:#fff; padding:2px 8px; border-radius:10px; }
+    .ai-report { background:rgba(0,0,0,0.2); border-radius:var(--radius-md); padding:16px; margin-top:10px; font-size:0.85rem; line-height:1.8; color:var(--text-primary); white-space:pre-wrap; max-height:500px; overflow-y:auto; }
+    .ai-report h3 { color:var(--accent-purple); font-size:1rem; margin:12px 0 6px; }
+    .ai-report strong { color:var(--accent-yellow); }
+    .ai-report .risk-high { color:#fca5a5; font-weight:600; }
+    .ai-report .risk-mid { color:#fcd34d; font-weight:600; }
+    .ai-loading { text-align:center; padding:20px; }
+    .ai-loading .ai-spinner { display:inline-block; width:40px; height:40px; border:3px solid rgba(168,139,250,0.2); border-top-color:#a78bfa; border-radius:50%; animation:spin 0.8s linear infinite; }
+    .ai-loading .ai-thinking-text { color:var(--text-secondary); font-size:0.85rem; margin-top:12px; }
+    /* 支付弹窗 */
+    .pay-overlay { position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.85); display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; animation:fadeIn 0.2s ease; }
+    .pay-modal { background:var(--bg-card); border-radius:var(--radius-lg); padding:24px; max-width:360px; width:100%; border:1px solid rgba(168,139,250,0.3); }
+    .pay-modal .pay-step { font-size:0.7rem; color:var(--accent-purple); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+    .pay-modal .pay-title { font-size:1.1rem; font-weight:700; color:var(--text-primary); margin-bottom:16px; }
+    .pay-modal .pay-qr { width:180px; height:180px; background:rgba(255,255,255,0.05); border-radius:var(--radius-sm); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-size:4rem; border:2px dashed rgba(255,255,255,0.15); }
+    .pay-modal .pay-price-row { display:flex; align-items:baseline; justify-content:center; gap:8px; margin-bottom:4px; }
+    .pay-modal .pay-code-input { width:100%; padding:12px 14px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:var(--radius-sm); color:var(--text-primary); font-size:1rem; text-align:center; font-family:var(--font-mono); letter-spacing:2px; margin:12px 0; outline:none; }
+    .pay-modal .pay-code-input:focus { border-color:var(--accent-purple); }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
   </style>
 </head>
 <body>
@@ -1398,6 +1428,18 @@
               </div>
             </div>` : ''}
 
+            <div class="ai-section" id="aiAnalysisSection">
+              <div class="ai-header">
+                <span class="ai-icon">🧬</span>
+                <div>
+                  <div class="ai-title">AI深度分析报告</div>
+                  <div class="ai-subtitle">DeepSeek V4 Pro Max · 深度推理引擎</div>
+                </div>
+                <span class="ai-model-badge">PRO MAX</span>
+              </div>
+              <div id="aiContent"></div>
+            </div>
+
             <div class="share-row" style="animation:fadeSlideIn 0.5s 0.9s both cubic-bezier(0.22,0.61,0.36,1)">
               <button class="btn" id="restartBtn" style="flex:1;">🔄 重新测试</button>
               <button class="btn btn-secondary" id="shareBtn" style="flex:0 0 auto;padding:15px 18px;">📋 复制结果</button>
@@ -1419,6 +1461,7 @@
             });
           }
         });
+        initAISection();
       }
 
       function renderHealthy() {
@@ -1441,6 +1484,180 @@
           </div>
         `;
         document.getElementById('restartBtn').addEventListener('click', renderWelcome);
+      }
+
+      // ==================== AI深度分析系统 ====================
+      const AI_CONFIG = {
+        apiEndpoint: 'https://api.deepseek.com/chat/completions',
+        model: 'deepseek-reasoner',
+        modelLabel: 'DeepSeek V4 Pro Max',
+        price: { current: 0.99, original: 4.99, unit: '次' },
+        maxTokens: 4096,
+      };
+
+      function getApiKey() {
+        const k = localStorage.getItem('dental_ai_key');
+        if (k) { try { return atob(k); } catch(e) { return ''; } }
+        return '';
+      }
+      function setApiKey(key) { if (key) localStorage.setItem('dental_ai_key', btoa(key)); }
+      function getAIBalance() { return parseInt(localStorage.getItem('dental_ai_bal') || '0'); }
+      function useAICredit() {
+        const b = getAIBalance(); if (b <= 0) return false;
+        localStorage.setItem('dental_ai_bal', String(b - 1)); return true;
+      }
+      // 首次赠送1次免费（延迟初始化，避免jsdom报错）
+      try { if (localStorage.getItem('dental_ai_bal') === null) { localStorage.setItem('dental_ai_bal', '1'); } } catch(e) {}
+
+      function generateValidCode(seed) {
+        const s = String(seed); let h = 0;
+        for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h |= 0; }
+        const ch = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let c = 'DPM-';
+        for (let i = 0; i < 8; i++) { c += ch[Math.abs((h * (i + 7)) % ch.length)]; }
+        return c;
+      }
+      function verifyCode(code) {
+        const used = JSON.parse(localStorage.getItem('dental_ai_used') || '[]');
+        if (used.includes(code.toUpperCase())) return false;
+        for (let s = 1001; s <= 9999; s++) {
+          if (generateValidCode(s) === code.toUpperCase().trim()) {
+            used.push(code.toUpperCase());
+            localStorage.setItem('dental_ai_used', JSON.stringify(used));
+            localStorage.setItem('dental_ai_bal', String(getAIBalance() + 1));
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function buildAIPrompt(userAnswers, rankings, es) {
+        const al = userAnswers.map(a => `[${a.qid}] ${a.text}`).join('\n');
+        const rl = rankings.slice(0, 5).map((r, i) => `${i + 1}. ${r.name} (得分:${r.score.toFixed(1)} 紧急度:${r.urgency})`).join('\n');
+        const rf = es.hasRedFlag ? '是（存在紧急警示）' : '否';
+        const age = es.userAge ? `${es.userAge[0]}-${es.userAge[1]}岁` : '未提供';
+        const gd = es.userGender === 'male' ? '男性' : es.userGender === 'female' ? '女性' : '未提供';
+        return `你是一位资深口腔医学专家，拥有20年临床经验。请基于以下患者的全部问答记录和DAG预问诊系统分析结果，提供一份深度分析报告。
+
+【患者基本信息】年龄范围：${age} | 性别：${gd} | 紧急警示：${rf}
+
+【完整问答记录】
+${al}
+
+【DAG系统诊断排名】
+${rl}
+
+【分析要求】请严格按以下结构输出Markdown格式报告：
+
+## 综合评估
+（2-3句话总结口腔健康总体状况和最主要问题）
+
+## 症状深度解读
+（逐一分析关键症状背后的病理机制，将患者回答串联成临床逻辑链。深入挖掘每个选项背后的医学含义，解释"为什么这些症状指向这个诊断"）
+
+## 风险因素分析
+（结合流行病学数据分析生活方式、病史、家族史如何影响口腔健康，标注风险等级）
+
+## 个性化建议方案
+（分层次：立即行动项、近期需做项、长期改善项，每项具体可执行）
+
+## 就医指导
+（建议科室、检查项目、就诊时需提供的关键信息）
+
+## 预后与预防
+（预测疾病进展路径与治疗后可达到的健康状态）
+
+注意：语言通俗易懂，引用患者具体回答作为依据，体现深度推理过程，总字数800-1200字。`;
+      }
+
+      function renderAISection(state) {
+        const ct = document.getElementById('aiContent'); if (!ct) return;
+        const bal = getAIBalance();
+        if (state === 'idle') {
+          ct.innerHTML = `<div class="ai-pricing"><span class="ai-price-current">¥${AI_CONFIG.price.current}</span><span class="ai-price-original">¥${AI_CONFIG.price.original}</span><span class="ai-price-badge">特价</span><span style="font-size:0.7rem;color:var(--text-secondary);margin-left:4px;">/${AI_CONFIG.price.unit}</span><span style="margin-left:auto;font-size:0.75rem;color:var(--text-secondary);">剩余 ${bal} 次</span></div><button class="btn" id="aiUnlockBtn" style="width:100%;background:linear-gradient(135deg,#8b5cf6,#ec4899);">🔬 解锁AI深度分析报告</button><div style="font-size:0.7rem;color:var(--text-secondary);text-align:center;margin-top:6px;">基于全部问答记录，${AI_CONFIG.modelLabel}深度推理分析</div>`;
+          document.getElementById('aiUnlockBtn').addEventListener('click', () => {
+            if (getAIBalance() <= 0) startAIPurchase(); else executeAIAnalysis();
+          });
+        } else if (state === 'loading') {
+          ct.innerHTML = `<div class="ai-loading"><div class="ai-spinner"></div><div class="ai-thinking-text">${AI_CONFIG.modelLabel} 正在深度思考中...</div><div style="font-size:0.7rem;color:var(--text-secondary);margin-top:6px;">分析全部问答记录 · 综合DAG诊断 · 生成深度报告</div></div>`;
+        } else if (state === 'no_credit') {
+          ct.innerHTML = `<div class="ai-pricing"><span class="ai-price-current">¥${AI_CONFIG.price.current}</span><span class="ai-price-original">¥${AI_CONFIG.price.original}</span><span class="ai-price-badge">特价</span><span style="margin-left:auto;font-size:0.75rem;color:#ef4444;">剩余 0 次</span></div><button class="btn" id="aiBuyBtn" style="width:100%;background:linear-gradient(135deg,#8b5cf6,#ec4899);">💳 购买分析次数 · ¥${AI_CONFIG.price.current}</button><button class="btn" id="aiCodeBtn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.08);">🔑 输入兑换码</button>`;
+          document.getElementById('aiBuyBtn').addEventListener('click', startAIPurchase);
+          document.getElementById('aiCodeBtn').addEventListener('click', showCodeInput);
+        } else if (state === 'need_key') {
+          ct.innerHTML = `<div style="padding:8px 0;"><div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:8px;">⚙️ 请配置 DeepSeek API Key</div><input type="password" id="apiKeyInput" placeholder="sk-xxxxxxxxxxxxxxxx" style="width:100%;padding:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.85rem;font-family:var(--font-mono);outline:none;margin-bottom:8px;"><button class="btn" id="saveApiKeyBtn" style="width:100%;">💾 保存并继续</button><div style="font-size:0.6rem;color:var(--text-secondary);text-align:center;margin-top:4px;">密钥仅保存在浏览器本地，不会上传</div></div>`;
+          document.getElementById('saveApiKeyBtn').addEventListener('click', () => {
+            const k = document.getElementById('apiKeyInput').value.trim();
+            if (k.startsWith('sk-')) { setApiKey(k); initAISection(); } else alert('请输入有效的API Key（以 sk- 开头）');
+          });
+        }
+      }
+
+      function startAIPurchase() {
+        const ov = document.createElement('div'); ov.className = 'pay-overlay'; ov.id = 'payOverlay';
+        ov.innerHTML = `<div class="pay-modal"><div class="pay-step">STEP 1/2</div><div class="pay-title">解锁 AI深度分析</div><div class="pay-qr">💳</div><div class="pay-price-row"><span style="font-size:1.6rem;font-weight:700;color:#fbbf24;">¥${AI_CONFIG.price.current}</span><span style="font-size:0.85rem;color:var(--text-secondary);text-decoration:line-through;">¥${AI_CONFIG.price.original}</span><span class="ai-price-badge" style="font-size:0.7rem;">限时特价</span></div><div style="text-align:center;font-size:0.7rem;color:var(--text-secondary);margin:8px 0;">支付后获得兑换码 · 1次深度分析</div><button class="btn" id="paySimBtn" style="width:100%;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000;font-weight:700;">💰 确认支付 ¥${AI_CONFIG.price.current}</button><button class="btn" id="paySkipBtn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.08);">🔑 我已有兑换码</button><button class="btn" id="payClsBtn" style="width:100%;margin-top:6px;background:transparent;color:var(--text-secondary);font-size:0.8rem;">✕ 取消</button></div>`;
+        document.body.appendChild(ov);
+        document.getElementById('payClsBtn').addEventListener('click', () => document.body.removeChild(ov));
+        document.getElementById('paySkipBtn').addEventListener('click', () => { document.body.removeChild(ov); showCodeInput(); });
+        document.getElementById('paySimBtn').addEventListener('click', () => {
+          const code = generateValidCode(Date.now() % 9000 + 1000);
+          ov.querySelector('.pay-modal').innerHTML = `<div class="pay-step">STEP 2/2</div><div class="pay-title">✅ 支付成功</div><div style="text-align:center;padding:16px 0;"><div style="font-size:3rem;margin-bottom:8px;">🎫</div><div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:6px;">您的兑换码：</div><div style="font-size:1.4rem;font-weight:700;color:#34d399;font-family:var(--font-mono);letter-spacing:2px;background:rgba(52,211,153,0.1);padding:10px;border-radius:8px;margin-bottom:10px;">${code}</div><div style="font-size:0.7rem;color:var(--text-secondary);">请复制此码，关闭后输入使用</div></div><button class="btn" id="payDoneBtn" style="width:100%;">✅ 已复制，继续</button>`;
+          document.getElementById('payDoneBtn').addEventListener('click', () => { document.body.removeChild(ov); showCodeInput(); });
+        });
+      }
+
+      function showCodeInput() {
+        const ov = document.createElement('div'); ov.className = 'pay-overlay'; ov.id = 'codeOverlay';
+        ov.innerHTML = `<div class="pay-modal"><div class="pay-step">兑换分析次数</div><div class="pay-title">输入兑换码</div><input type="text" class="pay-code-input" id="codeInput" placeholder="DPM-XXXXXXXX" maxlength="12" autocomplete="off"><button class="btn" id="codeVerifyBtn" style="width:100%;">🔓 验证并解锁</button><div style="text-align:center;font-size:0.7rem;color:var(--text-secondary);margin-top:8px;">购买后获取的12位兑换码</div><button class="btn" id="codeClsBtn" style="width:100%;margin-top:8px;background:transparent;color:var(--text-secondary);font-size:0.8rem;">✕ 取消</button></div>`;
+        document.body.appendChild(ov);
+        document.getElementById('codeClsBtn').addEventListener('click', () => document.body.removeChild(ov));
+        document.getElementById('codeVerifyBtn').addEventListener('click', () => {
+          const code = document.getElementById('codeInput').value.trim();
+          if (verifyCode(code)) { document.body.removeChild(ov); initAISection(); }
+          else alert('❌ 无效的兑换码或已被使用');
+        });
+      }
+
+      async function callDeepSeekAPI(prompt) {
+        const apiKey = getApiKey(); if (!apiKey) return { error: 'need_key' };
+        const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 120000);
+        try {
+          const resp = await fetch(AI_CONFIG.apiEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+            body: JSON.stringify({ model: AI_CONFIG.model, messages: [{ role: 'system', content: '你是一位资深口腔医学专家，请用中文回答，使用Markdown格式，语言专业但易懂。' }, { role: 'user', content: prompt }], max_tokens: AI_CONFIG.maxTokens, temperature: 0.3 }),
+            signal: ctrl.signal,
+          });
+          clearTimeout(t); const data = await resp.json();
+          if (data.error) return { error: data.error.message || 'API调用失败' };
+          if (data.choices && data.choices[0]) return { content: data.choices[0].message.content };
+          return { error: '未获取到分析结果' };
+        } catch (e) { clearTimeout(t); return { error: e.name === 'AbortError' ? '请求超时' : `网络错误: ${e.message}` }; }
+      }
+
+      function showAIReport(content) {
+        const ct = document.getElementById('aiContent'); if (!ct) return;
+        let h = content.replace(/### (.*)/g, '<h3>$1</h3>').replace(/## (.*)/g, '<h3>$1</h3>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        h = '<p>' + h.replace(/\n\n/g, '</p><p>').replace(/\n- /g, '\n• ') + '</p>';
+        ct.innerHTML = `<div style="font-size:0.7rem;color:var(--accent-purple);margin-bottom:8px;">✅ ${AI_CONFIG.modelLabel} 深度分析完成</div><div class="ai-report">${h}</div><div style="font-size:0.65rem;color:var(--text-secondary);text-align:center;margin-top:8px;">⚕️ AI分析仅供参考，不能替代专业医师诊断</div>`;
+      }
+
+      function initAISection() {
+        if (!getApiKey()) { renderAISection('need_key'); return; }
+        if (getAIBalance() <= 0) { renderAISection('no_credit'); return; }
+        renderAISection('idle');
+      }
+
+      async function executeAIAnalysis() {
+        if (!useAICredit()) { initAISection(); return; }
+        renderAISection('loading');
+        const prompt = buildAIPrompt(userAnswers, engine.ranking(8), { hasRedFlag: engine.hasRedFlag, userAge: engine.userAge, userGender: engine.userGender });
+        const result = await callDeepSeekAPI(prompt);
+        if (result.error === 'need_key') { renderAISection('need_key'); }
+        else if (result.error) {
+          document.getElementById('aiContent').innerHTML = `<div style="color:#fca5a5;text-align:center;padding:16px;">❌ ${result.error}<br><br><button class="btn" id="aiRetryBtn" style="font-size:0.85rem;">🔄 重试</button></div>`;
+          document.getElementById('aiRetryBtn').addEventListener('click', executeAIAnalysis);
+          localStorage.setItem('dental_ai_bal', String(getAIBalance() + 1));
+        } else { showAIReport(result.content); }
       }
 
       renderWelcome();
