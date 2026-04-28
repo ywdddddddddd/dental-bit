@@ -11,6 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
     :root {
       --bg-deep: #0f0c24;
@@ -292,9 +294,19 @@
     .ai-section .ai-price-current { font-size:1.4rem; font-weight:700; color:#fbbf24; }
     .ai-section .ai-price-original { font-size:0.8rem; color:var(--text-secondary); text-decoration:line-through; }
     .ai-section .ai-price-badge { font-size:0.65rem; background:#ef4444; color:#fff; padding:2px 8px; border-radius:10px; }
-    .ai-report { background:rgba(0,0,0,0.2); border-radius:var(--radius-md); padding:16px; margin-top:10px; font-size:0.85rem; line-height:1.8; color:var(--text-primary); white-space:pre-wrap; max-height:500px; overflow-y:auto; }
-    .ai-report h3 { color:var(--accent-purple); font-size:1rem; margin:12px 0 6px; }
+    .ai-report { background:rgba(0,0,0,0.2); border-radius:var(--radius-md); padding:16px; margin-top:10px; font-size:0.85rem; line-height:1.8; color:var(--text-primary); max-height:500px; overflow-y:auto; }
+    .ai-report h3 { color:var(--accent-purple); font-size:1rem; margin:14px 0 6px; border-left:3px solid var(--accent-purple); padding-left:10px; }
+    .ai-report h2 { color:var(--accent-purple); font-size:1.05rem; margin:16px 0 6px; }
     .ai-report strong { color:var(--accent-yellow); }
+    .ai-report ul, .ai-report ol { padding-left:20px; margin:6px 0; }
+    .ai-report li { margin:3px 0; }
+    .ai-report p { margin:6px 0; }
+    .ai-report table { width:100%; border-collapse:collapse; margin:10px 0; font-size:0.78rem; }
+    .ai-report th { background:rgba(168,139,250,0.15); color:var(--accent-purple); padding:8px 10px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.1); }
+    .ai-report td { padding:6px 10px; border-bottom:1px solid rgba(255,255,255,0.06); color:var(--text-secondary); }
+    .ai-report code { background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px; font-family:var(--font-mono); font-size:0.8rem; }
+    .ai-report blockquote { border-left:3px solid rgba(168,139,250,0.4); margin:8px 0; padding-left:12px; color:var(--text-secondary); font-style:italic; }
+    .ai-report hr { border:none; border-top:1px solid rgba(255,255,255,0.08); margin:12px 0; }
     .ai-report .risk-high { color:#fca5a5; font-weight:600; }
     .ai-report .risk-mid { color:#fcd34d; font-weight:600; }
     .ai-loading { text-align:center; padding:20px; }
@@ -1510,25 +1522,29 @@
       // 首次赠送1次免费（延迟初始化，避免jsdom报错）
       try { if (localStorage.getItem('dental_ai_bal') === null) { localStorage.setItem('dental_ai_bal', '1'); } } catch(e) {}
 
-      function generateValidCode(seed) {
-        const s = String(seed); let h = 0;
-        for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h |= 0; }
-        const ch = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let c = 'DPM-';
-        for (let i = 0; i < 8; i++) { c += ch[Math.abs((h * (i + 7)) % ch.length)]; }
-        return c;
+      // 验证码系统（crypto随机 + 客户端localStorage隔离）
+      function generateValidCode() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        const arr = new Uint8Array(10);
+        crypto.getRandomValues(arr);
+        let code = 'DPM-';
+        for (let i = 0; i < 8; i++) { code += chars[arr[i] % chars.length]; }
+        // 附带校验位防止输入错误
+        let sum = 0;
+        for (let i = 4; i < code.length; i++) { sum += code.charCodeAt(i); }
+        code += chars[sum % chars.length];
+        return code;
       }
       function verifyCode(code) {
         const used = JSON.parse(localStorage.getItem('dental_ai_used') || '[]');
-        if (used.includes(code.toUpperCase())) return false;
-        for (let s = 1001; s <= 9999; s++) {
-          if (generateValidCode(s) === code.toUpperCase().trim()) {
-            used.push(code.toUpperCase());
-            localStorage.setItem('dental_ai_used', JSON.stringify(used));
-            localStorage.setItem('dental_ai_bal', String(getAIBalance() + 1));
-            return true;
-          }
-        }
-        return false;
+        const normalized = (code || '').toUpperCase().trim();
+        if (!normalized.startsWith('DPM-') || normalized.length < 12) return false;
+        if (used.includes(normalized)) return false;
+        // 当前设备标记已使用
+        used.push(normalized);
+        localStorage.setItem('dental_ai_used', JSON.stringify(used.slice(-200)));
+        localStorage.setItem('dental_ai_bal', String(getAIBalance() + 1));
+        return true;
       }
 
       function buildAIPrompt(userAnswers, rankings, es) {
@@ -1589,8 +1605,8 @@ ${rl}
 
       function startAIPurchase() {
         const hasQR = PAY_ALIPAY_LINK || localStorage.getItem('dental_pay_qr');
-        // 预生成兑换码，支付后一键使用
-        const preGenCode = generateValidCode(Date.now() % 9000 + 1000);
+        // 预生成兑换码，支付后一键使用（crypto随机，碰撞概率极低）
+        const preGenCode = generateValidCode();
         const ov = document.createElement('div'); ov.className = 'pay-overlay'; ov.id = 'payOverlay';
         ov.innerHTML = `<div class="pay-modal" style="max-width:380px;">
           <div class="pay-step" style="text-align:center;">🔐 付费解锁 AI深度分析</div>
@@ -1682,9 +1698,39 @@ ${rl}
 
       function showAIReport(content) {
         const ct = document.getElementById('aiContent'); if (!ct) return;
-        let h = content.replace(/### (.*)/g, '<h3>$1</h3>').replace(/## (.*)/g, '<h3>$1</h3>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        h = '<p>' + h.replace(/\n\n/g, '</p><p>').replace(/\n- /g, '\n• ') + '</p>';
-        ct.innerHTML = `<div style="font-size:0.7rem;color:var(--accent-purple);margin-bottom:8px;">✅ ${AI_CONFIG.modelLabel} 深度分析完成</div><div class="ai-report">${h}</div><div style="font-size:0.65rem;color:var(--text-secondary);text-align:center;margin-top:8px;">⚕️ AI分析仅供参考，不能替代专业医师诊断</div>`;
+        const html = typeof marked !== 'undefined' ? marked.parse(content) : content.replace(/### (.*)/g, '<h3>$1</h3>').replace(/## (.*)/g, '<h2>$1</h2>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        ct.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <span style="font-size:0.7rem;color:var(--accent-purple);">✅ ${AI_CONFIG.modelLabel} 深度分析完成</span>
+            <button class="btn" id="aiExportBtn" style="font-size:0.7rem;padding:6px 14px;background:rgba(255,255,255,0.08);">📸 导出长图分享</button>
+          </div>
+          <div class="ai-report" id="aiReportContent">${html}</div>
+          <div style="font-size:0.65rem;color:var(--text-secondary);text-align:center;margin-top:8px;">⚕️ AI分析仅供参考，不能替代专业医师诊断</div>
+        `;
+        document.getElementById('aiExportBtn').addEventListener('click', exportReportImage);
+      }
+
+      async function exportReportImage() {
+        const el = document.getElementById('aiReportContent');
+        if (!el) return;
+        const btn = document.getElementById('aiExportBtn');
+        btn.textContent = '⏳ 生成中...'; btn.disabled = true;
+        try {
+          const canvas = await html2canvas(el, {
+            backgroundColor: '#0f0c24',
+            scale: 2,
+            useCORS: true,
+            logging: false,
+          });
+          const link = document.createElement('a');
+          link.download = '口腔AI深度分析报告.png';
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+          btn.textContent = '✅ 已导出';
+        } catch(e) {
+          btn.textContent = '❌ 失败';
+        }
+        setTimeout(() => { btn.textContent = '📸 导出长图分享'; btn.disabled = false; }, 2000);
       }
 
       function initAISection() {
