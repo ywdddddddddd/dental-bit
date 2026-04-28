@@ -1699,65 +1699,29 @@ ${rl}
       window.confirmPayment = confirmPayment;
       
       function startAIPurchase() {
+        // 每日限制：同一浏览器每天最多3次
+        const today = new Date().toDateString();
+        const dailyKey = 'dental_daily_' + today;
+        const usedToday = parseInt(localStorage.getItem(dailyKey) || '0');
+        if (usedToday >= 3) {
+          alert('今日免费次数已用完（3次/天），请明天再来或联系客服获取更多次数');
+          return;
+        }
+        
         const ov = document.createElement('div'); ov.className = 'pay-overlay';
         ov.innerHTML = `<div class="pay-modal" style="max-width:360px;text-align:center;">
           <div style="font-weight:700;color:var(--text-primary);margin-bottom:12px;">解锁 AI深度分析</div>
           <div style="color:#fbbf24;font-size:1.6rem;font-weight:800;">¥${AI_CONFIG.price.current}</div>
           <div style="color:var(--text-secondary);font-size:0.7rem;text-decoration:line-through;">¥${AI_CONFIG.price.original}</div>
           <img src="${PAY_ALIPAY_LINK}" style="width:180px;margin:12px auto;display:block;border-radius:8px;">
-          <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:16px;">支付宝扫码支付</div>
-          <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;margin-bottom:12px;font-size:0.75rem;color:var(--text-secondary);">
-            付完后，复制支付宝<b style="color:#fbbf24;">账单详情</b>中的<br><b style="color:#fbbf24;">交易号后6位</b>数字
-          </div>
-          <input type="text" id="txn6digits" placeholder="输入交易号后6位" maxlength="6" autocomplete="off" style="width:100%;padding:12px;text-align:center;font-size:1.2rem;letter-spacing:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:var(--text-primary);font-family:var(--font-mono);outline:none;margin-bottom:12px;">
-          <button class="btn" id="payVerifyBtn" style="width:100%;background:linear-gradient(135deg,#8b5cf6,#ec4899);">验证并解锁</button>
-          <div id="payError" style="color:#ef4444;font-size:0.7rem;margin-top:6px;display:none;"></div>
+          <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;">支付宝扫码支付 ¥${AI_CONFIG.price.current}</div>
+          <div style="font-size:0.7rem;color:#34d399;margin-bottom:16px;">今日剩余 ${3 - usedToday} 次</div>
+          <button class="btn" id="payDoneBtn" style="width:100%;background:linear-gradient(135deg,#8b5cf6,#ec4899);">✅ 已完成支付，立即解锁</button>
         </div>`;
         document.body.appendChild(ov);
         ov.addEventListener('click', (e) => { if (e.target === ov) document.body.removeChild(ov); });
-        
-        const input = ov.querySelector('#txn6digits');
-        input.focus();
-        input.addEventListener('input', () => { input.value = input.value.replace(/\D/g,''); });
-        
-        let failCount = parseInt(sessionStorage.getItem('dental_fail') || '0');
-        const lockUntil = parseInt(sessionStorage.getItem('dental_lock') || '0');
-        
-        ov.querySelector('#payVerifyBtn').addEventListener('click', async () => {
-          const now = Date.now();
-          if (now < lockUntil) {
-            const sec = Math.ceil((lockUntil - now) / 1000);
-            ov.querySelector('#payError').textContent = `请等待 ${sec} 秒后再试`;
-            ov.querySelector('#payError').style.display = 'block'; return;
-          }
-          const val = input.value.trim();
-          const errEl = ov.querySelector('#payError');
-          if (!/^\d{6}$/.test(val)) {
-            errEl.textContent = '请输入6位数字';
-            errEl.style.display = 'block'; return;
-          }
-          // Worker 全局验证（防止跨设备复用）
-          try {
-            const r = await fetch(`${PAY_API}/verify-txn?txn=${val}`);
-            const d = await r.json();
-            if (!d.ok) {
-              failCount++;
-              sessionStorage.setItem('dental_fail', failCount);
-              if (failCount >= 3) {
-                sessionStorage.setItem('dental_lock', now + 30000);
-                errEl.textContent = '验证次数过多，请30秒后再试';
-              } else {
-                errEl.textContent = d.error === '已使用' ? '该订单已使用过' : '验证失败，请重试';
-              }
-              errEl.style.display = 'block'; return;
-            }
-          } catch(e) {
-            errEl.textContent = '网络异常，请重试';
-            errEl.style.display = 'block'; return;
-          }
-          // 验证通过
-          sessionStorage.removeItem('dental_fail');
-          sessionStorage.removeItem('dental_lock');
+        ov.querySelector('#payDoneBtn').addEventListener('click', () => {
+          localStorage.setItem(dailyKey, String(usedToday + 1));
           document.body.removeChild(ov);
           const code = generateValidCode();
           verifyCode(code);
