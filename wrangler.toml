@@ -2,14 +2,8 @@
 name = "dental-pay"
 main = "worker.js"
 compatibility_date = "2025-01-01"
+account_id = "e0f248f67c8de99c72b52ca5c9213418"
 
-# KV 命名空间（部署后手动创建并填入ID）
-# npx wrangler kv:namespace create "PAY_KV"
-# npx wrangler kv:namespace create "PAY_KV" --preview
 [[kv_namespaces]]
 binding = "PAY_KV"
-id = "YOUR_KV_ID_HERE"
-preview_id = "YOUR_PREVIEW_ID_HERE"
-
-# 环境变量（管理端密钥，部署后设置）
-# npx wrangler secret put ADMIN_KEY
+id = "c98c6ebc8d2b41278b346a98d173acb5"

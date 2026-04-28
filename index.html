@@ -1610,8 +1610,8 @@ ${rl}
         }
       }
 
-      // 支付Worker API（部署Cloudflare Worker后替换此URL）
-      const PAY_API = localStorage.getItem('dental_pay_api') || '';
+      // 支付Worker API（已部署）
+      const PAY_API = 'https://dental-pay.oral-mineru.workers.dev';
       
       function startAIPurchase() {
         // 频控
