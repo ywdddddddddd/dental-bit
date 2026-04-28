@@ -1499,10 +1499,9 @@
       const BUILTIN_API_KEY = 'sk-0fb0a98da71a46388a7701b842ecd438';
       function getApiKey() { return BUILTIN_API_KEY; }
 
-      // 支付宝固定金额收款码配置
-      // 获取方式：支付宝App → 首页「收钱」→「向对方收钱」→ 金额填0.99、原因填"口腔AI分析" → 生成二维码 → 保存图片
-      // 将图片上传到图床（如 https://imgur.com/upload），拿到图片直链填入下方：
-      const PAY_ALIPAY_LINK = localStorage.getItem('dental_pay_qr') || '';
+      // 支付宝固定金额收款码（¥0.99锁定）
+      // 图片部署在站点同级目录，直接引用即可
+      const PAY_ALIPAY_LINK = '351a480f8de743d71a63a443143283a4.jpg';
       function getAIBalance() { return parseInt(localStorage.getItem('dental_ai_bal') || '0'); }
       function useAICredit() {
         const b = getAIBalance(); if (b <= 0) return false;
