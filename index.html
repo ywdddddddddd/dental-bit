@@ -1588,6 +1588,8 @@ ${rl}
 
       function startAIPurchase() {
         const hasQR = PAY_ALIPAY_LINK || localStorage.getItem('dental_pay_qr');
+        // 预生成兑换码，支付后一键使用
+        const preGenCode = generateValidCode(Date.now() % 9000 + 1000);
         const ov = document.createElement('div'); ov.className = 'pay-overlay'; ov.id = 'payOverlay';
         ov.innerHTML = `<div class="pay-modal" style="max-width:380px;">
           <div class="pay-step" style="text-align:center;">🔐 付费解锁 AI深度分析</div>
@@ -1600,20 +1602,19 @@ ${rl}
             <span style="font-size:2rem;font-weight:800;color:#fbbf24;margin:0 8px;">¥${AI_CONFIG.price.current}</span>
             <span style="font-size:0.75rem;color:var(--text-secondary);text-decoration:line-through;">¥${AI_CONFIG.price.original}</span>
           </div>
-          ${hasQR ? `
-          <div style="text-align:center;margin:16px 0;">
-            <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px;">📱 支付宝扫码支付</div>
-            <img src="${PAY_ALIPAY_LINK || localStorage.getItem('dental_pay_qr')}" style="width:180px;height:180px;border-radius:8px;border:2px solid rgba(255,255,255,0.1);" alt="支付宝收款码" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-            <div class="pay-qr" style="display:none;">💳</div>
-            <div style="font-size:0.7rem;color:var(--text-secondary);margin-top:6px;">支付后请截图保存交易单号</div>
-          </div>` : `
-          <div class="pay-qr" style="margin:16px auto;">💳</div>
-          <div style="text-align:center;font-size:0.7rem;color:var(--text-secondary);margin-bottom:8px;">模拟支付环境 · 点击下方直接获取兑换码</div>`}
-          <button class="btn" id="paySimBtn" style="width:100%;background:linear-gradient(135deg,#1677FF,#0A5AC2);font-weight:700;font-size:0.95rem;">
-            ${hasQR ? '✅ 已完成支付，获取兑换码' : '💰 确认支付 ¥' + AI_CONFIG.price.current}
+          ${hasQR ? `<div style="text-align:center;margin:12px 0;"><img src="${PAY_ALIPAY_LINK || localStorage.getItem('dental_pay_qr')}" style="width:180px;height:180px;border-radius:8px;border:2px solid rgba(255,255,255,0.1);" alt="支付宝收款码" onerror="this.style.display='none'"><div style="font-size:0.7rem;color:var(--text-secondary);margin-top:6px;">📱 支付宝扫码支付 ¥${AI_CONFIG.price.current}</div></div>` : `<div class="pay-qr" style="margin:16px auto;">💳</div><div style="text-align:center;font-size:0.7rem;color:var(--text-secondary);margin-bottom:8px;">模拟支付 · 点击下方自动获取</div>`}
+          <div style="background:rgba(52,211,153,0.08);border-radius:8px;padding:10px;margin:10px 0;text-align:center;">
+            <div style="font-size:0.7rem;color:var(--text-secondary);">支付完成后点击下方按钮</div>
+            <div style="font-size:0.7rem;color:#34d399;">系统将自动填入兑换码并解锁</div>
+          </div>
+          <button class="btn" id="payAutoBtn" style="width:100%;background:linear-gradient(135deg,#1677FF,#0A5AC2);font-weight:700;font-size:0.95rem;">
+            ✅ 我已完成支付 · 自动解锁
           </button>
-          <button class="btn" id="paySkipBtn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.08);">
-            🔑 使用兑换码
+          <div style="text-align:center;font-size:0.65rem;color:var(--text-secondary);margin-top:6px;">
+            您的兑换码：<span style="font-family:var(--font-mono);color:#34d399;user-select:all;cursor:pointer;">${preGenCode}</span>
+          </div>
+          <button class="btn" id="payCodeBtn" style="width:100%;margin-top:6px;background:rgba(255,255,255,0.08);">
+            🔑 手动输入兑换码
           </button>
           <button class="btn" id="payClsBtn" style="width:100%;margin-top:6px;background:transparent;color:var(--text-secondary);font-size:0.8rem;">
             ✕ 取消
@@ -1621,20 +1622,17 @@ ${rl}
         </div>`;
         document.body.appendChild(ov);
         document.getElementById('payClsBtn').addEventListener('click', () => document.body.removeChild(ov));
-        document.getElementById('paySkipBtn').addEventListener('click', () => { document.body.removeChild(ov); showCodeInput(); });
-        document.getElementById('paySimBtn').addEventListener('click', () => {
-          const code = generateValidCode(Date.now() % 9000 + 1000);
-          ov.querySelector('.pay-modal').innerHTML = `<div class="pay-step" style="text-align:center;">✅ 支付验证通过</div><div style="text-align:center;padding:20px 0;"><div style="font-size:3rem;margin-bottom:8px;">🎫</div><div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:6px;">您的AI分析兑换码：</div><div style="font-size:1.3rem;font-weight:700;color:#34d399;font-family:var(--font-mono);letter-spacing:2px;background:rgba(52,211,153,0.1);padding:10px;border-radius:8px;margin:8px 0;cursor:pointer;user-select:all;">${code}</div><div style="font-size:0.7rem;color:var(--text-secondary);">点击上方可复制 · 或直接点击下方自动使用</div></div><button class="btn" id="payUseCodeBtn" style="width:100%;">✅ 立即使用此码</button><button class="btn" id="payCopyBtn" style="width:100%;margin-top:6px;background:rgba(255,255,255,0.08);">📋 复制兑换码</button>`;
-          ov.querySelector('#payUseCodeBtn').addEventListener('click', () => {
-            verifyCode(code);
-            document.body.removeChild(ov);
+        document.getElementById('payCodeBtn').addEventListener('click', () => { document.body.removeChild(ov); showCodeInput(); });
+        document.getElementById('payAutoBtn').addEventListener('click', () => {
+          // 自动验证预生成的兑换码 → 解锁 → 开始分析
+          verifyCode(preGenCode);
+          document.body.removeChild(ov);
+          // 直接触发AI分析，跳过idle界面
+          if (getAIBalance() > 0) {
+            executeAIAnalysis();
+          } else {
             initAISection();
-          });
-          ov.querySelector('#payCopyBtn').addEventListener('click', () => {
-            navigator.clipboard.writeText(code).then(() => {
-              ov.querySelector('#payCopyBtn').textContent = '✅ 已复制';
-            });
-          });
+          }
         });
       }
 
