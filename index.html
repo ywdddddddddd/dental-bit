@@ -1612,6 +1612,98 @@ ${rl}
 
       // 支付Worker API（已部署）
       const PAY_API = 'https://dental-pay.oral-mineru.workers.dev';
+      const ADMIN_KEY = 'dental2026';
+
+      // 管理面板（URL加 ?admin 访问）
+      function initAdminPanel() {
+        if (!location.search.includes('admin')) return;
+        // 已通过URL进入管理面板
+        const panel = document.createElement('div');
+        panel.id = 'adminPanel';
+        panel.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9998;background:var(--bg-card);border-radius:12px;padding:16px;border:1px solid var(--accent-purple);max-width:320px;font-size:0.8rem;';
+        panel.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <b style="color:var(--accent-purple);">🛡️ 管理面板</b>
+            <button id="adminRefreshBtn" style="background:rgba(255,255,255,0.08);border:none;color:var(--text-primary);padding:4px 10px;border-radius:8px;cursor:pointer;font-size:0.7rem;">🔄 刷新</button>
+          </div>
+          <div id="adminPending" style="max-height:250px;overflow-y:auto;"></div>
+          <div style="margin-top:10px;font-size:0.7rem;color:var(--text-secondary);">生成兑换码：<input type="number" id="genCodeCount" value="5" min="1" max="50" style="width:45px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text-primary);padding:2px 4px;border-radius:4px;margin:0 4px;"><button id="genCodeBtn" style="background:rgba(255,255,255,0.08);border:none;color:var(--text-primary);padding:3px 8px;border-radius:6px;cursor:pointer;font-size:0.7rem;">生成</button></div>
+          <div id="adminGenResult" style="margin-top:6px;font-size:0.65rem;word-break:break-all;"></div>
+        `;
+        document.body.appendChild(panel);
+        document.getElementById('adminRefreshBtn').addEventListener('click', refreshAdminPending);
+        document.getElementById('genCodeBtn').addEventListener('click', generateAdminCodes);
+        refreshAdminPending();
+      }
+      
+      async function refreshAdminPending() {
+        const el = document.getElementById('adminPending'); if (!el) return;
+        el.innerHTML = '<div style="color:var(--text-secondary);">加载中...</div>';
+        try {
+          // 列出KV中所有pending的token（通过轮询已知token）
+          const allKeys = JSON.parse(localStorage.getItem('admin_known_tokens') || '[]');
+          const pending = [];
+          for (const token of allKeys) {
+            const r = await fetch(`${PAY_API}/check-status?token=${token}`);
+            const d = await r.json();
+            if (d.status === 'pending') pending.push(token);
+          }
+          if (pending.length === 0) {
+            el.innerHTML = '<div style="color:var(--text-secondary);text-align:center;padding:10px;">暂无待确认支付</div>';
+          } else {
+            el.innerHTML = pending.map(t => `
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:rgba(255,255,255,0.03);border-radius:6px;margin-bottom:6px;">
+                <span style="font-family:var(--font-mono);font-size:0.7rem;">${t}</span>
+                <button onclick="confirmPayment('${t}')" style="background:#10b981;border:none;color:#fff;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:0.7rem;">✅ 确认到账</button>
+              </div>
+            `).join('');
+          }
+        } catch(e) { el.innerHTML = '<div style="color:#ef4444;">连接失败</div>'; }
+      }
+      
+      async function confirmPayment(token) {
+        try {
+          const r = await fetch(`${PAY_API}/verify-payment`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({token, adminKey: ADMIN_KEY})
+          });
+          const d = await r.json();
+          if (d.success) {
+            refreshAdminPending();
+          } else {
+            alert('确认失败: ' + (d.error || '未知错误'));
+          }
+        } catch(e) { alert('网络错误'); }
+      }
+      
+      async function generateAdminCodes() {
+        const count = parseInt(document.getElementById('genCodeCount').value) || 5;
+        const el = document.getElementById('adminGenResult');
+        try {
+          const r = await fetch(`${PAY_API}/generate-code`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({adminKey: ADMIN_KEY, count})
+          });
+          const d = await r.json();
+          if (d.success) {
+            el.innerHTML = '<div style="color:#34d399;">✅ 已生成:</div>' + d.codes.map(c => `<div style="font-family:var(--font-mono);color:#fbbf24;font-size:0.65rem;">${c}</div>`).join('');
+          }
+        } catch(e) { el.innerHTML = '<div style="color:#ef4444;">生成失败</div>'; }
+      }
+      
+      // 在showResult中记录token到本地
+      function trackAdminToken(token) {
+        const known = JSON.parse(localStorage.getItem('admin_known_tokens') || '[]');
+        if (!known.includes(token)) {
+          known.push(token);
+          if (known.length > 200) known.shift();
+          localStorage.setItem('admin_known_tokens', JSON.stringify(known));
+        }
+      }
+      // 暴露管理函数到全局
+      window.confirmPayment = confirmPayment;
       
       function startAIPurchase() {
         // 频控
@@ -1690,6 +1782,8 @@ ${rl}
               const r = await fetch(`${PAY_API}/create-session`, { method: 'POST' });
               const d = await r.json();
               if (d.token) {
+                // 记录token供管理面板使用
+                trackAdminToken(d.token);
                 // 开始轮询
                 const statusEl = document.getElementById('payStatus');
                 let attempts = 0;
@@ -1861,8 +1955,9 @@ ${rl}
       }
 
       renderWelcome();
-      // 检测URL中的unlock参数（支付后自动解锁）
+      // 检测支付URL解锁 + 管理面板
       checkUrlUnlock();
+      initAdminPanel();
     })();
   </script>
 </body>
