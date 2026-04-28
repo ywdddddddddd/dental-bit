@@ -584,6 +584,7 @@
             { emoji:'🪥', text:'刷牙刷到牙根那儿的时候刺痛', delta:{wedge_defect:8,dentin_hypersensitivity:6}, lock:['caries_deep','cracked_tooth'] },
             { emoji:'💢', text:'咬到某个点突然像过电/刀割一样剧痛', next:['q_pain_lightning_duration'], delta:{cracked_tooth:7,trigeminal_neuralgia:5}, lock:['caries_shallow','dentin_hypersensitivity','dental_erosion'] },
             { emoji:'🎈', text:'不敢咬东西，感觉牙齿"浮起来了"，一碰就疼', delta:{apical_periodontitis:8,pulp_necrosis:3}, lock:['dentin_hypersensitivity','caries_shallow','wedge_defect'] },
+            { emoji:'🤧', text:'上排后牙疼，同时同侧鼻子堵、流黄色脓鼻涕', delta:{sinusitis_odontogenic:12}, lock:['caries_shallow','caries_deep','dentin_hypersensitivity','wedge_defect','cracked_tooth'] },
           ]
         },
         q_pain_caries_depth: {
@@ -615,6 +616,7 @@
             { emoji:'🍎', text:'刷牙或者啃苹果时才出血，平时不出', next:['q_perio_location'], delta:{gingivitis:7,puberty_gingivitis:3,pregnancy_gingivitis:3}, lock:['aggressive_periodontitis'] },
             { emoji:'🩸', text:'不刷牙也自己出血，牙龈发红发紫', next:['q_perio_mobility'], delta:{periodontitis:6,aggressive_periodontitis:5}, lock:['gingivitis'] },
             { emoji:'🩹', text:'牙龈反复鼓起一个脓包来，挤破了过几天又鼓起来', delta:{apical_periodontitis:10,pulp_necrosis:6}, lock:['gingivitis','periodontitis','aggressive_periodontitis'] },
+            { emoji:'⚠️', text:'牙龈反复排脓，同时牙齿对冷热没感觉了（牙神经可能坏死了）', delta:{perio_endo_lesion:12,pulp_necrosis:5}, lock:['gingivitis','periodontitis'] },
           ]
         },
         q_perio_location: {
@@ -663,6 +665,7 @@
             { emoji:'🔴', text:'下面（私处）也反复长溃疡，或者眼睛反复发红疼痛', delta:{behcet_disease:12}, lock:['oral_ulcer','herpes_stomatitis','hfmd'], forceRed:true },
             { emoji:'💊', text:'最近吃了新药后突然发作的，嘴唇上全是厚厚的血痂', delta:{erythema_multiforme:12}, lock:['pemphigus','oral_ulcer','herpes_stomatitis','hfmd'], forceRed:true },
             { emoji:'🩹', text:'牙龈像被"烫掉一层皮"一样脱皮，大面积发红发烂', delta:{pemphigoid:10,pemphigus:4,lichen_planus:3}, lock:['gingivitis','periodontitis','anug'] },
+            { emoji:'🤧', text:'换了新牙膏/漱口水/吃了某种食物后出现的，有点过敏的感觉', delta:{allergic_stomatitis:12}, lock:['oral_ulcer','herpes_stomatitis','pemphigus','behcet_disease'] },
             { emoji:'❌', text:'没有以上这些情况，就是长溃疡/糜烂', delta:{oral_ulcer:5}, next:['q_mucosa_ulcer_duration'] },
           ]
         },

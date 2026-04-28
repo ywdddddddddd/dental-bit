@@ -49,6 +49,10 @@ const ENTRY_PATHS = {
         desc: '牙疼路径-浮起感',
         path: { q_pain_spontaneous: 1, q_pain_cold_hot_diff: 0, q_pain_trigger_main: 3 },
       },
+      sinusitis: {
+        desc: '牙疼路径-鼻窦源性',
+        path: { q_pain_spontaneous: 1, q_pain_cold_hot_diff: 0, q_pain_trigger_main: 4 },
+      },
       trigeminal: {
         desc: '牙疼路径-闪电痛→三叉神经',
         path: { q_pain_spontaneous: 1, q_pain_cold_hot_diff: 0, q_pain_trigger_main: 2, q_pain_lightning_duration: 0, q_pain_xray_finding: 1 },
@@ -83,8 +87,11 @@ const ENTRY_PATHS = {
       },
       apical_abscess: {
         desc: '牙周路径-根尖脓肿（经牙周入口）',
-        path: { q_perio_necrosis_smell: 1, q_perio_bleeding_type: 2, q_perio_mobility: 0 },
-        // Note: perio_bleeding_type branch 2 routes to apical_periodontitis
+        path: { q_perio_necrosis_smell: 1, q_perio_bleeding_type: 2 },
+      },
+      perio_endo: {
+        desc: '牙周路径-牙周牙髓联合病变',
+        path: { q_perio_necrosis_smell: 1, q_perio_bleeding_type: 3 },
       },
     },
   },
@@ -114,28 +121,28 @@ const ENTRY_PATHS = {
         desc: '黏膜路径-复发性溃疡',
         path: {
           q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1,
-          q_mucosa_ulcer_pattern: 4, q_mucosa_ulcer_duration: 0,
+          q_mucosa_ulcer_pattern: 5, q_mucosa_ulcer_duration: 0,
         },
       },
       herpes: {
         desc: '黏膜路径-疱疹',
         path: {
           q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1,
-          q_mucosa_ulcer_pattern: 4, q_mucosa_ulcer_duration: 3,
+          q_mucosa_ulcer_pattern: 5, q_mucosa_ulcer_duration: 3,
         },
       },
       pemphigus: {
         desc: '黏膜路径-天疱疮',
         path: {
           q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1,
-          q_mucosa_ulcer_pattern: 4, q_mucosa_ulcer_duration: 2,
+          q_mucosa_ulcer_pattern: 5, q_mucosa_ulcer_duration: 2,
         },
       },
       oral_cancer: {
         desc: '黏膜路径-口腔癌',
         path: {
           q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1,
-          q_mucosa_ulcer_pattern: 4, q_mucosa_ulcer_duration: 1,
+          q_mucosa_ulcer_pattern: 5, q_mucosa_ulcer_duration: 1,
           q_mucosa_cancer_redflags: [0, 1, 2, 3],
         },
       },
@@ -166,6 +173,13 @@ const ENTRY_PATHS = {
         path: {
           q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1,
           q_mucosa_ulcer_pattern: 3,
+        },
+      },
+      allergic: {
+        desc: '黏膜路径-过敏',
+        path: {
+          q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1,
+          q_mucosa_ulcer_pattern: 4,
         },
       },
       hfmd: {
@@ -335,7 +349,7 @@ const PRIMARY_DISEASE_ENTRY = {
   gingival_fibromatosis: 'perio:gingivitis',
   epulis: 'perio:gingivitis',
   acute_gingival_papillitis: 'perio:gingivitis',
-  perio_endo_lesion: 'perio:periodontitis',
+  perio_endo_lesion: 'perio:perio_endo',
   furcation_involvement: 'perio:periodontitis',
   periodontal_abscess: 'perio:periodontitis',
   gingival_recession: 'perio:periodontitis',
@@ -356,7 +370,7 @@ const PRIMARY_DISEASE_ENTRY = {
   erythema_multiforme: 'mucosa:erythema',
   hfmd: 'mucosa:hfmd',
   traumatic_ulcer: 'mucosa:oral_ulcer',
-  allergic_stomatitis: 'mucosa:oral_ulcer',
+  allergic_stomatitis: 'mucosa:allergic',
   lupus_erythematosus_oral: 'mucosa:lichen',
   pemphigoid: 'mucosa:pemphigoid',
   radiation_stomatitis: 'mucosa:oral_ulcer', // 通过黏膜路径+全局放疗史加分
@@ -372,7 +386,7 @@ const PRIMARY_DISEASE_ENTRY = {
   malocclusion: 'hard_tissue:developmental_hypoplasia',
   sialolithiasis: 'jaw:swelling_sialolith',
   parotitis: 'jaw:swelling_parotitis',
-  sinusitis_odontogenic: 'pain:triggered_caries',
+  sinusitis_odontogenic: 'pain:sinusitis',
   osteomyelitis_jaw: 'pain:triggered_floating',
   mronj: 'jaw:mronj',
   garre_osteomyelitis: 'pain:triggered_floating',
