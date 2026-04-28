@@ -79,6 +79,20 @@ export default {
       return Response.json({ status: status === 'used' ? 'used' : 'invalid' }, { headers: cors });
     }
 
+    // 验证交易号后6位（全局防重用）
+    if (url.pathname === '/verify-txn') {
+      const txn = url.searchParams.get('txn');
+      if (!txn || !/^\d{6}$/.test(txn)) {
+        return Response.json({ ok: false, error: '格式错误' }, { headers: cors });
+      }
+      const existing = await env.PAY_KV.get('txn:' + txn);
+      if (existing) {
+        return Response.json({ ok: false, error: '已使用' }, { headers: cors });
+      }
+      await env.PAY_KV.put('txn:' + txn, 'used', { expirationTtl: 86400 * 30 });
+      return Response.json({ ok: true }, { headers: cors });
+    }
+
     return new Response('Not found', { status: 404, headers: cors });
   },
 };

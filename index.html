@@ -1723,13 +1723,12 @@ ${rl}
         let failCount = parseInt(sessionStorage.getItem('dental_fail') || '0');
         const lockUntil = parseInt(sessionStorage.getItem('dental_lock') || '0');
         
-        ov.querySelector('#payVerifyBtn').addEventListener('click', () => {
+        ov.querySelector('#payVerifyBtn').addEventListener('click', async () => {
           const now = Date.now();
           if (now < lockUntil) {
             const sec = Math.ceil((lockUntil - now) / 1000);
             ov.querySelector('#payError').textContent = `请等待 ${sec} 秒后再试`;
-            ov.querySelector('#payError').style.display = 'block';
-            return;
+            ov.querySelector('#payError').style.display = 'block'; return;
           }
           const val = input.value.trim();
           const errEl = ov.querySelector('#payError');
@@ -1737,23 +1736,28 @@ ${rl}
             errEl.textContent = '请输入6位数字';
             errEl.style.display = 'block'; return;
           }
-          const used = JSON.parse(localStorage.getItem('dental_txn_used') || '[]');
-          if (used.includes(val)) {
-            failCount++;
-            sessionStorage.setItem('dental_fail', failCount);
-            if (failCount >= 3) {
-              sessionStorage.setItem('dental_lock', now + 30000);
-              errEl.textContent = '验证次数过多，请30秒后再试';
-            } else {
-              errEl.textContent = '该交易号已使用过';
+          // Worker 全局验证（防止跨设备复用）
+          try {
+            const r = await fetch(`${PAY_API}/verify-txn?txn=${val}`);
+            const d = await r.json();
+            if (!d.ok) {
+              failCount++;
+              sessionStorage.setItem('dental_fail', failCount);
+              if (failCount >= 3) {
+                sessionStorage.setItem('dental_lock', now + 30000);
+                errEl.textContent = '验证次数过多，请30秒后再试';
+              } else {
+                errEl.textContent = d.error === '已使用' ? '该订单已使用过' : '验证失败，请重试';
+              }
+              errEl.style.display = 'block'; return;
             }
+          } catch(e) {
+            errEl.textContent = '网络异常，请重试';
             errEl.style.display = 'block'; return;
           }
           // 验证通过
           sessionStorage.removeItem('dental_fail');
           sessionStorage.removeItem('dental_lock');
-          used.push(val);
-          localStorage.setItem('dental_txn_used', JSON.stringify(used.slice(-100)));
           document.body.removeChild(ov);
           const code = generateValidCode();
           verifyCode(code);
