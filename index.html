@@ -480,7 +480,7 @@
         ['mronj','osteomyelitis_jaw']
       );
       DISEASE_GRAPH.mutualExclusionGroups.push(
-        ['reversible_pulpitis','irreversible_pulpitis','pulp_necrosis','pulp_calcification'],
+        ['irreversible_pulpitis','pulp_necrosis','pulp_calcification'],
         ['anug','gingivitis','periodontitis'],
         ['gingival_hyperplasia','gingival_fibromatosis','epulis'],
         ['behcet_disease','erythema_multiforme','pemphigus','pemphigoid','lupus_erythematosus_oral'],
@@ -538,10 +538,17 @@
         q_pain_trigger_main: {
           id:'q_pain_trigger_main', text:'哪种情况最容易把疼勾出来？', stage:'symptom',
           branches:[
-            { emoji:'🍬', text:'吃甜的或者喝冰的时酸痛，刺激去掉马上就好了', delta:{caries_shallow:4,caries_deep:6,dental_erosion:3}, lock:['cracked_tooth','apical_periodontitis','trigeminal_neuralgia'] },
+            { emoji:'🍬', text:'吃甜的或者喝冰的时酸痛，刺激去掉马上就好了', next:['q_pain_caries_depth'], delta:{caries_shallow:4,caries_deep:6,dental_erosion:3}, lock:['cracked_tooth','apical_periodontitis','trigeminal_neuralgia'] },
             { emoji:'🪥', text:'刷牙刷到牙根那儿的时候刺痛', delta:{wedge_defect:8,dentin_hypersensitivity:6}, lock:['caries_deep','cracked_tooth'] },
             { emoji:'💢', text:'咬到某个点突然像过电/刀割一样剧痛', next:['q_pain_lightning_duration'], delta:{cracked_tooth:7,trigeminal_neuralgia:5}, lock:['caries_shallow','dentin_hypersensitivity','dental_erosion'] },
             { emoji:'🎈', text:'不敢咬东西，感觉牙齿"浮起来了"，一碰就疼', delta:{apical_periodontitis:8,pulp_necrosis:3}, lock:['dentin_hypersensitivity','caries_shallow','wedge_defect'] },
+          ]
+        },
+        q_pain_caries_depth: {
+          id:'q_pain_caries_depth', text:'那颗牙上的洞有多大？照镜子能看到明显的小洞吗？', stage:'symptom',
+          branches:[
+            { emoji:'🔍', text:'只有一条黑线或针尖大的小黑点，舔上去基本感觉不到凹坑', delta:{caries_shallow:10}, lock:['caries_deep','residual_root'] },
+            { emoji:'🕳️', text:'能看到明显的洞，舌头舔上去有个凹坑，吃东西容易塞进去', delta:{caries_deep:10}, lock:['caries_shallow'] },
           ]
         },
         q_pain_floating: {
@@ -563,9 +570,16 @@
         q_perio_bleeding_type: {
           id:'q_perio_bleeding_type', text:'牙龈出血是哪种情况？', stage:'symptom',
           branches:[
-            { emoji:'🍎', text:'刷牙或者啃苹果时才出血，平时不出', next:['q_perio_mobility'], delta:{gingivitis:7,puberty_gingivitis:3,pregnancy_gingivitis:3}, lock:['aggressive_periodontitis'] },
+            { emoji:'🍎', text:'刷牙或者啃苹果时才出血，平时不出', next:['q_perio_location'], delta:{gingivitis:7,puberty_gingivitis:3,pregnancy_gingivitis:3}, lock:['aggressive_periodontitis'] },
             { emoji:'🩸', text:'不刷牙也自己出血，牙龈发红发紫', next:['q_perio_mobility'], delta:{periodontitis:6,aggressive_periodontitis:5}, lock:['gingivitis'] },
             { emoji:'🩹', text:'牙龈反复鼓起一个脓包来，挤破了过几天又鼓起来', delta:{apical_periodontitis:10,pulp_necrosis:6}, lock:['gingivitis','periodontitis','aggressive_periodontitis'] },
+          ]
+        },
+        q_perio_location: {
+          id:'q_perio_location', text:'肿痛主要在哪个位置？', stage:'symptom',
+          branches:[
+            { emoji:'🦷', text:'最里面那颗牙（智齿）周围的牙龈肿了，吞咽都疼，嘴都有点张不开', delta:{pericoronitis:12}, lock:['gingivitis','puberty_gingivitis','pregnancy_gingivitis'], next:['q_perio_mobility'] },
+            { emoji:'🩸', text:'前面或者侧面的牙龈，不是最里面的', next:['q_perio_mobility'], delta:{gingivitis:4} },
           ]
         },
         q_perio_mobility: {
@@ -595,9 +609,19 @@
           id:'q_mucosa_white_or_ulcer', text:'它主要长什么样？', stage:'symptom',
           branches:[
             { emoji:'⬜', text:'白色的斑块或者白色条纹，没有破皮', next:['q_mucosa_white_risk'], delta:{leukoplakia:6,lichen_planus:5,osf:4}, lock:['oral_ulcer','herpes_stomatitis','pemphigus'] },
-            { emoji:'😖', text:'凹陷的坑/糜烂面/水疱，碰到就很疼', next:['q_mucosa_hand_foot_rash'], delta:{oral_ulcer:6,herpes_stomatitis:4,pemphigus:3}, lock:['leukoplakia','osf'] },
+            { emoji:'😖', text:'凹陷的坑/糜烂面/水疱，碰到就很疼', next:['q_mucosa_ulcer_pattern'], delta:{oral_ulcer:6,herpes_stomatitis:4,pemphigus:3}, lock:['leukoplakia','osf'] },
             { emoji:'🗺️', text:'舌头表面有游走的红斑白边，倒是不怎么疼', delta:{geographic_tongue:12}, lock:['leukoplakia','oral_ulcer','pemphigus','oral_cancer'] },
             { emoji:'😬', text:'就嘴角裂开/发红/起皮结痂', delta:{angular_cheilitis:10}, lock:['oral_ulcer','leukoplakia','pemphigus','oral_cancer'] },
+          ]
+        },
+        q_mucosa_ulcer_pattern: {
+          id:'q_mucosa_ulcer_pattern', text:'有没有以下这些伴随情况？', stage:'symptom',
+          branches:[
+            { emoji:'🖐️', text:'手脚也出现了红色疹子/小水疱，还有点发烧', delta:{hfmd:12}, lock:['herpes_stomatitis','oral_ulcer','pemphigus','behcet_disease','erythema_multiforme','pemphigoid'] },
+            { emoji:'🔴', text:'下面（私处）也反复长溃疡，或者眼睛反复发红疼痛', delta:{behcet_disease:12}, lock:['oral_ulcer','herpes_stomatitis','hfmd'], forceRed:true },
+            { emoji:'💊', text:'最近吃了新药后突然发作的，嘴唇上全是厚厚的血痂', delta:{erythema_multiforme:12}, lock:['pemphigus','oral_ulcer','herpes_stomatitis','hfmd'], forceRed:true },
+            { emoji:'🩹', text:'牙龈像被"烫掉一层皮"一样脱皮，大面积发红发烂', delta:{pemphigoid:10,pemphigus:4,lichen_planus:3}, lock:['gingivitis','periodontitis','anug'] },
+            { emoji:'❌', text:'没有以上这些情况，就是长溃疡/糜烂', delta:{oral_ulcer:5}, next:['q_mucosa_ulcer_duration'] },
           ]
         },
         q_mucosa_white_risk: {
@@ -743,7 +767,7 @@
             { emoji:'🫀', text:'高血压/心脏病，在吃降压药', riskTag:{gingival_hyperplasia:4,xerostomia:1.5,periodontitis:1.3} },
             { emoji:'🧬', text:'干燥综合征/红斑狼疮/类风湿等自身免疫病', riskTag:{xerostomia:3,candidiasis:2.5,lichen_planus:2,pemphigus:3,burning_mouth:2} },
             { emoji:'💊', text:'长期吃抗癫痫药/抗抑郁药/环孢素', riskTag:{gingival_hyperplasia:4,xerostomia:2} },
-            { emoji:'☢️', text:'做过头部或颈部放射治疗', riskTag:{xerostomia:5,caries_rampant:6,candidiasis:4,radiation_stomatitis:8,osteomyelitis_jaw:3,mronj:5}, forceRed:true },
+            { emoji:'☢️', text:'做过头部或颈部放射治疗', riskTag:{xerostomia:5,caries_rampant:6,candidiasis:4,radiation_stomatitis:15,osteomyelitis_jaw:3,mronj:5}, forceRed:true },
             { emoji:'🦴', text:'在用或曾用过双膦酸盐/地舒单抗（治骨质疏松/骨转移的）', riskTag:{mronj:8,osteomyelitis_jaw:3}, forceRed:true },
             { emoji:'✅', text:'以上都没有', riskTag:{} },
           ]
@@ -993,10 +1017,15 @@
           if (finalScores['root_caries'] > 10 && finalScores['caries_shallow'] > 10) {
             finalScores['root_caries'] *= 0.7; finalScores['caries_shallow'] *= 0.7;
           }
+          // 牙髓炎谱系：可复/不可复互斥因子调至0.35（原0.15过于激进）
           if (finalScores['reversible_pulpitis'] > finalScores['irreversible_pulpitis']) {
-            finalScores['irreversible_pulpitis'] *= 0.1;
+            finalScores['irreversible_pulpitis'] *= 0.15;
           } else if (finalScores['irreversible_pulpitis'] > finalScores['reversible_pulpitis']) {
-            finalScores['reversible_pulpitis'] *= 0.15;
+            finalScores['reversible_pulpitis'] *= 0.35;
+          }
+          // 浅/深龋互斥软化：浅龋高分时深龋不应被过度压制
+          if (finalScores['caries_shallow'] > 30 && finalScores['caries_deep'] > 0) {
+            finalScores['caries_deep'] *= 0.6;
           }
           if (finalScores['anug'] > 20) {
             ['gingivitis','periodontitis','puberty_gingivitis'].forEach(k => { finalScores[k] *= 0.15; });
