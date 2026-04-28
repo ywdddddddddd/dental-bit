@@ -36,20 +36,20 @@ function loadEngine() {
   const htmlPath = path.join(__dirname, '..', 'index.html');
   let html = fs.readFileSync(htmlPath, 'utf-8');
   
-  // 在 IIFE 结束前注入导出代码，将引擎变量暴露到 window
-  html = html.replace(
-    '})();\n  </script>',
-    '  window.__OralTriageEngine = OralTriageEngine;\n' +
-    '  window.__DISEASES = DISEASES;\n' +
-    '  window.__DISEASE_GRAPH = DISEASE_GRAPH;\n' +
-    '  window.__QUESTION_TREE = QUESTION_TREE;\n' +
-    '  window.__DISEASE_CATEGORIES = DISEASE_CATEGORIES;\n' +
-    '})();\n  </script>'
-  );
+  // 在最后一个 })(); 之前注入 window 导出代码
+  const lastIIFEClose = html.lastIndexOf('})();');
+  if (lastIIFEClose === -1) throw new Error('找不到 IIFE 闭合标记');
+  const injectCode = `
+  window.__OralTriageEngine = OralTriageEngine;
+  window.__DISEASES = DISEASES;
+  window.__DISEASE_GRAPH = DISEASE_GRAPH;
+  window.__QUESTION_TREE = QUESTION_TREE;
+  window.__DISEASE_CATEGORIES = DISEASE_CATEGORIES;
+`;
+  html = html.slice(0, lastIIFEClose) + injectCode + html.slice(lastIIFEClose);
   
   const dom = new JSDOM(html, {
     runScripts: 'dangerously',
-    resources: 'usable',
   });
   
   const win = dom.window;
