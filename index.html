@@ -1474,6 +1474,13 @@
           }
         });
         initAISection();
+        // 检查支付URL解锁
+        if (checkUrlUnlock()) {
+          // 已通过URL解锁，自动开始分析
+          setTimeout(() => {
+            if (getAIBalance() > 0) executeAIAnalysis();
+          }, 500);
+        }
       }
 
       function renderHealthy() {
@@ -1604,13 +1611,17 @@ ${rl}
       }
 
       function startAIPurchase() {
-        // 频控：同一浏览器30分钟内最多自动解锁1次
+        // 频控：同一浏览器30分钟内最多解锁1次
         const lastUnlock = parseInt(localStorage.getItem('dental_last_unlock') || '0');
         const cooldown = Date.now() - lastUnlock;
         if (cooldown < 30 * 60 * 1000 && lastUnlock > 0) {
           alert(`请稍后再试，距上次解锁需间隔${Math.ceil((30*60*1000 - cooldown)/60000)}分钟`);
           return;
         }
+        
+        // 生成支付会话token
+        const sessionToken = 'PAY-' + crypto.randomUUID().slice(0, 8).toUpperCase();
+        const unlockUrl = `${location.origin}${location.pathname}?unlock=${sessionToken}`;
         
         const ov = document.createElement('div'); ov.className = 'pay-overlay'; ov.id = 'payOverlay';
         let countdown = 8;
@@ -1628,68 +1639,57 @@ ${rl}
           <div style="text-align:center;margin:8px 0;">
             <img src="${PAY_ALIPAY_LINK}" style="width:170px;height:170px;border-radius:8px;border:2px solid rgba(255,255,255,0.1);" alt="支付宝收款码">
             <div style="font-size:0.75rem;color:#fbbf24;margin-top:6px;">📱 支付宝扫码支付 ¥${AI_CONFIG.price.current}</div>
-            <div style="font-size:0.65rem;color:var(--text-secondary);">金额已锁定，扫码即付</div>
+            <div style="font-size:0.65rem;color:var(--text-secondary);">固定金额 ¥${AI_CONFIG.price.current}，扫码即付</div>
           </div>
-          <div style="background:rgba(52,211,153,0.06);border-radius:8px;padding:12px;margin:10px 0;text-align:center;">
-            <div style="font-size:0.78rem;color:#34d399;margin-bottom:6px;">⚡ 支付完成后自动解锁</div>
-            <div style="font-size:0.7rem;color:var(--text-secondary);">系统正在监听支付返回...</div>
-            <div id="payCountdown" style="font-size:0.85rem;color:#fbbf24;margin-top:6px;font-weight:600;">⏳ 请先完成支付 (${countdown}s)</div>
+          <div style="background:rgba(52,211,153,0.06);border-radius:8px;padding:10px;margin:10px 0;text-align:center;">
+            <div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:4px;">支付完成后，请将<b style="color:#fbbf24;">支付宝账单截图</b>发给客服</div>
+            <div style="font-size:0.68rem;color:#34d399;">客服核对后将发送解锁链接，点击即用</div>
           </div>
-          <button class="btn" id="payDoneBtn" style="width:100%;background:linear-gradient(135deg,#1677FF,#0A5AC2);font-weight:700;opacity:0.5;cursor:not-allowed;" disabled>
-            ⏳ 等待支付完成...
-          </button>
-          <button class="btn" id="payClsBtn" style="width:100%;margin-top:6px;background:transparent;color:var(--text-secondary);font-size:0.8rem;">
-            ✕ 取消
-          </button>
+          <div style="background:rgba(255,255,255,0.03);border-radius:6px;padding:8px;margin:8px 0;">
+            <div style="font-size:0.65rem;color:var(--text-secondary);margin-bottom:4px;">🔑 已有解锁码？</div>
+            <div style="display:flex;gap:6px;">
+              <input type="text" class="pay-code-input" id="codeQuickInput" placeholder="输入兑换码" maxlength="13" autocomplete="off" style="flex:1;margin:0;font-size:0.78rem;">
+              <button class="btn" id="codeQuickBtn" style="padding:10px 16px;font-size:0.78rem;flex-shrink:0;">验证</button>
+            </div>
+          </div>
+          <button class="btn" id="payClsBtn" style="width:100%;margin-top:6px;background:transparent;color:var(--text-secondary);font-size:0.8rem;">✕ 取消</button>
         </div>`;
         document.body.appendChild(ov);
+        
         document.getElementById('payClsBtn').addEventListener('click', () => document.body.removeChild(ov));
-        
-        // 倒计时
-        const countdownEl = document.getElementById('payCountdown');
-        const doneBtn = document.getElementById('payDoneBtn');
-        const timer = setInterval(() => {
-          countdown--;
-          if (countdown <= 0) {
-            clearInterval(timer);
-            countdownEl.innerHTML = '<span style="color:#34d399;">✅ 检测到支付完成</span>';
-            doneBtn.textContent = '✅ 支付完成 · 立即解锁';
-            doneBtn.style.opacity = '1';
-            doneBtn.style.cursor = 'pointer';
-            doneBtn.disabled = false;
-            doneBtn.addEventListener('click', () => {
-              clearInterval(timer);
-              localStorage.setItem('dental_last_unlock', String(Date.now()));
-              const code = generateValidCode();
-              verifyCode(code);
-              document.body.removeChild(ov);
-              renderAISection('loading');
-              executeAIAnalysisSilent();
-            });
+        document.getElementById('codeQuickBtn').addEventListener('click', () => {
+          const code = document.getElementById('codeQuickInput').value.trim();
+          if (verifyCode(code)) {
+            document.body.removeChild(ov);
+            localStorage.setItem('dental_last_unlock', String(Date.now()));
+            renderAISection('loading');
+            executeAIAnalysisSilent();
           } else {
-            countdownEl.textContent = `⏳ 请先完成支付 (${countdown}s)`;
+            alert('❌ 无效的兑换码或已被使用');
           }
-        }, 1000);
-        
-        // 检测页面焦点返回（用户从支付宝App切回来）
-        let wasHidden = false;
-        const visibilityHandler = () => {
-          if (document.hidden) { wasHidden = true; }
-          else if (wasHidden && countdown > 2) {
-            // 用户切回来了，加速倒计时到2秒
-            countdown = Math.min(countdown, 2);
-            countdownEl.innerHTML = '<span style="color:#34d399;">📲 检测到您已返回，即将解锁...</span>';
+        });
+      }
+      
+      // 页面加载时检测URL中的unlock参数
+      function checkUrlUnlock() {
+        const params = new URLSearchParams(location.search);
+        const unlockToken = params.get('unlock');
+        if (unlockToken && unlockToken.startsWith('PAY-')) {
+          // 检查此token是否已被使用
+          const usedTokens = JSON.parse(localStorage.getItem('dental_pay_tokens') || '[]');
+          if (!usedTokens.includes(unlockToken)) {
+            usedTokens.push(unlockToken);
+            localStorage.setItem('dental_pay_tokens', JSON.stringify(usedTokens.slice(-500)));
+            const code = generateValidCode();
+            verifyCode(code);
+            // 清除URL参数
+            history.replaceState(null, '', location.pathname);
+            return true;
           }
-        };
-        document.addEventListener('visibilitychange', visibilityHandler);
-        const cleanup = () => {
-          document.removeEventListener('visibilitychange', visibilityHandler);
-          clearInterval(timer);
-        };
-        document.getElementById('payClsBtn').addEventListener('click', cleanup);
-        // 弹窗关闭时清理
-        const origClose = document.getElementById('payClsBtn').onclick;
-        document.getElementById('payClsBtn').onclick = () => { cleanup(); document.body.removeChild(ov); };
+          // 已使用过，清除URL
+          history.replaceState(null, '', location.pathname);
+        }
+        return false;
       }
       
       // 内部执行分析（跳过余额检查，因为余额已由verifyCode注入）
@@ -1763,22 +1763,32 @@ ${rl}
 
       async function exportReportImage() {
         const el = document.getElementById('aiReportContent');
-        if (!el) return;
+        if (!el || typeof html2canvas === 'undefined') return;
         const btn = document.getElementById('aiExportBtn');
         btn.textContent = '⏳ 生成中...'; btn.disabled = true;
+        const origMaxH = el.style.maxHeight;
+        const origOverflow = el.style.overflow;
         try {
+          el.style.maxHeight = 'none';
+          el.style.overflow = 'visible';
           const canvas = await html2canvas(el, {
             backgroundColor: '#0f0c24',
             scale: 2,
             useCORS: true,
             logging: false,
+            windowWidth: el.scrollWidth,
+            windowHeight: el.scrollHeight,
           });
+          el.style.maxHeight = origMaxH;
+          el.style.overflow = origOverflow;
           const link = document.createElement('a');
           link.download = '口腔AI深度分析报告.png';
           link.href = canvas.toDataURL('image/png');
           link.click();
           btn.textContent = '✅ 已导出';
         } catch(e) {
+          el.style.maxHeight = origMaxH;
+          el.style.overflow = origOverflow;
           btn.textContent = '❌ 失败';
         }
         setTimeout(() => { btn.textContent = '📸 导出长图分享'; btn.disabled = false; }, 2000);
@@ -1802,6 +1812,8 @@ ${rl}
       }
 
       renderWelcome();
+      // 检测URL中的unlock参数（支付后自动解锁）
+      checkUrlUnlock();
     })();
   </script>
 </body>
