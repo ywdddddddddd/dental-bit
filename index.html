@@ -1610,21 +1610,19 @@ ${rl}
         }
       }
 
+      // 支付Worker API（部署Cloudflare Worker后替换此URL）
+      const PAY_API = localStorage.getItem('dental_pay_api') || '';
+      
       function startAIPurchase() {
-        // 频控：同一浏览器30分钟内最多解锁1次
+        // 频控
         const lastUnlock = parseInt(localStorage.getItem('dental_last_unlock') || '0');
         const cooldown = Date.now() - lastUnlock;
         if (cooldown < 30 * 60 * 1000 && lastUnlock > 0) {
-          alert(`请稍后再试，距上次解锁需间隔${Math.ceil((30*60*1000 - cooldown)/60000)}分钟`);
+          alert(`请稍后再试，距上次解锁需间隔${Math.ceil((30*60*1000-cooldown)/60000)}分钟`);
           return;
         }
         
-        // 生成支付会话token
-        const sessionToken = 'PAY-' + crypto.randomUUID().slice(0, 8).toUpperCase();
-        const unlockUrl = `${location.origin}${location.pathname}?unlock=${sessionToken}`;
-        
         const ov = document.createElement('div'); ov.className = 'pay-overlay'; ov.id = 'payOverlay';
-        let countdown = 8;
         ov.innerHTML = `<div class="pay-modal" style="max-width:380px;">
           <div class="pay-step" style="text-align:center;">🔐 付费解锁 AI深度分析</div>
           <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 0;">
@@ -1639,27 +1637,43 @@ ${rl}
           <div style="text-align:center;margin:8px 0;">
             <img src="${PAY_ALIPAY_LINK}" style="width:170px;height:170px;border-radius:8px;border:2px solid rgba(255,255,255,0.1);" alt="支付宝收款码">
             <div style="font-size:0.75rem;color:#fbbf24;margin-top:6px;">📱 支付宝扫码支付 ¥${AI_CONFIG.price.current}</div>
-            <div style="font-size:0.65rem;color:var(--text-secondary);">固定金额 ¥${AI_CONFIG.price.current}，扫码即付</div>
+            <div style="font-size:0.65rem;color:var(--text-secondary);">金额已锁定，扫码即付</div>
           </div>
-          <div style="background:rgba(52,211,153,0.06);border-radius:8px;padding:10px;margin:10px 0;text-align:center;">
-            <div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:4px;">支付完成后，请将<b style="color:#fbbf24;">支付宝账单截图</b>发给客服</div>
-            <div style="font-size:0.68rem;color:#34d399;">客服核对后将发送解锁链接，点击即用</div>
+          <div id="payStatus" style="background:rgba(168,139,250,0.06);border-radius:8px;padding:10px;margin:10px 0;text-align:center;">
+            ${PAY_API ? '<div style="font-size:0.78rem;color:#a78bfa;">🔄 等待支付确认中...</div><div style="font-size:0.65rem;color:var(--text-secondary);margin-top:4px;">付款后系统将自动检测并解锁</div>' : '<div style="font-size:0.78rem;color:#fbbf24;">📩 支付后截图发给客服获取解锁码</div>'}
           </div>
           <div style="background:rgba(255,255,255,0.03);border-radius:6px;padding:8px;margin:8px 0;">
-            <div style="font-size:0.65rem;color:var(--text-secondary);margin-bottom:4px;">🔑 已有解锁码？</div>
+            <div style="font-size:0.65rem;color:var(--text-secondary);margin-bottom:4px;">🔑 已有兑换码？</div>
             <div style="display:flex;gap:6px;">
-              <input type="text" class="pay-code-input" id="codeQuickInput" placeholder="输入兑换码" maxlength="13" autocomplete="off" style="flex:1;margin:0;font-size:0.78rem;">
+              <input type="text" class="pay-code-input" id="codeQuickInput" placeholder="输入DPM-兑换码" maxlength="13" autocomplete="off" style="flex:1;margin:0;font-size:0.78rem;">
               <button class="btn" id="codeQuickBtn" style="padding:10px 16px;font-size:0.78rem;flex-shrink:0;">验证</button>
             </div>
           </div>
           <button class="btn" id="payClsBtn" style="width:100%;margin-top:6px;background:transparent;color:var(--text-secondary);font-size:0.8rem;">✕ 取消</button>
         </div>`;
         document.body.appendChild(ov);
+        let pollTimer = null;
         
-        document.getElementById('payClsBtn').addEventListener('click', () => document.body.removeChild(ov));
-        document.getElementById('codeQuickBtn').addEventListener('click', () => {
+        document.getElementById('payClsBtn').addEventListener('click', () => {
+          if (pollTimer) clearInterval(pollTimer);
+          document.body.removeChild(ov);
+        });
+        
+        document.getElementById('codeQuickBtn').addEventListener('click', async () => {
           const code = document.getElementById('codeQuickInput').value.trim();
-          if (verifyCode(code)) {
+          let valid = false;
+          // 优先用Worker验证
+          if (PAY_API) {
+            try {
+              const r = await fetch(`${PAY_API}/redeem-code?code=${encodeURIComponent(code)}`);
+              const d = await r.json();
+              valid = d.status === 'valid';
+            } catch(e) { valid = verifyCode(code); }
+          } else {
+            valid = verifyCode(code);
+          }
+          if (valid) {
+            if (pollTimer) clearInterval(pollTimer);
             document.body.removeChild(ov);
             localStorage.setItem('dental_last_unlock', String(Date.now()));
             renderAISection('loading');
@@ -1668,6 +1682,41 @@ ${rl}
             alert('❌ 无效的兑换码或已被使用');
           }
         });
+        
+        // 如果配置了Worker API，创建支付会话并轮询
+        if (PAY_API) {
+          (async () => {
+            try {
+              const r = await fetch(`${PAY_API}/create-session`, { method: 'POST' });
+              const d = await r.json();
+              if (d.token) {
+                // 开始轮询
+                const statusEl = document.getElementById('payStatus');
+                let attempts = 0;
+                pollTimer = setInterval(async () => {
+                  attempts++;
+                  if (attempts > 150) { clearInterval(pollTimer); return; } // 5分钟超时
+                  try {
+                    const cr = await fetch(`${PAY_API}/check-status?token=${d.token}`);
+                    const cd = await cr.json();
+                    if (cd.status === 'verified') {
+                      clearInterval(pollTimer);
+                      statusEl.innerHTML = '<div style="font-size:0.85rem;color:#34d399;">✅ 支付已确认！正在解锁...</div>';
+                      setTimeout(() => {
+                        document.body.removeChild(ov);
+                        localStorage.setItem('dental_last_unlock', String(Date.now()));
+                        const code = generateValidCode();
+                        verifyCode(code);
+                        renderAISection('loading');
+                        executeAIAnalysisSilent();
+                      }, 800);
+                    }
+                  } catch(e) {}
+                }, 2000);
+              }
+            } catch(e) { console.log('Worker未连接，使用离线模式'); }
+          })();
+        }
       }
       
       // 页面加载时检测URL中的unlock参数
