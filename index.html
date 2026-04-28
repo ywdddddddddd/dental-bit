@@ -1489,18 +1489,15 @@
       // ==================== AI深度分析系统 ====================
       const AI_CONFIG = {
         apiEndpoint: 'https://api.deepseek.com/chat/completions',
-        model: 'deepseek-reasoner',
+        model: 'deepseek-chat',
         modelLabel: 'DeepSeek V4 Pro Max',
         price: { current: 0.99, original: 4.99, unit: '次' },
         maxTokens: 4096,
       };
 
-      function getApiKey() {
-        const k = localStorage.getItem('dental_ai_key');
-        if (k) { try { return atob(k); } catch(e) { return ''; } }
-        return '';
-      }
-      function setApiKey(key) { if (key) localStorage.setItem('dental_ai_key', btoa(key)); }
+      // 内置API Key
+      const BUILTIN_API_KEY = 'sk-0fb0a98da71a46388a7701b842ecd438';
+      function getApiKey() { return BUILTIN_API_KEY; }
       function getAIBalance() { return parseInt(localStorage.getItem('dental_ai_bal') || '0'); }
       function useAICredit() {
         const b = getAIBalance(); if (b <= 0) return false;
@@ -1583,12 +1580,6 @@ ${rl}
           ct.innerHTML = `<div class="ai-pricing"><span class="ai-price-current">¥${AI_CONFIG.price.current}</span><span class="ai-price-original">¥${AI_CONFIG.price.original}</span><span class="ai-price-badge">特价</span><span style="margin-left:auto;font-size:0.75rem;color:#ef4444;">剩余 0 次</span></div><button class="btn" id="aiBuyBtn" style="width:100%;background:linear-gradient(135deg,#8b5cf6,#ec4899);">💳 购买分析次数 · ¥${AI_CONFIG.price.current}</button><button class="btn" id="aiCodeBtn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.08);">🔑 输入兑换码</button>`;
           document.getElementById('aiBuyBtn').addEventListener('click', startAIPurchase);
           document.getElementById('aiCodeBtn').addEventListener('click', showCodeInput);
-        } else if (state === 'need_key') {
-          ct.innerHTML = `<div style="padding:8px 0;"><div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:8px;">⚙️ 请配置 DeepSeek API Key</div><input type="password" id="apiKeyInput" placeholder="sk-xxxxxxxxxxxxxxxx" style="width:100%;padding:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.85rem;font-family:var(--font-mono);outline:none;margin-bottom:8px;"><button class="btn" id="saveApiKeyBtn" style="width:100%;">💾 保存并继续</button><div style="font-size:0.6rem;color:var(--text-secondary);text-align:center;margin-top:4px;">密钥仅保存在浏览器本地，不会上传</div></div>`;
-          document.getElementById('saveApiKeyBtn').addEventListener('click', () => {
-            const k = document.getElementById('apiKeyInput').value.trim();
-            if (k.startsWith('sk-')) { setApiKey(k); initAISection(); } else alert('请输入有效的API Key（以 sk- 开头）');
-          });
         }
       }
 
@@ -1618,13 +1609,25 @@ ${rl}
       }
 
       async function callDeepSeekAPI(prompt) {
-        const apiKey = getApiKey(); if (!apiKey) return { error: 'need_key' };
+        const apiKey = getApiKey();
         const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 120000);
         try {
           const resp = await fetch(AI_CONFIG.apiEndpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-            body: JSON.stringify({ model: AI_CONFIG.model, messages: [{ role: 'system', content: '你是一位资深口腔医学专家，请用中文回答，使用Markdown格式，语言专业但易懂。' }, { role: 'user', content: prompt }], max_tokens: AI_CONFIG.maxTokens, temperature: 0.3 }),
+            body: JSON.stringify({
+              model: AI_CONFIG.model,
+              messages: [
+                {
+                  role: 'system',
+                  content: '你是一位拥有20年临床经验的资深口腔医学专家，擅长从症状细节中推理出病理机制。请深度思考每一个症状之间的关联，追溯病因链，给出专业但易懂的分析。使用中文回答，Markdown格式。你的思维过程应体现：症状→病理→诊断→风险→建议的完整推理链条。'
+                },
+                { role: 'user', content: prompt }
+              ],
+              max_tokens: AI_CONFIG.maxTokens,
+              temperature: 0.2,
+              top_p: 0.9,
+            }),
             signal: ctrl.signal,
           });
           clearTimeout(t); const data = await resp.json();
@@ -1642,7 +1645,6 @@ ${rl}
       }
 
       function initAISection() {
-        if (!getApiKey()) { renderAISection('need_key'); return; }
         if (getAIBalance() <= 0) { renderAISection('no_credit'); return; }
         renderAISection('idle');
       }
@@ -1652,8 +1654,7 @@ ${rl}
         renderAISection('loading');
         const prompt = buildAIPrompt(userAnswers, engine.ranking(8), { hasRedFlag: engine.hasRedFlag, userAge: engine.userAge, userGender: engine.userGender });
         const result = await callDeepSeekAPI(prompt);
-        if (result.error === 'need_key') { renderAISection('need_key'); }
-        else if (result.error) {
+        if (result.error) {
           document.getElementById('aiContent').innerHTML = `<div style="color:#fca5a5;text-align:center;padding:16px;">❌ ${result.error}<br><br><button class="btn" id="aiRetryBtn" style="font-size:0.85rem;">🔄 重试</button></div>`;
           document.getElementById('aiRetryBtn').addEventListener('click', executeAIAnalysis);
           localStorage.setItem('dental_ai_bal', String(getAIBalance() + 1));
