@@ -1489,7 +1489,7 @@
       // ==================== AI深度分析系统 ====================
       const AI_CONFIG = {
         apiEndpoint: 'https://api.deepseek.com/chat/completions',
-        model: 'deepseek-chat',
+        model: 'deepseek-v4-flash',
         modelLabel: 'DeepSeek V4 Pro Max',
         price: { current: 0.99, original: 4.99, unit: '次' },
         maxTokens: 4096,
@@ -1498,6 +1498,9 @@
       // 内置API Key
       const BUILTIN_API_KEY = 'sk-0fb0a98da71a46388a7701b842ecd438';
       function getApiKey() { return BUILTIN_API_KEY; }
+
+      // 支付宝付费配置
+      const PAY_ALIPAY_LINK = ''; // 填入你的支付宝收款链接，如 https://qr.alipay.com/xxx
       function getAIBalance() { return parseInt(localStorage.getItem('dental_ai_bal') || '0'); }
       function useAICredit() {
         const b = getAIBalance(); if (b <= 0) return false;
@@ -1584,15 +1587,54 @@ ${rl}
       }
 
       function startAIPurchase() {
+        const hasQR = PAY_ALIPAY_LINK || localStorage.getItem('dental_pay_qr');
         const ov = document.createElement('div'); ov.className = 'pay-overlay'; ov.id = 'payOverlay';
-        ov.innerHTML = `<div class="pay-modal"><div class="pay-step">STEP 1/2</div><div class="pay-title">解锁 AI深度分析</div><div class="pay-qr">💳</div><div class="pay-price-row"><span style="font-size:1.6rem;font-weight:700;color:#fbbf24;">¥${AI_CONFIG.price.current}</span><span style="font-size:0.85rem;color:var(--text-secondary);text-decoration:line-through;">¥${AI_CONFIG.price.original}</span><span class="ai-price-badge" style="font-size:0.7rem;">限时特价</span></div><div style="text-align:center;font-size:0.7rem;color:var(--text-secondary);margin:8px 0;">支付后获得兑换码 · 1次深度分析</div><button class="btn" id="paySimBtn" style="width:100%;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000;font-weight:700;">💰 确认支付 ¥${AI_CONFIG.price.current}</button><button class="btn" id="paySkipBtn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.08);">🔑 我已有兑换码</button><button class="btn" id="payClsBtn" style="width:100%;margin-top:6px;background:transparent;color:var(--text-secondary);font-size:0.8rem;">✕ 取消</button></div>`;
+        ov.innerHTML = `<div class="pay-modal" style="max-width:380px;">
+          <div class="pay-step" style="text-align:center;">🔐 付费解锁 AI深度分析</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0;">
+            <div style="background:linear-gradient(135deg,#1677FF,#0A5AC2);color:#fff;padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:600;">支付宝</div>
+            <span style="font-size:0.8rem;color:var(--text-secondary);">安全支付 · 即时到账</span>
+          </div>
+          <div class="pay-price-row" style="padding:16px 0;">
+            <span style="font-size:0.8rem;color:var(--text-secondary);">应付金额</span>
+            <span style="font-size:2rem;font-weight:800;color:#fbbf24;margin:0 8px;">¥${AI_CONFIG.price.current}</span>
+            <span style="font-size:0.75rem;color:var(--text-secondary);text-decoration:line-through;">¥${AI_CONFIG.price.original}</span>
+          </div>
+          ${hasQR ? `
+          <div style="text-align:center;margin:16px 0;">
+            <div style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:8px;">📱 支付宝扫码支付</div>
+            <img src="${PAY_ALIPAY_LINK || localStorage.getItem('dental_pay_qr')}" style="width:180px;height:180px;border-radius:8px;border:2px solid rgba(255,255,255,0.1);" alt="支付宝收款码" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+            <div class="pay-qr" style="display:none;">💳</div>
+            <div style="font-size:0.7rem;color:var(--text-secondary);margin-top:6px;">支付后请截图保存交易单号</div>
+          </div>` : `
+          <div class="pay-qr" style="margin:16px auto;">💳</div>
+          <div style="text-align:center;font-size:0.7rem;color:var(--text-secondary);margin-bottom:8px;">模拟支付环境 · 点击下方直接获取兑换码</div>`}
+          <button class="btn" id="paySimBtn" style="width:100%;background:linear-gradient(135deg,#1677FF,#0A5AC2);font-weight:700;font-size:0.95rem;">
+            ${hasQR ? '✅ 已完成支付，获取兑换码' : '💰 确认支付 ¥' + AI_CONFIG.price.current}
+          </button>
+          <button class="btn" id="paySkipBtn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.08);">
+            🔑 使用兑换码
+          </button>
+          <button class="btn" id="payClsBtn" style="width:100%;margin-top:6px;background:transparent;color:var(--text-secondary);font-size:0.8rem;">
+            ✕ 取消
+          </button>
+        </div>`;
         document.body.appendChild(ov);
         document.getElementById('payClsBtn').addEventListener('click', () => document.body.removeChild(ov));
         document.getElementById('paySkipBtn').addEventListener('click', () => { document.body.removeChild(ov); showCodeInput(); });
         document.getElementById('paySimBtn').addEventListener('click', () => {
           const code = generateValidCode(Date.now() % 9000 + 1000);
-          ov.querySelector('.pay-modal').innerHTML = `<div class="pay-step">STEP 2/2</div><div class="pay-title">✅ 支付成功</div><div style="text-align:center;padding:16px 0;"><div style="font-size:3rem;margin-bottom:8px;">🎫</div><div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:6px;">您的兑换码：</div><div style="font-size:1.4rem;font-weight:700;color:#34d399;font-family:var(--font-mono);letter-spacing:2px;background:rgba(52,211,153,0.1);padding:10px;border-radius:8px;margin-bottom:10px;">${code}</div><div style="font-size:0.7rem;color:var(--text-secondary);">请复制此码，关闭后输入使用</div></div><button class="btn" id="payDoneBtn" style="width:100%;">✅ 已复制，继续</button>`;
-          document.getElementById('payDoneBtn').addEventListener('click', () => { document.body.removeChild(ov); showCodeInput(); });
+          ov.querySelector('.pay-modal').innerHTML = `<div class="pay-step" style="text-align:center;">✅ 支付验证通过</div><div style="text-align:center;padding:20px 0;"><div style="font-size:3rem;margin-bottom:8px;">🎫</div><div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:6px;">您的AI分析兑换码：</div><div style="font-size:1.3rem;font-weight:700;color:#34d399;font-family:var(--font-mono);letter-spacing:2px;background:rgba(52,211,153,0.1);padding:10px;border-radius:8px;margin:8px 0;cursor:pointer;user-select:all;">${code}</div><div style="font-size:0.7rem;color:var(--text-secondary);">点击上方可复制 · 或直接点击下方自动使用</div></div><button class="btn" id="payUseCodeBtn" style="width:100%;">✅ 立即使用此码</button><button class="btn" id="payCopyBtn" style="width:100%;margin-top:6px;background:rgba(255,255,255,0.08);">📋 复制兑换码</button>`;
+          ov.querySelector('#payUseCodeBtn').addEventListener('click', () => {
+            verifyCode(code);
+            document.body.removeChild(ov);
+            initAISection();
+          });
+          ov.querySelector('#payCopyBtn').addEventListener('click', () => {
+            navigator.clipboard.writeText(code).then(() => {
+              ov.querySelector('#payCopyBtn').textContent = '✅ 已复制';
+            });
+          });
         });
       }
 
@@ -1620,10 +1662,12 @@ ${rl}
               messages: [
                 {
                   role: 'system',
-                  content: '你是一位拥有20年临床经验的资深口腔医学专家，擅长从症状细节中推理出病理机制。请深度思考每一个症状之间的关联，追溯病因链，给出专业但易懂的分析。使用中文回答，Markdown格式。你的思维过程应体现：症状→病理→诊断→风险→建议的完整推理链条。'
+                  content: '你是一位拥有20年临床经验的资深口腔医学专家。请先深度推理患者症状之间的病理关联，追溯病因链，再从症状→病理→诊断→风险→建议给出完整分析。使用中文，Markdown格式。'
                 },
                 { role: 'user', content: prompt }
               ],
+              thinking: { type: 'enabled' },
+              reasoning_effort: 'high',
               max_tokens: AI_CONFIG.maxTokens,
               temperature: 0.2,
               top_p: 0.9,
