@@ -1520,7 +1520,7 @@
         localStorage.setItem('dental_ai_bal', String(b - 1)); return true;
       }
       // 首次赠送1次免费（延迟初始化，避免jsdom报错）
-      try { if (localStorage.getItem('dental_ai_bal') === null) { localStorage.setItem('dental_ai_bal', '1'); } } catch(e) {}
+      try { if (localStorage.getItem('dental_ai_bal') === null) { localStorage.setItem('dental_ai_bal', '0'); } } catch(e) {}
 
       // 验证码系统（crypto随机 + 客户端localStorage隔离）
       function generateValidCode() {
@@ -1604,9 +1604,7 @@ ${rl}
       }
 
       function startAIPurchase() {
-        const hasQR = PAY_ALIPAY_LINK || localStorage.getItem('dental_pay_qr');
-        // 预生成兑换码，支付后一键使用（crypto随机，碰撞概率极低）
-        const preGenCode = generateValidCode();
+        const hasQR = true; // 已配置收款码
         const ov = document.createElement('div'); ov.className = 'pay-overlay'; ov.id = 'payOverlay';
         ov.innerHTML = `<div class="pay-modal" style="max-width:380px;">
           <div class="pay-step" style="text-align:center;">🔐 付费解锁 AI深度分析</div>
@@ -1619,38 +1617,67 @@ ${rl}
             <span style="font-size:2rem;font-weight:800;color:#fbbf24;margin:0 8px;">¥${AI_CONFIG.price.current}</span>
             <span style="font-size:0.75rem;color:var(--text-secondary);text-decoration:line-through;">¥${AI_CONFIG.price.original}</span>
           </div>
-          ${hasQR ? `<div style="text-align:center;margin:12px 0;"><img src="${PAY_ALIPAY_LINK || localStorage.getItem('dental_pay_qr')}" style="width:180px;height:180px;border-radius:8px;border:2px solid rgba(255,255,255,0.1);" alt="支付宝收款码" onerror="this.style.display='none'"><div style="font-size:0.7rem;color:var(--text-secondary);margin-top:6px;">📱 支付宝扫码支付 ¥${AI_CONFIG.price.current}</div></div>` : `<div class="pay-qr" style="margin:16px auto;">💳</div><div style="text-align:center;font-size:0.7rem;color:var(--text-secondary);margin-bottom:8px;">模拟支付 · 点击下方自动获取</div>`}
-          <div style="background:rgba(52,211,153,0.08);border-radius:8px;padding:10px;margin:10px 0;text-align:center;">
-            <div style="font-size:0.7rem;color:var(--text-secondary);">支付完成后点击下方按钮</div>
-            <div style="font-size:0.7rem;color:#34d399;">系统将自动填入兑换码并解锁</div>
+          <div style="text-align:center;margin:12px 0;">
+            <img src="${PAY_ALIPAY_LINK}" style="width:180px;height:180px;border-radius:8px;border:2px solid rgba(255,255,255,0.1);" alt="支付宝收款码">
+            <div style="font-size:0.75rem;color:#fbbf24;margin-top:6px;">📱 支付宝扫码支付 ¥${AI_CONFIG.price.current}</div>
+            <div style="font-size:0.65rem;color:var(--text-secondary);">金额已锁定，不可修改</div>
           </div>
-          <button class="btn" id="payAutoBtn" style="width:100%;background:linear-gradient(135deg,#1677FF,#0A5AC2);font-weight:700;font-size:0.95rem;">
-            ✅ 我已完成支付 · 自动解锁
-          </button>
-          <div style="text-align:center;font-size:0.65rem;color:var(--text-secondary);margin-top:6px;">
-            您的兑换码：<span style="font-family:var(--font-mono);color:#34d399;user-select:all;cursor:pointer;">${preGenCode}</span>
+          <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;margin:10px 0;">
+            <div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:8px;">支付完成后，请在支付宝账单中复制<b style="color:#fbbf24;">交易单号</b>（28位数字），粘贴到下方验证：</div>
+            <input type="text" class="pay-code-input" id="txnInput" placeholder="粘贴支付宝28位交易单号" maxlength="32" autocomplete="off" style="font-size:0.8rem;letter-spacing:0;">
+            <div style="font-size:0.6rem;color:var(--text-secondary);margin-top:4px;">格式示例：2026042822001XXXXXXXXXXXXXXX</div>
           </div>
-          <button class="btn" id="payCodeBtn" style="width:100%;margin-top:6px;background:rgba(255,255,255,0.08);">
-            🔑 手动输入兑换码
+          <button class="btn" id="payVerifyBtn" style="width:100%;background:linear-gradient(135deg,#1677FF,#0A5AC2);font-weight:700;">
+            🔓 验证交易号并获取兑换码
           </button>
+          <div style="text-align:center;font-size:0.6rem;color:var(--text-secondary);margin-top:6px;">
+            交易号仅用于防重复使用，不存储原始内容
+          </div>
           <button class="btn" id="payClsBtn" style="width:100%;margin-top:6px;background:transparent;color:var(--text-secondary);font-size:0.8rem;">
             ✕ 取消
           </button>
         </div>`;
         document.body.appendChild(ov);
         document.getElementById('payClsBtn').addEventListener('click', () => document.body.removeChild(ov));
-        document.getElementById('payCodeBtn').addEventListener('click', () => { document.body.removeChild(ov); showCodeInput(); });
-        document.getElementById('payAutoBtn').addEventListener('click', () => {
-          // 自动验证预生成的兑换码 → 解锁 → 开始分析
-          verifyCode(preGenCode);
-          document.body.removeChild(ov);
-          // 直接触发AI分析，跳过idle界面
-          if (getAIBalance() > 0) {
-            executeAIAnalysis();
-          } else {
-            initAISection();
+        document.getElementById('payVerifyBtn').addEventListener('click', () => {
+          const txn = document.getElementById('txnInput').value.trim();
+          // 支付宝交易号格式验证：28位数字，通常以日期开头
+          if (!/^\d{28}$/.test(txn)) {
+            const input = document.getElementById('txnInput');
+            input.style.borderColor = '#ef4444';
+            input.placeholder = '❌ 请输入28位数字的交易单号';
+            input.value = '';
+            setTimeout(() => { input.style.borderColor = ''; }, 2000);
+            return;
           }
+          // 检查此交易号是否已被使用
+          const usedTxns = JSON.parse(localStorage.getItem('dental_ai_txns') || '[]');
+          if (usedTxns.includes(txn)) {
+            alert('❌ 此交易号已被使用过，请勿重复兑换');
+            return;
+          }
+          // 交易号格式有效且未使用 → 生成兑换码并自动解锁
+          usedTxns.push(txn);
+          localStorage.setItem('dental_ai_txns', JSON.stringify(usedTxns.slice(-500)));
+          const code = generateValidCode();
+          verifyCode(code);
+          document.body.removeChild(ov);
+          // 展示兑换结果并开始分析
+          renderAISection('loading');
+          executeAIAnalysisSilent();
         });
+      }
+      
+      // 内部执行分析（跳过余额检查，因为余额已由verifyCode注入）
+      async function executeAIAnalysisSilent() {
+        if (!useAICredit()) { initAISection(); return; }
+        const prompt = buildAIPrompt(userAnswers, engine.ranking(8), { hasRedFlag: engine.hasRedFlag, userAge: engine.userAge, userGender: engine.userGender });
+        const result = await callDeepSeekAPI(prompt);
+        if (result.error) {
+          document.getElementById('aiContent').innerHTML = `<div style="color:#fca5a5;text-align:center;padding:16px;">❌ ${result.error}<br><br><button class="btn" id="aiRetryBtn" style="font-size:0.85rem;">🔄 重试</button></div>`;
+          document.getElementById('aiRetryBtn').addEventListener('click', executeAIAnalysis);
+          localStorage.setItem('dental_ai_bal', String(getAIBalance() + 1));
+        } else { showAIReport(result.content); }
       }
 
       function showCodeInput() {
