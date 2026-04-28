@@ -1718,28 +1718,43 @@ ${rl}
         
         const input = ov.querySelector('#txn6digits');
         input.focus();
-        // 只允许输入数字
         input.addEventListener('input', () => { input.value = input.value.replace(/\D/g,''); });
         
+        let failCount = parseInt(sessionStorage.getItem('dental_fail') || '0');
+        const lockUntil = parseInt(sessionStorage.getItem('dental_lock') || '0');
+        
         ov.querySelector('#payVerifyBtn').addEventListener('click', () => {
+          const now = Date.now();
+          if (now < lockUntil) {
+            const sec = Math.ceil((lockUntil - now) / 1000);
+            ov.querySelector('#payError').textContent = `请等待 ${sec} 秒后再试`;
+            ov.querySelector('#payError').style.display = 'block';
+            return;
+          }
           const val = input.value.trim();
           const errEl = ov.querySelector('#payError');
           if (!/^\d{6}$/.test(val)) {
             errEl.textContent = '请输入6位数字';
-            errEl.style.display = 'block';
-            return;
+            errEl.style.display = 'block'; return;
           }
-          // 检查是否已使用
           const used = JSON.parse(localStorage.getItem('dental_txn_used') || '[]');
           if (used.includes(val)) {
-            errEl.textContent = '该交易号已使用过';
-            errEl.style.display = 'block';
-            return;
+            failCount++;
+            sessionStorage.setItem('dental_fail', failCount);
+            if (failCount >= 3) {
+              sessionStorage.setItem('dental_lock', now + 30000);
+              errEl.textContent = '验证次数过多，请30秒后再试';
+            } else {
+              errEl.textContent = '该交易号已使用过';
+            }
+            errEl.style.display = 'block'; return;
           }
+          // 验证通过
+          sessionStorage.removeItem('dental_fail');
+          sessionStorage.removeItem('dental_lock');
           used.push(val);
           localStorage.setItem('dental_txn_used', JSON.stringify(used.slice(-100)));
           document.body.removeChild(ov);
-          // 生成余额并解锁
           const code = generateValidCode();
           verifyCode(code);
           renderAISection('loading');
