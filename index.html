@@ -546,6 +546,20 @@
         ['allergic_stomatitis','lichen_planus'],
         ['behcet_disease','oral_ulcer']
       );
+      // v2.3: 补充未注册互斥组，让0%疾病参与软竞争
+      DISEASE_GRAPH.mutualExclusionGroups.push(
+        ['periodontal_abscess','perio_endo_lesion','furcation_involvement'],
+        ['apical_periodontitis','pulp_necrosis','osteomyelitis_jaw'],
+        ['vertical_root_fracture','cracked_tooth','internal_resorption'],
+        ['root_resorption','internal_resorption','residual_root'],
+        ['caries_rampant','caries_recurrent','root_caries'],
+        ['tooth_wear_attrition','dental_erosion','wedge_defect'],
+        ['malocclusion','enamel_hypoplasia','dens_evaginatus'],
+        ['acute_gingival_papillitis','gingival_hyperplasia','gingival_recession'],
+        ['traumatic_ulcer','oral_ulcer','radiation_stomatitis'],
+        ['atypical_odontalgia','trigeminal_neuralgia','pulp_calcification'],
+        ['dentinogenesis_imperfecta','fluorosis','tetracycline_teeth']
+      );
 
       // ==================== DAG 问诊二叉树网络 ====================
       const QUESTION_TREE = {
@@ -615,7 +629,7 @@
           branches:[
             { emoji:'🍎', text:'刷牙或者啃苹果时才出血，平时不出', next:['q_perio_location'], delta:{gingivitis:7,puberty_gingivitis:3,pregnancy_gingivitis:3,acute_gingival_papillitis:5}, lock:['aggressive_periodontitis'] },
             { emoji:'🩸', text:'不刷牙也自己出血，牙龈发红发紫', next:['q_perio_mobility'], delta:{periodontitis:6,aggressive_periodontitis:5,gingival_hyperplasia:3}, lock:['gingivitis'] },
-            { emoji:'🩹', text:'牙龈反复鼓起一个脓包来，挤破了过几天又鼓起来', delta:{apical_periodontitis:10,pulp_necrosis:6,periodontal_abscess:6}, lock:['gingivitis','periodontitis','aggressive_periodontitis'] },
+            { emoji:'🩹', text:'牙龈反复鼓起一个脓包来，挤破了过几天又鼓起来', delta:{apical_periodontitis:10,pulp_necrosis:6,periodontal_abscess:8}, lock:['gingivitis','periodontitis','aggressive_periodontitis'] },
             { emoji:'⚠️', text:'牙龈反复排脓，同时牙齿对冷热没感觉了（牙神经可能坏死了）', delta:{perio_endo_lesion:12,pulp_necrosis:5}, lock:['gingivitis','periodontitis'] },
           ]
         },
@@ -707,7 +721,7 @@
         q_hard_defect_type: {
           id:'q_hard_defect_type', text:'缺损主要是什么样子的？', stage:'symptom',
           branches:[
-            { emoji:'🕳️', text:'咬合面上有黑线或黑洞，容易塞东西', delta:{caries_shallow:9,caries_recurrent:3}, lock:['wedge_defect','dental_erosion','trauma'] },
+            { emoji:'🕳️', text:'咬合面上有黑线或黑洞，容易塞东西', delta:{caries_shallow:9,caries_recurrent:3,root_resorption:4,internal_resorption:3}, lock:['wedge_defect','dental_erosion','trauma'] },
             { emoji:'🪥', text:'牙齿靠牙龈那儿缺了一块，像V形槽', delta:{wedge_defect:10}, lock:['caries_shallow','dental_erosion','cracked_tooth'] },
             { emoji:'🥤', text:'牙齿表面光滑凹陷/变透明了，舌头那面比较明显', delta:{dental_erosion:10}, lock:['caries_shallow','wedge_defect'] },
             { emoji:'💥', text:'撞到/摔倒/咬硬东西后崩掉一块', next:['q_hard_trauma_type'], delta:{trauma:10}, lock:['caries_shallow','wedge_defect','dental_erosion'] },
@@ -784,7 +798,7 @@
           branches:[
             { emoji:'💊', text:'长期在吃抗抑郁药/抗过敏药/利尿类的药', delta:{xerostomia:6} },
             { emoji:'🧬', text:'确诊过干燥综合征或红斑狼疮或类风湿', delta:{xerostomia:8,candidiasis:3,caries_rampant:3} },
-            { emoji:'☢️', text:'做过头部或颈部的放射治疗', delta:{xerostomia:9,caries_rampant:9,candidiasis:5}, forceRed:true },
+            { emoji:'☢️', text:'做过头部或颈部的放射治疗', delta:{xerostomia:9,caries_rampant:12,candidiasis:5}, forceRed:true },
           ]
         },
 
@@ -812,7 +826,7 @@
             { emoji:'🫀', text:'高血压/心脏病，在吃降压药', riskTag:{gingival_hyperplasia:4,xerostomia:1.5,periodontitis:1.3} },
             { emoji:'🧬', text:'干燥综合征/红斑狼疮/类风湿等自身免疫病', riskTag:{xerostomia:3,candidiasis:2.5,lichen_planus:2,pemphigus:3,burning_mouth:2} },
             { emoji:'💊', text:'长期吃抗癫痫药/抗抑郁药/环孢素', riskTag:{gingival_hyperplasia:4,xerostomia:2} },
-            { emoji:'☢️', text:'做过头部或颈部放射治疗', riskTag:{xerostomia:5,caries_rampant:6,candidiasis:4,radiation_stomatitis:15,osteomyelitis_jaw:3,mronj:5}, forceRed:true },
+            { emoji:'☢️', text:'做过头部或颈部放射治疗', riskTag:{xerostomia:5,caries_rampant:6,candidiasis:4,radiation_stomatitis:18,osteomyelitis_jaw:3,mronj:5}, forceRed:true },
             { emoji:'🦴', text:'在用或曾用过双膦酸盐/地舒单抗（治骨质疏松/骨转移的）', riskTag:{mronj:8,osteomyelitis_jaw:3}, forceRed:true },
             { emoji:'✅', text:'以上都没有', riskTag:{} },
           ]
