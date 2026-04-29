@@ -1,4 +1,4 @@
-// Regenerated engine core from index.html v2.3 (74 diseases)
+// Regenerated engine core from index.html (74 diseases)
 'use strict';
 
 const DISEASE_CATEGORIES = {
@@ -2025,7 +2025,7 @@ const QUESTION_TREE = {
         "text": "牙龈反复排脓，同时牙齿对冷热没感觉了（牙神经可能坏死了）",
         "delta": {
           "perio_endo_lesion": 12,
-          "pulp_necrosis": 5
+          "pulp_necrosis": 8
         },
         "lock": [
           "gingivitis",
@@ -2991,7 +2991,9 @@ const QUESTION_TREE = {
           "aggressive_periodontitis": 2,
           "gingivitis": 1.5,
           "candidiasis": 2,
-          "halitosis": 1.5
+          "halitosis": 1.5,
+          "periodontal_abscess": 4,
+          "furcation_involvement": 3
         }
       },
       {
@@ -3018,7 +3020,7 @@ const QUESTION_TREE = {
         "emoji": "💊",
         "text": "长期吃抗癫痫药/抗抑郁药/环孢素",
         "riskTag": {
-          "gingival_hyperplasia": 4,
+          "gingival_hyperplasia": 8,
           "xerostomia": 2
         }
       },
@@ -3027,7 +3029,7 @@ const QUESTION_TREE = {
         "text": "做过头部或颈部放射治疗",
         "riskTag": {
           "xerostomia": 5,
-          "caries_rampant": 6,
+          "caries_rampant": 10,
           "candidiasis": 4,
           "radiation_stomatitis": 18,
           "osteomyelitis_jaw": 3,
@@ -3040,7 +3042,7 @@ const QUESTION_TREE = {
         "text": "在用或曾用过双膦酸盐/地舒单抗（治骨质疏松/骨转移的）",
         "riskTag": {
           "mronj": 8,
-          "osteomyelitis_jaw": 3
+          "osteomyelitis_jaw": 6
         },
         "forceRed": true
       },
@@ -3103,7 +3105,8 @@ const QUESTION_TREE = {
           "leukoplakia": 5,
           "oral_cancer": 4,
           "halitosis": 2,
-          "gingivitis": 1.5
+          "gingivitis": 1.5,
+          "internal_resorption": 2
         }
       },
       {
@@ -3144,7 +3147,8 @@ const QUESTION_TREE = {
         "text": "喜欢用力横着来回拉锯式刷",
         "riskTag": {
           "wedge_defect": 4,
-          "dentin_hypersensitivity": 3
+          "dentin_hypersensitivity": 3,
+          "gingival_recession": 5
         }
       },
       {
@@ -3183,7 +3187,8 @@ const QUESTION_TREE = {
           "bruxism": 5,
           "tmd": 3,
           "burning_mouth": 3,
-          "pericoronitis": 2
+          "pericoronitis": 2,
+          "atypical_odontalgia": 4
         }
       },
       {
@@ -3276,7 +3281,9 @@ const QUESTION_TREE = {
         "riskTag": {
           "periodontitis": 1.8,
           "caries_deep": 1.8,
-          "oral_cancer": 1.5
+          "oral_cancer": 1.5,
+          "residual_root": 3,
+          "root_resorption": 2
         }
       }
     ]

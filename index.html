@@ -630,7 +630,7 @@
             { emoji:'🍎', text:'刷牙或者啃苹果时才出血，平时不出', next:['q_perio_location'], delta:{gingivitis:7,puberty_gingivitis:3,pregnancy_gingivitis:3,acute_gingival_papillitis:5}, lock:['aggressive_periodontitis'] },
             { emoji:'🩸', text:'不刷牙也自己出血，牙龈发红发紫', next:['q_perio_mobility'], delta:{periodontitis:6,aggressive_periodontitis:5,gingival_hyperplasia:3}, lock:['gingivitis'] },
             { emoji:'🩹', text:'牙龈反复鼓起一个脓包来，挤破了过几天又鼓起来', delta:{apical_periodontitis:10,pulp_necrosis:6,periodontal_abscess:8}, lock:['gingivitis','periodontitis','aggressive_periodontitis'] },
-            { emoji:'⚠️', text:'牙龈反复排脓，同时牙齿对冷热没感觉了（牙神经可能坏死了）', delta:{perio_endo_lesion:12,pulp_necrosis:5}, lock:['gingivitis','periodontitis'] },
+            { emoji:'⚠️', text:'牙龈反复排脓，同时牙齿对冷热没感觉了（牙神经可能坏死了）', delta:{perio_endo_lesion:12,pulp_necrosis:8}, lock:['gingivitis','periodontitis'] },
           ]
         },
         q_perio_location: {
@@ -822,12 +822,12 @@
         q_universal_medical: {
           id:'q_universal_medical', text:'你有没有以下这些全身的健康状况？（可多选）', stage:'history', universal:true, multiSelect:true,
           branches:[
-            { emoji:'🍬', text:'确诊糖尿病 / 血糖控制不太好', riskTag:{periodontitis:2.5,aggressive_periodontitis:2,gingivitis:1.5,candidiasis:2,halitosis:1.5} },
+            { emoji:'🍬', text:'确诊糖尿病 / 血糖控制不太好', riskTag:{periodontitis:2.5,aggressive_periodontitis:2,gingivitis:1.5,candidiasis:2,halitosis:1.5,periodontal_abscess:4,furcation_involvement:3} },
             { emoji:'🫀', text:'高血压/心脏病，在吃降压药', riskTag:{gingival_hyperplasia:4,xerostomia:1.5,periodontitis:1.3} },
             { emoji:'🧬', text:'干燥综合征/红斑狼疮/类风湿等自身免疫病', riskTag:{xerostomia:3,candidiasis:2.5,lichen_planus:2,pemphigus:3,burning_mouth:2} },
-            { emoji:'💊', text:'长期吃抗癫痫药/抗抑郁药/环孢素', riskTag:{gingival_hyperplasia:4,xerostomia:2} },
-            { emoji:'☢️', text:'做过头部或颈部放射治疗', riskTag:{xerostomia:5,caries_rampant:6,candidiasis:4,radiation_stomatitis:18,osteomyelitis_jaw:3,mronj:5}, forceRed:true },
-            { emoji:'🦴', text:'在用或曾用过双膦酸盐/地舒单抗（治骨质疏松/骨转移的）', riskTag:{mronj:8,osteomyelitis_jaw:3}, forceRed:true },
+            { emoji:'💊', text:'长期吃抗癫痫药/抗抑郁药/环孢素', riskTag:{gingival_hyperplasia:8,xerostomia:2} },
+            { emoji:'☢️', text:'做过头部或颈部放射治疗', riskTag:{xerostomia:5,caries_rampant:10,candidiasis:4,radiation_stomatitis:18,osteomyelitis_jaw:3,mronj:5}, forceRed:true },
+            { emoji:'🦴', text:'在用或曾用过双膦酸盐/地舒单抗（治骨质疏松/骨转移的）', riskTag:{mronj:8,osteomyelitis_jaw:6}, forceRed:true },
             { emoji:'✅', text:'以上都没有', riskTag:{} },
           ]
         },
@@ -843,7 +843,7 @@
         q_universal_smoking: {
           id:'q_universal_smoking', text:'你有这些生活习惯吗？（可多选）', stage:'lifestyle', universal:true, multiSelect:true,
           branches:[
-            { emoji:'🚬', text:'经常抽烟（每天半包以上）', riskTag:{periodontitis:3,leukoplakia:5,oral_cancer:4,halitosis:2,gingivitis:1.5} },
+            { emoji:'🚬', text:'经常抽烟（每天半包以上）', riskTag:{periodontitis:3,leukoplakia:5,oral_cancer:4,halitosis:2,gingivitis:1.5,internal_resorption:2} },
             { emoji:'🍺', text:'经常喝酒（一周三四次以上）', riskTag:{leukoplakia:2.5,oral_cancer:3,halitosis:2} },
             { emoji:'🫒', text:'经常嚼槟榔', riskTag:{osf:8,oral_cancer:6,leukoplakia:3,periodontitis:1.5}, forceRed:true },
             { emoji:'✅', text:'不抽烟不喝酒不嚼槟榔', riskTag:{} },
@@ -852,7 +852,7 @@
         q_universal_brush: {
           id:'q_universal_brush', text:'你平时怎么刷牙的？', stage:'lifestyle', universal:true,
           branches:[
-            { emoji:'🪚', text:'喜欢用力横着来回拉锯式刷', riskTag:{wedge_defect:4,dentin_hypersensitivity:3} },
+            { emoji:'🪚', text:'喜欢用力横着来回拉锯式刷', riskTag:{wedge_defect:4,dentin_hypersensitivity:3,gingival_recession:5} },
             { emoji:'⏱️', text:'随便刷刷不到一分钟，基本不用牙线', riskTag:{periodontitis:3,gingivitis:3,caries_shallow:2,caries_deep:1.5} },
             { emoji:'✨', text:'巴氏刷牙法刷够两分钟，也用牙线或冲牙器', riskTag:{gingivitis:0.4,periodontitis:0.4,caries_shallow:0.5}, protect:true },
           ]
@@ -860,7 +860,7 @@
         q_universal_stress: {
           id:'q_universal_stress', text:'最近的精神状态和生活作息怎么样？', stage:'lifestyle', universal:true,
           branches:[
-            { emoji:'😫', text:'压力山大、常常焦虑/失眠/情绪紧绷', riskTag:{oral_ulcer:4,bruxism:5,tmd:3,burning_mouth:3,pericoronitis:2} },
+            { emoji:'😫', text:'压力山大、常常焦虑/失眠/情绪紧绷', riskTag:{oral_ulcer:4,bruxism:5,tmd:3,burning_mouth:3,pericoronitis:2,atypical_odontalgia:4} },
             { emoji:'😬', text:'注意到自己会不自觉紧咬牙关/咬嘴唇/咬指甲', riskTag:{bruxism:5,tmd:3,wedge_defect:2}, delta:{tooth_wear_attrition:4} },
             { emoji:'🧘', text:'作息规律、情绪平稳、压力不大', riskTag:{oral_ulcer:0.5,bruxism:0.3,tmd:0.5,burning_mouth:0.4}, protect:true },
           ]
@@ -878,7 +878,7 @@
           id:'q_universal_dental_visit', text:'你多久看一次牙医？', stage:'lifestyle', universal:true,
           branches:[
             { emoji:'📅', text:'每年至少洗牙一次，定期检查', riskTag:{gingivitis:0.3,periodontitis:0.3,caries_shallow:0.4,caries_deep:0.5,oral_cancer:0.5}, protect:true },
-            { emoji:'😰', text:'好几年没去过牙科了', riskTag:{periodontitis:1.8,caries_deep:1.8,oral_cancer:1.5} },
+            { emoji:'😰', text:'好几年没去过牙科了', riskTag:{periodontitis:1.8,caries_deep:1.8,oral_cancer:1.5,residual_root:3,root_resorption:2} },
           ]
         },
         q_universal_fluoride: {
