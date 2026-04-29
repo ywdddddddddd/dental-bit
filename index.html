@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <meta name="description" content="口腔健康解密卡 - 基于DAG二叉树网络的AI预问诊系统，覆盖46种口腔疾病">
+  <meta name="description" content="口腔健康解密卡 - 基于DAG二叉树网络的AI预问诊系统，覆盖74种口腔疾病">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#1a1535">
@@ -590,8 +590,8 @@
         q_pain_caries_depth: {
           id:'q_pain_caries_depth', text:'那颗牙上的洞有多大？照镜子能看到明显的小洞吗？', stage:'symptom',
           branches:[
-            { emoji:'🔍', text:'只有一条黑线或针尖大的小黑点，舔上去基本感觉不到凹坑', delta:{caries_shallow:10}, lock:['caries_deep','residual_root'] },
-            { emoji:'🕳️', text:'能看到明显的洞，舌头舔上去有个凹坑，吃东西容易塞进去', delta:{caries_deep:10}, lock:['caries_shallow'] },
+            { emoji:'🔍', text:'只有一条黑线或针尖大的小黑点，舔上去基本感觉不到凹坑', delta:{caries_shallow:10,reversible_pulpitis:3}, lock:['caries_deep','residual_root'] },
+            { emoji:'🕳️', text:'能看到明显的洞，舌头舔上去有个凹坑，吃东西容易塞进去', delta:{caries_deep:10,residual_root:3}, lock:['caries_shallow'] },
           ]
         },
         q_pain_floating: {
@@ -615,7 +615,7 @@
           branches:[
             { emoji:'🍎', text:'刷牙或者啃苹果时才出血，平时不出', next:['q_perio_location'], delta:{gingivitis:7,puberty_gingivitis:3,pregnancy_gingivitis:3}, lock:['aggressive_periodontitis'] },
             { emoji:'🩸', text:'不刷牙也自己出血，牙龈发红发紫', next:['q_perio_mobility'], delta:{periodontitis:6,aggressive_periodontitis:5}, lock:['gingivitis'] },
-            { emoji:'🩹', text:'牙龈反复鼓起一个脓包来，挤破了过几天又鼓起来', delta:{apical_periodontitis:10,pulp_necrosis:6}, lock:['gingivitis','periodontitis','aggressive_periodontitis'] },
+            { emoji:'🩹', text:'牙龈反复鼓起一个脓包来，挤破了过几天又鼓起来', delta:{apical_periodontitis:10,pulp_necrosis:6,periodontal_abscess:6}, lock:['gingivitis','periodontitis','aggressive_periodontitis'] },
             { emoji:'⚠️', text:'牙龈反复排脓，同时牙齿对冷热没感觉了（牙神经可能坏死了）', delta:{perio_endo_lesion:12,pulp_necrosis:5}, lock:['gingivitis','periodontitis'] },
           ]
         },
@@ -856,7 +856,7 @@
           branches:[
             { emoji:'🍰', text:'爱吃甜的/甜饮料/零食', riskTag:{caries_shallow:3,caries_deep:2.5,caries_recurrent:2} },
             { emoji:'🍋', text:'爱吃酸的/喝碳酸饮料/喝果醋', riskTag:{dental_erosion:5,dentin_hypersensitivity:2} },
-            { emoji:'🥩', text:'爱吃硬的（坚果/啃骨头/嚼冰块）', riskTag:{cracked_tooth:4,wedge_defect:2,trauma:2} },
+            { emoji:'🥩', text:'爱吃硬的（坚果/啃骨头/嚼冰块）', riskTag:{cracked_tooth:4,wedge_defect:2,trauma:2,tooth_wear_attrition:3} },
             { emoji:'🥗', text:'啥都吃、不偏食', riskTag:{} },
           ]
         },
@@ -1018,69 +1018,78 @@
         }
 
         finalize() {
-          const finalScores = {};
+          let scores = {};
           Object.keys(this.rawScores).forEach(diseaseId => {
-            if (this.lockedDiseases.has(diseaseId)) {
-              finalScores[diseaseId] = 0;
-              return;
-            }
-            let score = this.rawScores[diseaseId] || 0;
-            if (this.riskAccum[diseaseId]) score *= this.riskAccum[diseaseId];
-            if (this.protectAccum[diseaseId]) score *= this.protectAccum[diseaseId];
-
+            if (this.lockedDiseases.has(diseaseId)) { scores[diseaseId] = 0; return; }
+            let s = this.rawScores[diseaseId] || 0;
+            if (this.riskAccum[diseaseId]) s *= this.riskAccum[diseaseId];
+            if (this.protectAccum[diseaseId]) s *= this.protectAccum[diseaseId];
             const disease = DISEASES[diseaseId];
             if (disease && disease.ageRange && this.userAge) {
-              const [minAge, maxAge] = disease.ageRange;
-              const [userMin, userMax] = this.userAge;
-              if (userMax < minAge || userMin > maxAge) score *= 0.3;
+              const [minA, maxA] = disease.ageRange;
+              const [uMin, uMax] = this.userAge;
+              const mid = (uMin + uMax) / 2;
+              if (uMax < minA || uMin > maxA) s *= 0.15;
+              else if (mid >= minA && mid <= maxA) {
+                const center = (minA + maxA) / 2;
+                const dist = Math.abs(mid - center) / ((maxA - minA || 1) / 2);
+                s *= Math.max(0.35, 1.3 - dist * 0.6);
+              } else s *= 0.6;
             }
-            if (disease && disease.genderBias && this.userGender) {
-              score *= (disease.genderBias === this.userGender) ? 1.3 : 0.6;
-            }
-            finalScores[diseaseId] = Math.round(score * 10) / 10;
+            if (disease && disease.genderBias && this.userGender)
+              s *= (disease.genderBias === this.userGender) ? 1.35 : 0.55;
+            scores[diseaseId] = Math.round(s * 10) / 10;
           });
 
           DISEASE_GRAPH.mutualExclusionGroups.forEach(group => {
-            let maxKey = null, maxScore = 0;
-            group.forEach(key => { if (finalScores[key] > maxScore) { maxScore = finalScores[key]; maxKey = key; } });
-            group.forEach(key => { if (key !== maxKey && finalScores[key] > 0) finalScores[key] *= 0.15; });
+            const present = group.filter(k => scores[k] > 0);
+            if (present.length <= 1) return;
+            present.sort((a, b) => scores[b] - scores[a]);
+            const top = scores[present[0]];
+            if (top <= 0) return;
+            for (let i = 1; i < present.length; i++) {
+              const k = present[i];
+              const ratio = scores[k] / top;
+              scores[k] *= Math.max(0.08, 0.40 + ratio * 0.35);
+            }
           });
 
           DISEASE_GRAPH.causalChains.forEach(chain => {
             for (let i = 0; i < chain.length - 1; i++) {
-              const upstream = chain[i], downstream = chain[i + 1];
-              if (finalScores[upstream] > 15) finalScores[downstream] = (finalScores[downstream] || 0) + finalScores[upstream] * 0.2;
+              const up = chain[i], down = chain[i + 1];
+              if (!DISEASES[up] || !DISEASES[down]) continue;
+              if ((scores[up] || 0) > 6) scores[down] = (scores[down] || 0) + (scores[up] || 0) * 0.25;
+              if ((scores[down] || 0) > 8) scores[up] = (scores[up] || 0) + (scores[down] || 0) * 0.12;
             }
           });
 
           DISEASE_GRAPH.comorbidityPairs.forEach(([a, b]) => {
-            if (finalScores[a] > 20 && finalScores[b] > 0) finalScores[b] *= 1.2;
-            if (finalScores[b] > 20 && finalScores[a] > 0) finalScores[a] *= 1.2;
+            const sa = scores[a] || 0, sb = scores[b] || 0;
+            if (sa > 8 && sb > 0) scores[b] *= 1.18;
+            if (sb > 8 && sa > 0) scores[a] *= 1.18;
           });
 
-          // 智能互斥增强：部位不同的疾病可共存但降权
-          if (finalScores['root_caries'] > 10 && finalScores['caries_shallow'] > 10) {
-            finalScores['root_caries'] *= 0.7; finalScores['caries_shallow'] *= 0.7;
+          const s = k => scores[k] || 0;
+          if (s('root_caries') > 8 && s('caries_shallow') > 8) {
+            scores['root_caries'] *= 0.7; scores['caries_shallow'] *= 0.7;
           }
-          // 牙髓炎谱系：可复/不可复互斥因子调至0.35（原0.15过于激进）
-          if (finalScores['reversible_pulpitis'] > finalScores['irreversible_pulpitis']) {
-            finalScores['irreversible_pulpitis'] *= 0.15;
-          } else if (finalScores['irreversible_pulpitis'] > finalScores['reversible_pulpitis']) {
-            finalScores['reversible_pulpitis'] *= 0.35;
+          if (s('reversible_pulpitis') > s('irreversible_pulpitis') && s('reversible_pulpitis') > 5)
+            scores['irreversible_pulpitis'] *= 0.25;
+          else if (s('irreversible_pulpitis') > s('reversible_pulpitis') && s('irreversible_pulpitis') > 5)
+            scores['reversible_pulpitis'] *= 0.35;
+          if (s('caries_shallow') > 20 && s('caries_deep') > 0) scores['caries_deep'] *= 0.65;
+          if (s('caries_deep') > 20 && s('caries_shallow') > 0) scores['caries_shallow'] *= 0.55;
+          if (s('anug') > 15)
+            ['gingivitis','periodontitis','puberty_gingivitis'].forEach(k => { scores[k] *= 0.18; });
+          if (s('pemphigus') > 10 && s('pemphigoid') > 10) {
+            if (s('pemphigus') > s('pemphigoid')) scores['pemphigoid'] *= 0.25;
+            else scores['pemphigus'] *= 0.25;
           }
-          // 浅/深龋互斥软化：浅龋高分时深龋不应被过度压制
-          if (finalScores['caries_shallow'] > 30 && finalScores['caries_deep'] > 0) {
-            finalScores['caries_deep'] *= 0.6;
-          }
-          if (finalScores['anug'] > 20) {
-            ['gingivitis','periodontitis','puberty_gingivitis'].forEach(k => { finalScores[k] *= 0.15; });
-          }
-          if (finalScores['pemphigus'] > 15 && finalScores['pemphigoid'] > 15) {
-            if (finalScores['pemphigus'] > finalScores['pemphigoid']) { finalScores['pemphigoid'] *= 0.2; }
-            else { finalScores['pemphigus'] *= 0.2; }
-          }
+          if (s('periodontal_abscess') > 8) scores['perio_endo_lesion'] = (s('perio_endo_lesion') || 0) * 0.3;
+          if (s('vertical_root_fracture') > 8) scores['cracked_tooth'] = (s('cracked_tooth') || 0) * 0.35;
 
-          this.scores = finalScores;
+          Object.keys(scores).forEach(k => { scores[k] = Math.round(scores[k] * 10) / 10; });
+          this.scores = scores;
           return this.ranking();
         }
 
@@ -1130,7 +1139,7 @@
             <div class="subhead" style="animation:fadeSlideIn 0.5s 0.25s both cubic-bezier(0.22,0.61,0.36,1)">DAG二叉树网络 · AI预问诊</div>
             <div style="animation:fadeSlideIn 0.5s 0.35s both cubic-bezier(0.22,0.61,0.36,1)">${renderThemeDots()}</div>
             <div style="text-align:center;line-height:1.8;font-size:0.9rem;margin:6px 0;animation:fadeSlideIn 0.5s 0.45s both cubic-bezier(0.22,0.61,0.36,1)">
-              <div style="color:var(--accent-purple)">📊 覆盖 <b>72</b> 种口腔疾病</div>
+              <div style="color:var(--accent-purple)">📊 覆盖 <b>74</b> 种口腔疾病</div>
               <div style="color:#6ee7b7">🧬 疾病因果关系感知引擎</div>
               <div style="color:var(--accent-yellow)">⏱️ 约3分钟 · DAG智能分析</div>
             </div>

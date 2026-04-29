@@ -85,9 +85,11 @@ function runPatientCase(patientCase) {
     
     const branchIndex = patientCase.answers[qId];
     if (branchIndex === undefined) {
-      stepLog.push(`  ⚠ 缺失答案: ${qId}, 默认选第0项`);
-      answeredQuestions.push({ qid: qId, branch: 0, text: node?.branches?.[0]?.text || 'N/A' });
-      engine.answerBranch(0);
+      // 安全fallback: 选最后一项(通常为"以上都不是"/"没有这些情况")
+      const safeIndex = node.branches.length - 1;
+      stepLog.push(`  ⚠ 缺失答案: ${qId}, fallback到最安全选项[${safeIndex}]`);
+      answeredQuestions.push({ qid: qId, branch: safeIndex, text: node?.branches?.[safeIndex]?.text || 'N/A' });
+      engine.answerBranch(safeIndex);
       continue;
     }
     
@@ -623,14 +625,38 @@ function main() {
   console.log('');
   
   console.log('生成报告...');
-  const reportPaths = generateReport(results, stats, useGenerated);
-  console.log('');
+  // 只输出JSON和简洁摘要，Markdown在大样本下占用过多内存
+  const summaryPath = path.join(reportDir, `test-summary-${timestamp}.txt`);
+  const summary = generateSummaryText(results, stats, timestamp, isGenerated);
+  fs.writeFileSync(summaryPath, summary, 'utf-8');
+  console.log(`[OK] 摘要报告: ${summaryPath}`);
+  
+  // JSON
+  const jsonPath = path.join(reportDir, `test-results-${timestamp}.json`);
+  const jsonData = results.map(r => ({
+    patientId: r.patientCase.id,
+    patientName: r.patientCase.name,
+    profile: r.patientCase.profile,
+    targetDisease: r.patientCase.target,
+    expectedCategory: r.patientCase.category,
+    expectedUrgency: r.patientCase.urgency,
+    hasRedFlag: r.hasRedFlag,
+    ageGate: r.ageGate,
+    genderGate: r.genderGate,
+    questionsAnswered: r.answeredQuestions.length,
+    visitedNodes: r.visitedNodes,
+    ranking: r.ranking,
+    allScores: r.finalScores,
+  }));
+  fs.writeFileSync(jsonPath, JSON.stringify(jsonData, null, 2), 'utf-8');
+  console.log(`[OK] JSON报告: ${jsonPath}`);
+  
+  return { jsonPath, summaryPath };
   
   console.log('='.repeat(60));
   console.log(`  测试完成！${testCases.length}份模拟患者问卷`);
   console.log(`  首诊命中率: ${accuracyRate}%`);
   console.log(`  JSON: ${reportPaths.jsonPath}`);
-  console.log(`  MD:   ${reportPaths.mdPath}`);
   console.log(`  TXT:  ${reportPaths.summaryPath}`);
   console.log('='.repeat(60));
 }

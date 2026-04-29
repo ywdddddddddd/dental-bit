@@ -637,6 +637,107 @@ const PREVALENCE = {
     senior: { male: 0.18, female: 0.28 },
     elderly:{ male: 0.25, female: 0.35 },
   },
+  // ====== 新增20种疾病流行病学数据 ======
+  amelogenesis_imperfecta: {
+    child:{ male:0.001,female:0.001 }, youth:{ male:0.001,female:0.001 },
+    young:{ male:0.001,female:0.001 }, middle:{ male:0.001,female:0.001 },
+    senior:{ male:0.001,female:0.001 }, elderly:{ male:0.001,female:0.001 },
+  },
+  pulp_polyp: {
+    child:{ male:0.02,female:0.02 }, youth:{ male:0.03,female:0.03 },
+    young:{ male:0.01,female:0.01 }, middle:{ male:0.005,female:0.005 },
+    senior:{ male:0.003,female:0.003 }, elderly:{ male:0.001,female:0.001 },
+  },
+  hairy_tongue: {
+    child:{ male:0.00,female:0.00 }, youth:{ male:0.01,female:0.01 },
+    young:{ male:0.03,female:0.02 }, middle:{ male:0.05,female:0.03 },
+    senior:{ male:0.06,female:0.04 }, elderly:{ male:0.07,female:0.05 },
+  },
+  fissured_tongue: {
+    child:{ male:0.02,female:0.02 }, youth:{ male:0.04,female:0.04 },
+    young:{ male:0.06,female:0.06 }, middle:{ male:0.08,female:0.08 },
+    senior:{ male:0.10,female:0.10 }, elderly:{ male:0.12,female:0.12 },
+  },
+  median_rhomboid_glossitis: {
+    child:{ male:0.00,female:0.00 }, youth:{ male:0.00,female:0.00 },
+    young:{ male:0.005,female:0.003 }, middle:{ male:0.01,female:0.005 },
+    senior:{ male:0.015,female:0.008 }, elderly:{ male:0.02,female:0.01 },
+  },
+  nicotine_stomatitis: {
+    child:{ male:0.00,female:0.00 }, youth:{ male:0.00,female:0.00 },
+    young:{ male:0.02,female:0.005 }, middle:{ male:0.05,female:0.01 },
+    senior:{ male:0.08,female:0.02 }, elderly:{ male:0.05,female:0.01 },
+  },
+  chronic_cheek_biting: {
+    child:{ male:0.02,female:0.03 }, youth:{ male:0.04,female:0.05 },
+    young:{ male:0.05,female:0.06 }, middle:{ male:0.03,female:0.04 },
+    senior:{ male:0.02,female:0.02 }, elderly:{ male:0.01,female:0.01 },
+  },
+  eagle_syndrome: {
+    child:{ male:0.00,female:0.00 }, youth:{ male:0.00,female:0.00 },
+    young:{ male:0.002,female:0.004 }, middle:{ male:0.005,female:0.01 },
+    senior:{ male:0.008,female:0.015 }, elderly:{ male:0.01,female:0.02 },
+  },
+  tmj_ankylosis: {
+    child:{ male:0.001,female:0.001 }, youth:{ male:0.002,female:0.002 },
+    young:{ male:0.002,female:0.002 }, middle:{ male:0.001,female:0.001 },
+    senior:{ male:0.001,female:0.001 }, elderly:{ male:0.001,female:0.001 },
+  },
+  myofascial_pain: {
+    child:{ male:0.005,female:0.005 }, youth:{ male:0.02,female:0.03 },
+    young:{ male:0.05,female:0.08 }, middle:{ male:0.08,female:0.12 },
+    senior:{ male:0.06,female:0.10 }, elderly:{ male:0.04,female:0.06 },
+  },
+  osteoradionecrosis: {
+    child:{ male:0.00,female:0.00 }, youth:{ male:0.00,female:0.00 },
+    young:{ male:0.001,female:0.001 }, middle:{ male:0.003,female:0.003 },
+    senior:{ male:0.008,female:0.005 }, elderly:{ male:0.01,female:0.008 },
+  },
+  cherubism: {
+    child:{ male:0.001,female:0.001 }, youth:{ male:0.001,female:0.001 },
+    young:{ male:0.000,female:0.000 }, middle:{ male:0.000,female:0.000 },
+    senior:{ male:0.000,female:0.000 }, elderly:{ male:0.000,female:0.000 },
+  },
+  desquamative_gingivitis: {
+    child:{ male:0.00,female:0.00 }, youth:{ male:0.00,female:0.00 },
+    young:{ male:0.002,female:0.005 }, middle:{ male:0.005,female:0.015 },
+    senior:{ male:0.008,female:0.025 }, elderly:{ male:0.01,female:0.03 },
+  },
+  gingival_cyst: {
+    child:{ male:0.005,female:0.005 }, youth:{ male:0.002,female:0.002 },
+    young:{ male:0.002,female:0.002 }, middle:{ male:0.003,female:0.003 },
+    senior:{ male:0.002,female:0.002 }, elderly:{ male:0.001,female:0.001 },
+  },
+  salivary_gland_tumor: {
+    child:{ male:0.00,female:0.00 }, youth:{ male:0.00,female:0.00 },
+    young:{ male:0.002,female:0.002 }, middle:{ male:0.005,female:0.005 },
+    senior:{ male:0.01,female:0.01 }, elderly:{ male:0.015,female:0.015 },
+  },
+  burning_tongue: {
+    child:{ male:0.00,female:0.00 }, youth:{ male:0.00,female:0.00 },
+    young:{ male:0.01,female:0.02 }, middle:{ male:0.02,female:0.05 },
+    senior:{ male:0.04,female:0.08 }, elderly:{ male:0.05,female:0.10 },
+  },
+  recurrent_herpes_labialis: {
+    child:{ male:0.05,female:0.06 }, youth:{ male:0.10,female:0.12 },
+    young:{ male:0.12,female:0.15 }, middle:{ male:0.10,female:0.12 },
+    senior:{ male:0.06,female:0.08 }, elderly:{ male:0.04,female:0.05 },
+  },
+  submandibular_sialadenitis: {
+    child:{ male:0.001,female:0.001 }, youth:{ male:0.002,female:0.002 },
+    young:{ male:0.005,female:0.003 }, middle:{ male:0.01,female:0.005 },
+    senior:{ male:0.015,female:0.01 }, elderly:{ male:0.02,female:0.015 },
+  },
+  torus: {
+    child:{ male:0.01,female:0.02 }, youth:{ male:0.05,female:0.08 },
+    young:{ male:0.08,female:0.12 }, middle:{ male:0.12,female:0.18 },
+    senior:{ male:0.15,female:0.22 }, elderly:{ male:0.18,female:0.25 },
+  },
+  oral_fibroma: {
+    child:{ male:0.005,female:0.005 }, youth:{ male:0.01,female:0.01 },
+    young:{ male:0.02,female:0.02 }, middle:{ male:0.03,female:0.03 },
+    senior:{ male:0.04,female:0.04 }, elderly:{ male:0.04,female:0.04 },
+  },
 };
 
 /**
