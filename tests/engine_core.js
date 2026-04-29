@@ -1,4 +1,4 @@
-// Regenerated engine core from index.html (74 diseases, 46 DAG nodes)
+// Regenerated engine core from index.html (74 diseases)
 'use strict';
 
 const DISEASE_CATEGORIES = {
@@ -176,7 +176,7 @@ const QUESTION_TREE = {
         q_entry: {
           id:'q_entry', text:'你的牙齿或嘴巴最近主要在闹什么"小情绪"？', stage:'complaint',
           branches:[
-            { emoji:'🦷', text:'牙疼 / 遇冷遇热疼 / 咬东西疼', next:['q_pain_spontaneous'], delta:{caries_deep:3,irreversible_pulpitis:2,dentin_hypersensitivity:2}, lock:['gingivitis','periodontitis','leukoplakia','oral_ulcer','malocclusion'] },
+            { emoji:'🦷', text:'牙疼 / 遇冷遇热疼 / 咬东西疼', next:['q_pain_spontaneous'], delta:{caries_deep:3,irreversible_pulpitis:2,dentin_hypersensitivity:2}, lock:['gingivitis','periodontitis','leukoplakia','oral_ulcer'] },
             { emoji:'🩸', text:'牙龈出血 / 红肿 / 长脓包 / 牙齿松动', next:['q_perio_necrosis_smell'], delta:{gingivitis:4,periodontitis:3,aggressive_periodontitis:2}, lock:['dentin_hypersensitivity','cracked_tooth','pemphigus'] },
             { emoji:'👄', text:'长溃疡了 / 有白斑 / 糜烂 / 舌头不对劲 / 嘴角裂', next:['q_mucosa_can_scrape'], delta:{oral_ulcer:3,leukoplakia:2,candidiasis:2}, lock:['caries_shallow','caries_deep','wedge_defect','irreversible_pulpitis'] },
             { emoji:'🕳️', text:'牙齿有个黑洞 / 缺了一块 / 变色 / 裂纹 / 形态不太对', next:['q_hard_acquired_or_dev'], delta:{caries_shallow:3,wedge_defect:2,caries_recurrent:2,fluorosis:1}, lock:['gingivitis','periodontitis','oral_ulcer','pemphigus'] },
@@ -206,7 +206,7 @@ const QUESTION_TREE = {
             { emoji:'🍬', text:'吃甜的或者喝冰的时酸痛，刺激去掉马上就好了', next:['q_pain_caries_depth'], delta:{caries_shallow:4,caries_deep:6,dental_erosion:3}, lock:['cracked_tooth','apical_periodontitis','trigeminal_neuralgia'] },
             { emoji:'🪥', text:'刷牙刷到牙根那儿的时候刺痛', delta:{wedge_defect:8,dentin_hypersensitivity:6}, lock:['caries_deep','cracked_tooth'] },
             { emoji:'💢', text:'咬到某个点突然像过电/刀割一样剧痛', next:['q_pain_lightning_duration'], delta:{cracked_tooth:7,trigeminal_neuralgia:5}, lock:['caries_shallow','dentin_hypersensitivity','dental_erosion'] },
-            { emoji:'🎈', text:'不敢咬东西，感觉牙齿"浮起来了"，一碰就疼', delta:{apical_periodontitis:8,pulp_necrosis:3}, lock:['dentin_hypersensitivity','caries_shallow','wedge_defect'] },
+            { emoji:'🎈', text:'不敢咬东西，感觉牙齿"浮起来了"，一碰就疼', delta:{apical_periodontitis:8,pulp_necrosis:3,vertical_root_fracture:3}, lock:['dentin_hypersensitivity','caries_shallow','wedge_defect'] },
             { emoji:'🤧', text:'上排后牙疼，同时同侧鼻子堵、流黄色脓鼻涕', delta:{sinusitis_odontogenic:12}, lock:['caries_shallow','caries_deep','dentin_hypersensitivity','wedge_defect','cracked_tooth'] },
           ]
         },
@@ -220,7 +220,7 @@ const QUESTION_TREE = {
         q_pain_floating: {
           id:'q_pain_floating', text:'有没有觉得这颗牙"浮起来了"，比别人高了一截？', stage:'symptom',
           branches:[
-            { emoji:'🎈', text:'对对对，明显浮起来，完全不敢咬', delta:{apical_periodontitis:9,pulp_necrosis:2}, lock:['irreversible_pulpitis'] },
+            { emoji:'🎈', text:'对对对，明显浮起来，完全不敢咬', delta:{apical_periodontitis:9,pulp_necrosis:2,osteomyelitis_jaw:3}, lock:['irreversible_pulpitis'] },
             { emoji:'🦷', text:'没有浮起感，就是纯疼', delta:{irreversible_pulpitis:8}, lock:['apical_periodontitis'] },
           ]
         },
@@ -236,8 +236,8 @@ const QUESTION_TREE = {
         q_perio_bleeding_type: {
           id:'q_perio_bleeding_type', text:'牙龈出血是哪种情况？', stage:'symptom',
           branches:[
-            { emoji:'🍎', text:'刷牙或者啃苹果时才出血，平时不出', next:['q_perio_location'], delta:{gingivitis:7,puberty_gingivitis:3,pregnancy_gingivitis:3}, lock:['aggressive_periodontitis'] },
-            { emoji:'🩸', text:'不刷牙也自己出血，牙龈发红发紫', next:['q_perio_mobility'], delta:{periodontitis:6,aggressive_periodontitis:5}, lock:['gingivitis'] },
+            { emoji:'🍎', text:'刷牙或者啃苹果时才出血，平时不出', next:['q_perio_location'], delta:{gingivitis:7,puberty_gingivitis:3,pregnancy_gingivitis:3,acute_gingival_papillitis:5}, lock:['aggressive_periodontitis'] },
+            { emoji:'🩸', text:'不刷牙也自己出血，牙龈发红发紫', next:['q_perio_mobility'], delta:{periodontitis:6,aggressive_periodontitis:5,gingival_hyperplasia:3}, lock:['gingivitis'] },
             { emoji:'🩹', text:'牙龈反复鼓起一个脓包来，挤破了过几天又鼓起来', delta:{apical_periodontitis:10,pulp_necrosis:6,periodontal_abscess:6}, lock:['gingivitis','periodontitis','aggressive_periodontitis'] },
             { emoji:'⚠️', text:'牙龈反复排脓，同时牙齿对冷热没感觉了（牙神经可能坏死了）', delta:{perio_endo_lesion:12,pulp_necrosis:5}, lock:['gingivitis','periodontitis'] },
           ]
@@ -252,8 +252,8 @@ const QUESTION_TREE = {
         q_perio_mobility: {
           id:'q_perio_mobility', text:'牙齿有没有松动的感觉？', stage:'symptom',
           branches:[
-            { emoji:'🍂', text:'有，好几颗牙明显松了', next:['q_perio_age_rapid'], delta:{periodontitis:8,aggressive_periodontitis:8}, lock:['gingivitis','puberty_gingivitis'] },
-            { emoji:'🦷', text:'没有明显松动，就是红肿出血', delta:{gingivitis:6,puberty_gingivitis:4,pregnancy_gingivitis:5}, lock:['periodontitis','aggressive_periodontitis'] },
+            { emoji:'🍂', text:'有，好几颗牙明显松了', next:['q_perio_age_rapid'], delta:{periodontitis:8,aggressive_periodontitis:8,furcation_involvement:6}, lock:['gingivitis','puberty_gingivitis'] },
+            { emoji:'🦷', text:'没有明显松动，就是红肿出血', delta:{gingivitis:6,puberty_gingivitis:4,pregnancy_gingivitis:5,gingival_recession:5}, lock:['periodontitis','aggressive_periodontitis'] },
           ]
         },
         q_perio_age_rapid: {
@@ -303,9 +303,9 @@ const QUESTION_TREE = {
         q_mucosa_ulcer_duration: {
           id:'q_mucosa_ulcer_duration', text:'这个溃疡/糜烂有多久了？', stage:'symptom',
           branches:[
-            { emoji:'🔄', text:'反复发作的，每次一两个星期自己就好了，圆形小坑', delta:{oral_ulcer:10}, lock:['oral_cancer','pemphigus'] },
+            { emoji:'🔄', text:'反复发作的，每次一两个星期自己就好了，圆形小坑', delta:{oral_ulcer:10,traumatic_ulcer:3}, lock:['oral_cancer','pemphigus'] },
             { emoji:'⚠️', text:'超过三个星期了还不愈合，边缘硬、基底不平', next:['q_mucosa_cancer_redflags'], delta:{oral_cancer:10,pemphigus:3}, lock:['oral_ulcer'] },
-            { emoji:'🫧', text:'大面积糜烂，同时身上皮肤也有水疱', delta:{pemphigus:12}, lock:['oral_ulcer','herpes_stomatitis'] },
+            { emoji:'🫧', text:'大面积糜烂，同时身上皮肤也有水疱', delta:{pemphigus:12,radiation_stomatitis:5}, lock:['oral_ulcer','herpes_stomatitis'] },
             { emoji:'🦠', text:'一簇簇小水疱，破了连成一片，之前有感冒的感觉', delta:{herpes_stomatitis:10}, lock:['oral_ulcer','pemphigus','oral_cancer'] },
           ]
         },
@@ -349,7 +349,7 @@ const QUESTION_TREE = {
         q_hard_dev_color_or_shape: {
           id:'q_hard_dev_color_or_shape', text:'是对颜色不满意，还是牙齿形状上多长了个小尖尖？', stage:'symptom',
           branches:[
-            { emoji:'🎨', text:'颜色不对——白垩色/黄褐色/灰黄色斑块', next:['q_hard_dev_color_detail'], delta:{fluorosis:5,tetracycline_teeth:5,enamel_hypoplasia:4}, lock:['dens_evaginatus'] },
+            { emoji:'🎨', text:'颜色不对——白垩色/黄褐色/灰黄色斑块', next:['q_hard_dev_color_detail'], delta:{fluorosis:5,tetracycline_teeth:5,enamel_hypoplasia:4,dentinogenesis_imperfecta:5}, lock:['dens_evaginatus'] },
             { emoji:'🔺', text:'形态异常——牙齿上多长了一个小尖尖', delta:{dens_evaginatus:10}, lock:['fluorosis','tetracycline_teeth','enamel_hypoplasia'] },
           ]
         },
@@ -445,7 +445,7 @@ const QUESTION_TREE = {
           branches:[
             { emoji:'🦷', text:'比较年轻（不到40岁）时牙齿就松动掉了好几颗', riskTag:{aggressive_periodontitis:5,periodontitis:1.5} },
             { emoji:'⚠️', text:'得过口腔癌或头颈部恶性肿瘤', riskTag:{oral_cancer:5,leukoplakia:2} },
-            { emoji:'🧩', text:'有严重的牙齿排列不齐/地包天', riskTag:{malocclusion:3} },
+            { emoji:'🧩', text:'有严重的牙齿排列不齐/地包天', riskTag:{malocclusion:8} },
             { emoji:'✅', text:'以上都没有', riskTag:{} },
           ]
         },
@@ -470,7 +470,7 @@ const QUESTION_TREE = {
           id:'q_universal_stress', text:'最近的精神状态和生活作息怎么样？', stage:'lifestyle', universal:true,
           branches:[
             { emoji:'😫', text:'压力山大、常常焦虑/失眠/情绪紧绷', riskTag:{oral_ulcer:4,bruxism:5,tmd:3,burning_mouth:3,pericoronitis:2} },
-            { emoji:'😬', text:'注意到自己会不自觉紧咬牙关/咬嘴唇/咬指甲', riskTag:{bruxism:5,tmd:3,wedge_defect:2} },
+            { emoji:'😬', text:'注意到自己会不自觉紧咬牙关/咬嘴唇/咬指甲', riskTag:{bruxism:5,tmd:3,wedge_defect:2}, delta:{tooth_wear_attrition:4} },
             { emoji:'🧘', text:'作息规律、情绪平稳、压力不大', riskTag:{oral_ulcer:0.5,bruxism:0.3,tmd:0.5,burning_mouth:0.4}, protect:true },
           ]
         },
@@ -510,7 +510,7 @@ const QUESTION_TREE = {
           id:'q_pain_xray_finding', text:'有没有拍过牙片，医生有没有说牙髓腔里有异常钙化或者"小石头"？', stage:'symptom',
           branches:[
             { emoji:'🪨', text:'有，医生说过髓腔里有钙化/髓石', delta:{pulp_calcification:10}, lock:['trigeminal_neuralgia','atypical_odontalgia'] },
-            { emoji:'❓', text:'没拍过 / 不清楚', delta:{trigeminal_neuralgia:3,pulp_calcification:2} },
+            { emoji:'❓', text:'没拍过 / 不清楚', delta:{trigeminal_neuralgia:3,pulp_calcification:2,atypical_odontalgia:6} },
           ]
         },
         q_perio_necrosis_smell: {
