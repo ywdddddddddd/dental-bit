@@ -25,7 +25,7 @@ cases.forEach((c, i) => {
     const node = QUESTION_TREE[qId];
     if (!node) break;
     let bi = c.answers[qId];
-    if (bi === undefined) bi = 0; // match original test runner behavior
+    if (bi === undefined) bi = node.branches ? node.branches.length - 1 : 0; // default to safe/last branch
 
     if (node.multiSelect) {
       const sel = Array.isArray(bi) ? bi : [bi];
@@ -95,7 +95,7 @@ results.forEach((r, idx) => {
 });
 
 console.log('\n' + '='.repeat(60));
-console.log(`  v2.0 · ${COUNT}例 · 94种疾病`);
+console.log(`  v2.5 · ${COUNT}例 · 145种疾病`);
 console.log('='.repeat(60));
 console.log(`  首诊命中: ${hit}/${COUNT} = ${(hit/COUNT*100).toFixed(1)}%`);
 console.log(`  Top-3覆盖: ${top3}/${COUNT} = ${(top3/COUNT*100).toFixed(1)}%`);
