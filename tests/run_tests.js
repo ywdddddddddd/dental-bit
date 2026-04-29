@@ -483,6 +483,7 @@ function generateSummary(results, stats, timestamp, isGenerated = false) {
 
 // ==================== 主函数 ====================
 function main() {
+  const timestamp = new Date().toISOString().replace(/:/g, '-').slice(0, 19);
   const useGenerated = process.argv.includes('--generated') || process.argv.includes('-g');
   const caseCount = parseInt(process.argv.find(a => a.startsWith('--count='))?.split('=')[1]) || 300;
   const label = useGenerated ? `${caseCount}份流行病学模拟病例` : '30份精选病例';
@@ -625,9 +626,11 @@ function main() {
   console.log('');
   
   console.log('生成报告...');
+  const reportDir = CONFIG.outputDir;
+  if (!fs.existsSync(reportDir)) fs.mkdirSync(reportDir, { recursive: true });
   // 只输出JSON和简洁摘要，Markdown在大样本下占用过多内存
   const summaryPath = path.join(reportDir, `test-summary-${timestamp}.txt`);
-  const summary = generateSummaryText(results, stats, timestamp, isGenerated);
+  const summary = generateSummary(results, stats, timestamp, useGenerated);
   fs.writeFileSync(summaryPath, summary, 'utf-8');
   console.log(`[OK] 摘要报告: ${summaryPath}`);
   

@@ -1,4 +1,4 @@
-// Regenerated engine core from index.html (74 diseases)
+// Regenerated engine core from index.html (144 diseases)
 'use strict';
 
 const DISEASE_CATEGORIES = {
@@ -1282,6 +1282,1165 @@ const DISEASES = {
     "causalParent": null,
     "causalChildren": [],
     "exclusiveGroup": "mucosa_malignant"
+  },
+  "chronic_pulpitis": {
+    "name": "慢性牙髓炎",
+    "cat": "tooth",
+    "urgency": "yellow",
+    "emoji": "🌡️",
+    "desc": "牙齿闷闷地钝痛，有时候能定位，冷热刺激反应变慢，咬东西不太舒服。",
+    "advice": "需要根管治疗，慢性牙髓炎往往已经坏死一部分了，拖久了会变成根尖周炎。",
+    "ageRange": [
+      10,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": "caries_deep",
+    "causalChildren": [
+      "apical_periodontitis"
+    ],
+    "exclusiveGroup": "pulp_pathosis"
+  },
+  "acute_apical_abscess": {
+    "name": "急性化脓性根尖周炎",
+    "cat": "tooth",
+    "urgency": "red",
+    "emoji": "💢",
+    "desc": "牙齿剧烈跳痛，牙龈肿起来，脸可能也肿了，碰一下就疼得受不了。",
+    "advice": "急诊！需要马上切开引流排脓，配合抗生素，消肿后做根管治疗。",
+    "ageRange": [
+      6,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": "apical_periodontitis",
+    "causalChildren": [
+      "osteomyelitis_jaw"
+    ],
+    "exclusiveGroup": "pulp_pathosis"
+  },
+  "chronic_apical_granuloma": {
+    "name": "慢性根尖周肉芽肿",
+    "cat": "tooth",
+    "urgency": "green",
+    "emoji": "🌿",
+    "desc": "牙齿对冷热没感觉了，咬东西轻微不适，拍片子看到根尖周围有一小团暗影。",
+    "advice": "根管治疗通常能好，如果病灶范围大可能需要根尖手术切除。",
+    "ageRange": [
+      10,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": "apical_periodontitis",
+    "causalChildren": [],
+    "exclusiveGroup": "pulp_pathosis"
+  },
+  "chronic_apical_cyst": {
+    "name": "慢性根尖周囊肿",
+    "cat": "tooth",
+    "urgency": "yellow",
+    "emoji": "🫧",
+    "desc": "牙齿变色发灰，对冷热没反应，拍片子看到根尖周围有圆形透光影，边界很清楚。",
+    "advice": "需要根管治疗加囊肿刮治术，较大的囊肿可能需要手术摘除。",
+    "ageRange": [
+      10,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": "apical_periodontitis",
+    "causalChildren": [],
+    "exclusiveGroup": "pulp_pathosis"
+  },
+  "arrested_caries": {
+    "name": "静止龋",
+    "cat": "tooth",
+    "urgency": "green",
+    "emoji": "🛑",
+    "desc": "龋洞表面变干了、变硬了、颜色变深褐色，不再继续发展。",
+    "advice": "虽然不再发展了，但还是建议补起来防止以后复发，同时保持好口腔卫生。",
+    "ageRange": [
+      20,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "caries_spectrum"
+  },
+  "baby_bottle_caries": {
+    "name": "奶瓶龋（婴幼儿龋）",
+    "cat": "tooth",
+    "urgency": "red",
+    "emoji": "🍼",
+    "desc": "上排前牙靠近牙龈的地方快速蛀坏变黑，常见于含着奶瓶睡觉或频繁夜奶的幼儿。",
+    "advice": "立即停掉含奶瓶睡觉的习惯！尽快去儿童口腔科治疗，严重时可能影响恒牙发育。",
+    "ageRange": [
+      0,
+      6
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "caries_spectrum"
+  },
+  "concussion": {
+    "name": "牙震荡",
+    "cat": "tooth",
+    "urgency": "yellow",
+    "emoji": "💫",
+    "desc": "牙齿受到撞击后有点松动、对咬合力敏感，但没有折断或移位。",
+    "advice": "2周内避免用这颗牙咬东西，定期复查牙髓活力，如果出现变色或疼痛要根管治疗。",
+    "ageRange": [
+      3,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": "trauma",
+    "causalChildren": [],
+    "exclusiveGroup": "crack_trauma"
+  },
+  "luxation": {
+    "name": "牙脱位",
+    "cat": "tooth",
+    "urgency": "red",
+    "emoji": "📍",
+    "desc": "牙齿被撞得往嘴唇或舌头方向移位了，甚至完全掉出来了。",
+    "advice": "如果整颗牙掉出来了，把它泡在牛奶里或者含在嘴里，30分钟内赶到医院急诊！",
+    "ageRange": [
+      3,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": "trauma",
+    "causalChildren": [
+      "pulp_necrosis"
+    ],
+    "exclusiveGroup": "crack_trauma"
+  },
+  "crown_fracture": {
+    "name": "冠折",
+    "cat": "tooth",
+    "urgency": "yellow",
+    "emoji": "📏",
+    "desc": "牙齿的牙冠部分折断了，可能露出牙神经，也可能只是缺了一小块。",
+    "advice": "如果露神经了需要尽快盖髓或根管治疗，小缺损可以直接树脂修复。",
+    "ageRange": [
+      3,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": "trauma",
+    "causalChildren": [
+      "pulp_necrosis"
+    ],
+    "exclusiveGroup": "crack_trauma"
+  },
+  "root_fracture": {
+    "name": "根折",
+    "cat": "tooth",
+    "urgency": "red",
+    "emoji": "📐",
+    "desc": "牙齿的牙根部分折断了，牙冠可能有不同程度的松动。",
+    "advice": "根折的预后通常不好，多数需要拔掉。少数根尖1/3折断的可以尝试固定观察。",
+    "ageRange": [
+      3,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": "trauma",
+    "causalChildren": [],
+    "exclusiveGroup": "crack_trauma"
+  },
+  "dens_in_dente": {
+    "name": "牙中牙",
+    "cat": "tooth",
+    "urgency": "green",
+    "emoji": "🔘",
+    "desc": "牙齿形状像一个小牙齿包在大牙齿里面，X光片看起来很有意思，但容易在凹陷处藏污纳垢导致蛀牙。",
+    "advice": "如果凹陷深容易蛀牙，可以预防性充填。已经蛀了的要补牙。",
+    "ageRange": [
+      6,
+      25
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "caries_deep"
+    ],
+    "exclusiveGroup": "developmental_tooth"
+  },
+  "fused_tooth": {
+    "name": "融合牙",
+    "cat": "tooth",
+    "urgency": "green",
+    "emoji": "🤝",
+    "desc": "两颗牙齿发育时融合在一起，看起来一颗牙特别大，牙缝容易塞东西。",
+    "advice": "注意清洁牙缝，容易蛀牙的位置要重点防护。影响美观或功能时可以考虑修复。",
+    "ageRange": [
+      3,
+      20
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_tooth"
+  },
+  "geminated_tooth": {
+    "name": "双生牙",
+    "cat": "tooth",
+    "urgency": "green",
+    "emoji": "👯",
+    "desc": "一颗牙齿有两个牙冠但共享一个牙根，看起来像一个牙裂成两半。",
+    "advice": "注意牙缝清洁，容易蛀牙。如果影响恒牙萌出可能需要拔除。",
+    "ageRange": [
+      3,
+      15
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_tooth"
+  },
+  "taurodontism": {
+    "name": "牛牙症",
+    "cat": "tooth",
+    "urgency": "green",
+    "emoji": "🐂",
+    "desc": "牙齿的牙根特别短，髓腔特别大，拍片子看起来很\"方\"。常见于某些遗传综合征。",
+    "advice": "根管治疗时比较难找根管口，需要找经验丰富的医生。定期复查。",
+    "ageRange": [
+      3,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_tooth"
+  },
+  "supernumerary_tooth": {
+    "name": "多生牙",
+    "cat": "tooth",
+    "urgency": "green",
+    "emoji": "➕",
+    "desc": "正常牙数之外多长出来的牙，常见于上排门牙中间，可能阻碍正常牙齿萌出。",
+    "advice": "拍片子确诊位置和数量，如果影响正常牙齿排列或萌出，建议尽早拔除。",
+    "ageRange": [
+      6,
+      25
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "malocclusion"
+    ],
+    "exclusiveGroup": "developmental_tooth"
+  },
+  "chronic_papillitis": {
+    "name": "慢性龈乳头炎",
+    "cat": "perio",
+    "urgency": "green",
+    "emoji": "🦷",
+    "desc": "牙缝之间牙龈长期红肿、轻微疼痛，常有食物嵌塞史。",
+    "advice": "重点是去除嵌塞原因（补牙缝、调咬合），局部冲洗上药。",
+    "ageRange": [
+      20,
+      80
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "perio_acute"
+  },
+  "peri_implantitis": {
+    "name": "种植体周围炎",
+    "cat": "perio",
+    "urgency": "red",
+    "emoji": "🦴",
+    "desc": "种植牙周围的牙龈红肿出血，种植体周围骨头在吸收，种植牙有点松动了。",
+    "advice": "马上去种植专科！需要深度清创，严重时种植体可能保不住。",
+    "ageRange": [
+      30,
+      85
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "perio_complex"
+  },
+  "peri_implant_mucositis": {
+    "name": "种植体周围黏膜炎",
+    "cat": "perio",
+    "urgency": "green",
+    "emoji": "🌿",
+    "desc": "种植牙周围的牙龈发红、刷牙出血，但拍片子骨头没有吸收。",
+    "advice": "加强种植牙周围的清洁，定期去种植专科复查和维护。",
+    "ageRange": [
+      30,
+      85
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "peri_implantitis"
+    ],
+    "exclusiveGroup": "perio_complex"
+  },
+  "acute_multiple_gingival_abscess": {
+    "name": "急性多发性牙龈脓肿",
+    "cat": "perio",
+    "urgency": "red",
+    "emoji": "🔥",
+    "desc": "多个牙龈部位同时红肿化脓，常见于免疫力低下、疲劳、感冒后或糖尿病患者。",
+    "advice": "需要全身抗生素治疗加上局部切开引流，同时控制好全身状况。",
+    "ageRange": [
+      20,
+      80
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "perio_acute"
+  },
+  "prepubertal_periodontitis": {
+    "name": "青春期前牙周炎",
+    "cat": "perio",
+    "urgency": "red",
+    "emoji": "👶",
+    "desc": "乳牙时期就出现牙龈红肿、牙齿松动，和全身免疫缺陷或遗传有关。",
+    "advice": "需要牙周科和儿科联合诊治，排查全身性疾病，积极治疗。",
+    "ageRange": [
+      2,
+      10
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "perio_spectrum"
+  },
+  "refractory_periodontitis": {
+    "name": "顽固性牙周炎",
+    "cat": "perio",
+    "urgency": "red",
+    "emoji": "🔄",
+    "desc": "经过规范牙周治疗后仍然反复发作、持续恶化，常和全身因素或特殊细菌感染有关。",
+    "advice": "需要牙周专科深度检查，可能需要微生物检测和长期抗生素维持。",
+    "ageRange": [
+      25,
+      70
+    ],
+    "genderBias": null,
+    "causalParent": "periodontitis",
+    "causalChildren": [],
+    "exclusiveGroup": "perio_spectrum"
+  },
+  "gingival_abscess": {
+    "name": "牙龈脓肿",
+    "cat": "perio",
+    "urgency": "yellow",
+    "emoji": "🩸",
+    "desc": "牙龈边缘局限性红肿化脓，疼得厉害，牙齿本身没有松动。",
+    "advice": "切开引流排脓，去除局部刺激因素（如牙结石），必要时用抗生素。",
+    "ageRange": [
+      10,
+      80
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "perio_acute"
+  },
+  "occlusal_trauma": {
+    "name": "咬合创伤",
+    "cat": "perio",
+    "urgency": "yellow",
+    "emoji": "⚖️",
+    "desc": "某颗牙咬合时受力过大，牙齿有叩击痛、轻微松动，牙龈可能出现窄而深的牙周袋。",
+    "advice": "调磨咬合高点，必要时做咬合垫，配合牙周基础治疗。",
+    "ageRange": [
+      15,
+      80
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "periodontitis"
+    ],
+    "exclusiveGroup": "perio_complex"
+  },
+  "post_scaling_sensitivity": {
+    "name": "根面平整术后敏感",
+    "cat": "perio",
+    "urgency": "green",
+    "emoji": "🌡️",
+    "desc": "洗牙或牙周刮治后牙齿对冷热敏感，牙根暴露导致。",
+    "advice": "一般1-2周自行缓解，可以用抗敏感牙膏，避免过冷过热食物。",
+    "ageRange": [
+      25,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "hypersensitivity_wedge"
+  },
+  "desquamative_gingivitis": {
+    "name": "剥脱性龈炎",
+    "cat": "perio",
+    "urgency": "yellow",
+    "emoji": "🩹",
+    "desc": "牙龈上皮大面积剥脱发红，像被\"烫掉一层皮\"，常和扁平苔藓、类天疱疮、红斑狼疮有关。",
+    "advice": "需要去口腔黏膜科做活检确诊，针对原发病进行系统治疗。",
+    "ageRange": [
+      30,
+      75
+    ],
+    "genderBias": "female",
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "perio_necrotizing"
+  },
+  "major_aphthous": {
+    "name": "复发性坏死性黏膜腺周围炎",
+    "cat": "mucosa",
+    "urgency": "yellow",
+    "emoji": "😣",
+    "desc": "嘴巴里长很大的溃疡（超过1厘米），很深，边缘不规则，愈合后留疤。",
+    "advice": "需要局部激素注射或全身免疫调节治疗，愈合时间可能长达数周。",
+    "ageRange": [
+      10,
+      60
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_ulcerative"
+  },
+  "labial_herpes": {
+    "name": "唇疱疹",
+    "cat": "mucosa",
+    "urgency": "green",
+    "emoji": "💋",
+    "desc": "嘴唇边缘出现小水疱，结痂，反复发作，常在感冒、疲劳、月经前后复发。",
+    "advice": "外用抗病毒软膏，不要弄破水疱。免疫力下降时容易复发。",
+    "ageRange": [
+      3,
+      70
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_vesicular"
+  },
+  "erythroplakia": {
+    "name": "口腔红斑",
+    "cat": "mucosa",
+    "urgency": "red",
+    "emoji": "🔴",
+    "desc": "口腔黏膜上出现鲜红色、天鹅绒样的斑块，擦不掉，比白斑的恶变风险更高。",
+    "advice": "高度警惕癌前病变！必须尽快活检，明确诊断。",
+    "ageRange": [
+      40,
+      80
+    ],
+    "genderBias": "male",
+    "causalParent": null,
+    "causalChildren": [
+      "oral_cancer"
+    ],
+    "exclusiveGroup": "mucosa_white"
+  },
+  "fissured_tongue": {
+    "name": "沟纹舌",
+    "cat": "mucosa",
+    "urgency": "green",
+    "emoji": "🗂️",
+    "desc": "舌头表面有很多深浅不一的沟纹，像裂纹一样，一般不影响健康，但沟纹里容易藏细菌。",
+    "advice": "注意刷舌头清洁沟纹，如果有发炎可以漱口水含漱。",
+    "ageRange": [
+      10,
+      80
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_tongue"
+  },
+  "hairy_tongue": {
+    "name": "毛舌",
+    "cat": "mucosa",
+    "urgency": "green",
+    "emoji": "🪶",
+    "desc": "舌头表面的乳头变长，像长了一层黑/褐/黄色的\"毛\"，常见于抽烟、用抗生素或口腔卫生差的人。",
+    "advice": "加强舌头清洁，戒烟，必要时用软毛刷刷舌背。",
+    "ageRange": [
+      15,
+      80
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_tongue"
+  },
+  "median_rhomboid_glossitis": {
+    "name": "正中菱形舌炎",
+    "cat": "mucosa",
+    "urgency": "green",
+    "emoji": "🔶",
+    "desc": "舌头背面前1/3处有一个菱形的红斑，表面光滑没有乳头，可能和念珠菌感染有关。",
+    "advice": "一般不需要治疗，有念珠菌感染时抗真菌治疗即可。",
+    "ageRange": [
+      10,
+      80
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_tongue"
+  },
+  "glossitis": {
+    "name": "舌乳头炎",
+    "cat": "mucosa",
+    "urgency": "green",
+    "emoji": "👅",
+    "desc": "舌头局部发红肿胀，像草莓一样，触碰或吃辣时疼痛。",
+    "advice": "去除刺激因素（尖锐牙尖、不良修复体），用漱口水消炎。",
+    "ageRange": [
+      10,
+      80
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_tongue"
+  },
+  "contact_stomatitis": {
+    "name": "接触性口炎",
+    "cat": "mucosa",
+    "urgency": "green",
+    "emoji": "🧴",
+    "desc": "接触某种材料（如假牙金属、补牙材料、口香糖）后，接触部位的黏膜发红、肿胀、糜烂。",
+    "advice": "找出并去除过敏原，换用其他材料，必要时用抗过敏药。",
+    "ageRange": [
+      15,
+      80
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_allergic"
+  },
+  "sebaceous_cyst_intraoral": {
+    "name": "口内皮脂腺囊肿",
+    "cat": "mucosa",
+    "urgency": "green",
+    "emoji": "🟡",
+    "desc": "口腔黏膜下出现黄豆大小的黄色小突起，摸起来软软的，内容物像豆腐渣。",
+    "advice": "一般不需要处理，如果影响吃饭或反复破溃可以手术切除。",
+    "ageRange": [
+      20,
+      70
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_ulcerative"
+  },
+  "mucocele": {
+    "name": "黏液囊肿",
+    "cat": "mucosa",
+    "urgency": "green",
+    "emoji": "💧",
+    "desc": "下嘴唇内侧出现半透明、淡蓝色的小泡，像含着一滴水，容易反复破溃。",
+    "advice": "手术切除囊肿和相连的小唾液腺，单纯挑破很容易复发。",
+    "ageRange": [
+      5,
+      40
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_ulcerative"
+  },
+  "ranula": {
+    "name": "舌下腺囊肿（蛤蟆肿）",
+    "cat": "mucosa",
+    "urgency": "yellow",
+    "emoji": "🐸",
+    "desc": "舌头下面或口底出现淡蓝色、半透明的肿物，像青蛙肚子一样，可能很大。",
+    "advice": "需要手术切除舌下腺，单纯抽液或切囊肿复发率很高。",
+    "ageRange": [
+      5,
+      50
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_ulcerative"
+  },
+  "oral_pigmentation": {
+    "name": "口腔黏膜色素沉着",
+    "cat": "mucosa",
+    "urgency": "green",
+    "emoji": "🟤",
+    "desc": "口腔黏膜上出现褐色或黑色的斑点/斑块，可能是生理性（如种族性色素沉着）或病理性。",
+    "advice": "如果颜色不均匀、边界不清、近期快速增大，需要活检排除恶性黑色素瘤。",
+    "ageRange": [
+      10,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_white"
+  },
+  "necrotizing_sialometaplasia": {
+    "name": "坏死性唾液腺化生",
+    "cat": "mucosa",
+    "urgency": "yellow",
+    "emoji": "🔥",
+    "desc": "上颚后部出现深凹的溃疡，看起来像癌，但其实是唾液腺的良性坏死，通常会自己好。",
+    "advice": "需要活检排除恶性病变，确诊后一般观察等待自愈即可。",
+    "ageRange": [
+      30,
+      70
+    ],
+    "genderBias": "male",
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_ulcerative"
+  },
+  "oral_tuberculosis": {
+    "name": "口腔结核",
+    "cat": "mucosa",
+    "urgency": "red",
+    "emoji": "🫁",
+    "desc": "口腔黏膜出现慢性溃疡，边缘不整齐呈鼠啮状，常有肺结核病史。",
+    "advice": "需要活检确诊，转到结核病专科医院进行规范抗结核治疗。",
+    "ageRange": [
+      20,
+      70
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "mucosa_infectious"
+  },
+  "glossopharyngeal_neuralgia": {
+    "name": "舌咽神经痛",
+    "cat": "joint",
+    "urgency": "yellow",
+    "emoji": "👅",
+    "desc": "舌头根部、咽喉深处、耳深部出现阵发性剧痛，吞咽、咳嗽、说话时诱发。",
+    "advice": "去神经内科或疼痛科，药物治疗同三叉神经痛，严重者考虑手术。",
+    "ageRange": [
+      40,
+      70
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "neuropathic_pain"
+  },
+  "bell_palsy": {
+    "name": "贝尔麻痹",
+    "cat": "joint",
+    "urgency": "yellow",
+    "emoji": "😶",
+    "desc": "突然一侧面部肌肉瘫痪，嘴角歪向一边，眼睛闭不拢，刷牙时嘴角漏水。",
+    "advice": "大多数在数周到数月内自愈。急性期可用激素和抗病毒药，注意保护眼睛。",
+    "ageRange": [
+      15,
+      60
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "neuropathic_pain"
+  },
+  "masticatory_muscle_spasm": {
+    "name": "咀嚼肌痉挛",
+    "cat": "joint",
+    "urgency": "green",
+    "emoji": "💪",
+    "desc": "腮帮子肌肉突然绷紧、疼痛，张嘴困难，常见于紧张、疲劳、着凉后。",
+    "advice": "热敷、按摩、放松，必要时用肌肉松弛剂。",
+    "ageRange": [
+      15,
+      60
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "tmd"
+    ],
+    "exclusiveGroup": "tmj_spectrum"
+  },
+  "ankylosis": {
+    "name": "关节强直",
+    "cat": "joint",
+    "urgency": "red",
+    "emoji": "🔗",
+    "desc": "颞下颌关节因为炎症、外伤或手术后粘连，嘴巴张不开了，或者只能张开一点点。",
+    "advice": "需要手术松解或置换人工关节，术后长期康复训练。",
+    "ageRange": [
+      10,
+      60
+    ],
+    "genderBias": null,
+    "causalParent": "tmd",
+    "causalChildren": [],
+    "exclusiveGroup": "tmj_spectrum"
+  },
+  "jaw_cyst": {
+    "name": "颌骨囊肿",
+    "cat": "joint",
+    "urgency": "yellow",
+    "emoji": "🥚",
+    "desc": "拍片子发现颌骨里有个圆形或椭圆形的\"空洞\"，通常没有症状，长大后会膨隆或导致牙齿松动。",
+    "advice": "手术刮除囊肿，必要时拔除涉及的牙齿。术后定期复查。",
+    "ageRange": [
+      10,
+      60
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "ameloblastoma": {
+    "name": "成釉细胞瘤",
+    "cat": "joint",
+    "urgency": "red",
+    "emoji": "🟠",
+    "desc": "颌骨里缓慢长大的肿物，拍片子看到多房性的透光影，牙齿可能被推移位或松动。",
+    "advice": "需要手术彻底切除，有复发倾向，术后长期随访。",
+    "ageRange": [
+      20,
+      50
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "pleomorphic_adenoma": {
+    "name": "多形性腺瘤",
+    "cat": "joint",
+    "urgency": "yellow",
+    "emoji": "🍐",
+    "desc": "腮腺或下颌下腺区域出现无痛、缓慢长大的肿块，边界清楚，质地中等。",
+    "advice": "手术切除，注意保护面神经（腮腺手术时），术后定期复查。",
+    "ageRange": [
+      25,
+      70
+    ],
+    "genderBias": "female",
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "salivary"
+  },
+  "warthin_tumor": {
+    "name": "沃辛瘤",
+    "cat": "joint",
+    "urgency": "green",
+    "emoji": "🍋",
+    "desc": "腮腺下极出现柔软、有弹性的肿块，多见于长期吸烟的老年男性。",
+    "advice": "手术切除，预后良好，极少数恶变。",
+    "ageRange": [
+      40,
+      80
+    ],
+    "genderBias": "male",
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "salivary"
+  },
+  "sjogren": {
+    "name": "舍格伦综合征",
+    "cat": "joint",
+    "urgency": "yellow",
+    "emoji": "💧",
+    "desc": "口干、眼干同时存在，唾液腺肿大，可能伴有关节痛和其他自身免疫病。",
+    "advice": "风湿免疫科和口腔科联合治疗，注意口腔卫生和防龋。",
+    "ageRange": [
+      40,
+      75
+    ],
+    "genderBias": "female",
+    "causalParent": null,
+    "causalChildren": [
+      "xerostomia",
+      "candidiasis",
+      "caries_rampant"
+    ],
+    "exclusiveGroup": "systemic"
+  },
+  "facial_space_infection": {
+    "name": "颌面部间隙感染",
+    "cat": "joint",
+    "urgency": "red",
+    "emoji": "🔥",
+    "desc": "脸突然肿起来了，红肿热痛，发烧，张嘴困难，可能从牙齿感染扩散而来。",
+    "advice": "急诊！需要住院静脉用抗生素，必要时切开引流，同时处理病灶牙。",
+    "ageRange": [
+      10,
+      80
+    ],
+    "genderBias": null,
+    "causalParent": "apical_periodontitis",
+    "causalChildren": [],
+    "exclusiveGroup": "osteomyelitis"
+  },
+  "jaw_fracture": {
+    "name": "颌骨骨折",
+    "cat": "joint",
+    "urgency": "red",
+    "emoji": "🦴",
+    "desc": "面部受到外力打击后，下颌骨或上颌骨断裂，咬合关系错乱，可能有出血和张嘴困难。",
+    "advice": "急诊！需要拍CT明确骨折位置，可能需要手术复位固定。",
+    "ageRange": [
+      10,
+      80
+    ],
+    "genderBias": "male",
+    "causalParent": "trauma",
+    "causalChildren": [],
+    "exclusiveGroup": "crack_trauma"
+  },
+  "condylar_fracture": {
+    "name": "髁突骨折",
+    "cat": "joint",
+    "urgency": "red",
+    "emoji": "🔩",
+    "desc": "颞下颌关节的髁突（下巴骨的\"头\"）骨折了，张嘴受限，咬合关系改变，耳前区肿胀疼痛。",
+    "advice": "根据骨折移位程度选择保守治疗（颌间固定）或手术复位。",
+    "ageRange": [
+      10,
+      60
+    ],
+    "genderBias": "male",
+    "causalParent": "trauma",
+    "causalChildren": [
+      "tmd"
+    ],
+    "exclusiveGroup": "crack_trauma"
+  },
+  "zygomatic_fracture": {
+    "name": "颧骨骨折",
+    "cat": "joint",
+    "urgency": "red",
+    "emoji": "⚡",
+    "desc": "面部侧面受到撞击后，颧骨塌陷，脸不对称，眼眶下方麻木，张嘴可能受限。",
+    "advice": "急诊！需要CT检查，手术复位固定恢复面部外形和功能。",
+    "ageRange": [
+      15,
+      60
+    ],
+    "genderBias": "male",
+    "causalParent": "trauma",
+    "causalChildren": [],
+    "exclusiveGroup": "crack_trauma"
+  },
+  "sleep_apnea": {
+    "name": "睡眠呼吸暂停综合征",
+    "cat": "joint",
+    "urgency": "yellow",
+    "emoji": "😴",
+    "desc": "睡觉打呼噜很响，中间会突然没声音（呼吸暂停），白天嗜睡，晨起口干头痛。",
+    "advice": "口腔科可以做下颌前移矫治器，中重度需要配合呼吸机或手术。",
+    "ageRange": [
+      25,
+      70
+    ],
+    "genderBias": "male",
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "systemic"
+  },
+  "mouth_breathing": {
+    "name": "口呼吸综合征",
+    "cat": "joint",
+    "urgency": "green",
+    "emoji": "👃",
+    "desc": "长期用嘴呼吸而不是鼻子，嘴唇外翻、牙龈暴露、牙弓狭窄、面型变长。",
+    "advice": "先去耳鼻喉科解决鼻子通气问题，然后口腔科做肌功能训练和正畸。",
+    "ageRange": [
+      3,
+      25
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "gingivitis",
+      "malocclusion"
+    ],
+    "exclusiveGroup": "systemic"
+  },
+  "impacted_tooth": {
+    "name": "阻生牙",
+    "cat": "joint",
+    "urgency": "yellow",
+    "emoji": "🔒",
+    "desc": "牙齿长不出来，被骨头或邻牙挡住了，常见于智齿，也可能引起邻牙蛀牙或牙根吸收。",
+    "advice": "拍片子看阻生角度和深度，大部分需要拔除，尤其是反复发炎的。",
+    "ageRange": [
+      15,
+      40
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "pericoronitis"
+    ],
+    "exclusiveGroup": "pericoronitis_impaction"
+  },
+  "embedded_tooth": {
+    "name": "埋伏牙",
+    "cat": "joint",
+    "urgency": "green",
+    "emoji": "🔍",
+    "desc": "牙齿完全埋在骨头里没有萌出，拍片子偶然发现，可能引起囊肿或邻牙牙根吸收。",
+    "advice": "如果影响邻牙或有囊肿风险，需要手术拔除或牵引萌出。",
+    "ageRange": [
+      6,
+      25
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "jaw_cyst"
+    ],
+    "exclusiveGroup": "pericoronitis_impaction"
+  },
+  "cleft_lip_palate": {
+    "name": "唇腭裂",
+    "cat": "joint",
+    "urgency": "yellow",
+    "emoji": "🍼",
+    "desc": "先天性上唇和/或腭部裂开，影响吃奶、说话和面容，需要序列治疗。",
+    "advice": "需要唇腭裂治疗团队（外科、正畸、语音治疗）的序列治疗。",
+    "ageRange": [
+      0,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "malocclusion"
+    ],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "congenital_missing": {
+    "name": "先天性缺牙",
+    "cat": "other",
+    "urgency": "green",
+    "emoji": "❌",
+    "desc": "天生就少长了几颗牙，常见于侧切牙或第二前磨牙，可能和遗传有关。",
+    "advice": "正畸关闭间隙，或者成年后种植/镶牙修复。",
+    "ageRange": [
+      3,
+      99
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "diastema"
+    ],
+    "exclusiveGroup": "developmental_tooth"
+  },
+  "fibrous_dysplasia": {
+    "name": "骨纤维异常增殖症",
+    "cat": "other",
+    "urgency": "yellow",
+    "emoji": "🦴",
+    "desc": "颌骨缓慢膨大变形，质地像橡皮一样，拍片子呈\"毛玻璃\"样改变。",
+    "advice": "如果影响面容或功能可手术修整，青春期后可能自行停止发展。",
+    "ageRange": [
+      5,
+      40
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "cherubism": {
+    "name": "巨颌症",
+    "cat": "other",
+    "urgency": "yellow",
+    "emoji": "👼",
+    "desc": "儿童期下颌骨对称性膨大，像小天使的脸蛋（所以叫cherubism），家族遗传。",
+    "advice": "青春期后可能自行消退，严重时需要手术修整。",
+    "ageRange": [
+      2,
+      20
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "hemangioma": {
+    "name": "血管瘤",
+    "cat": "other",
+    "urgency": "green",
+    "emoji": "🍒",
+    "desc": "口腔或面部出现红色或紫红色的肿块，按压褪色，可能出生时就有或婴儿期出现。",
+    "advice": "大多数婴幼儿血管瘤可自行消退，不消退或影响功能的可激光或手术治疗。",
+    "ageRange": [
+      0,
+      60
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "lymphangioma": {
+    "name": "淋巴管瘤",
+    "cat": "other",
+    "urgency": "green",
+    "emoji": "💧",
+    "desc": "口腔或颈部出现柔软、半透明的肿物，像装满水的气球，穿刺可抽出淡黄色液体。",
+    "advice": "手术切除，但因边界不清可能复发。大的淋巴管瘤需要整形外科处理。",
+    "ageRange": [
+      0,
+      40
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "neurofibroma": {
+    "name": "神经纤维瘤",
+    "cat": "other",
+    "urgency": "green",
+    "emoji": "🧠",
+    "desc": "口腔黏膜下出现柔软、有弹性的结节，按压可能有麻木或放射痛，可单发或多发。",
+    "advice": "手术切除，如果伴有多发皮肤和皮下结节，需排查神经纤维瘤病。",
+    "ageRange": [
+      10,
+      60
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "facial_furuncle": {
+    "name": "面疖痈",
+    "cat": "other",
+    "urgency": "red",
+    "emoji": "🔴",
+    "desc": "面部（尤其是\"危险三角区\"）出现红肿疼痛的硬结，可能化脓，严禁挤压！",
+    "advice": "面部危险三角区的感染可能扩散到颅内，必须正规医院抗感染治疗。",
+    "ageRange": [
+      15,
+      60
+    ],
+    "genderBias": "male",
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "systemic"
+  },
+  "sebaceous_cyst_facial": {
+    "name": "面部皮脂腺囊肿",
+    "cat": "other",
+    "urgency": "green",
+    "emoji": "🟡",
+    "desc": "面部皮肤下出现圆形肿物，中央可能有黑点，内容物像豆腐渣，感染时会红肿疼痛。",
+    "advice": "手术切除囊肿及囊壁，感染时先消炎再手术。",
+    "ageRange": [
+      15,
+      70
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "systemic"
+  },
+  "dental_crowding": {
+    "name": "牙列拥挤",
+    "cat": "other",
+    "urgency": "green",
+    "emoji": "🦷",
+    "desc": "牙齿排列不整齐，互相重叠，清洁困难，容易蛀牙和牙龈炎。",
+    "advice": "正畸矫正，拔牙或不拔牙方案取决于拥挤程度。",
+    "ageRange": [
+      6,
+      40
+    ],
+    "genderBias": null,
+    "causalParent": "supernumerary_tooth",
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "diastema": {
+    "name": "牙列稀疏/间隙",
+    "cat": "other",
+    "urgency": "green",
+    "emoji": "⬜",
+    "desc": "牙齿之间有缝隙，门牙之间的缝隙最常见，可能影响美观和发音。",
+    "advice": "正畸关闭间隙，或者做贴面/冠修复。排查是否有唇系带附着过低。",
+    "ageRange": [
+      6,
+      40
+    ],
+    "genderBias": null,
+    "causalParent": "congenital_missing",
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "deep_bite": {
+    "name": "深覆合",
+    "cat": "other",
+    "urgency": "green",
+    "emoji": "📉",
+    "desc": "上排牙齿盖住下排牙齿太多，下牙几乎看不到，可能咬伤上颚牙龈。",
+    "advice": "正畸矫正，打开咬合，改善面型和功能。",
+    "ageRange": [
+      6,
+      40
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [
+      "tmd"
+    ],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "open_bite": {
+    "name": "开颌",
+    "cat": "other",
+    "urgency": "green",
+    "emoji": "📤",
+    "desc": "上下牙齿咬不上，中间有缝隙，常见于前牙，影响咬断食物和发音。",
+    "advice": "正畸矫正，改掉咬笔、吮指等不良习惯。",
+    "ageRange": [
+      6,
+      30
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
+  },
+  "crossbite": {
+    "name": "反颌（地包天）",
+    "cat": "other",
+    "urgency": "yellow",
+    "emoji": "🔄",
+    "desc": "下排牙齿包在上排牙齿外面，脸看起来\"月亮脸\"，咀嚼功能差。",
+    "advice": "儿童期早期矫正效果最好，成年后可能需要正颌手术。",
+    "ageRange": [
+      3,
+      30
+    ],
+    "genderBias": null,
+    "causalParent": null,
+    "causalChildren": [],
+    "exclusiveGroup": "developmental_jaw"
   }
 };
 
@@ -1379,6 +2538,163 @@ const DISEASE_GRAPH = {
     [
       "mronj",
       "osteomyelitis_jaw"
+    ],
+    [
+      "caries_shallow",
+      "caries_deep",
+      "chronic_pulpitis",
+      "apical_periodontitis"
+    ],
+    [
+      "apical_periodontitis",
+      "acute_apical_abscess"
+    ],
+    [
+      "apical_periodontitis",
+      "chronic_apical_granuloma"
+    ],
+    [
+      "apical_periodontitis",
+      "chronic_apical_cyst"
+    ],
+    [
+      "trauma",
+      "concussion",
+      "luxation",
+      "crown_fracture",
+      "root_fracture"
+    ],
+    [
+      "trauma",
+      "pulp_necrosis",
+      "residual_root"
+    ],
+    [
+      "dry_socket",
+      "facial_space_infection"
+    ],
+    [
+      "pericoronitis",
+      "impacted_tooth"
+    ],
+    [
+      "sjogren",
+      "xerostomia",
+      "candidiasis",
+      "caries_rampant"
+    ],
+    [
+      "mouth_breathing",
+      "gingivitis",
+      "malocclusion"
+    ],
+    [
+      "supernumerary_tooth",
+      "malocclusion",
+      "dental_crowding"
+    ],
+    [
+      "congenital_missing",
+      "diastema"
+    ],
+    [
+      "cleft_lip_palate",
+      "malocclusion"
+    ],
+    [
+      "embedded_tooth",
+      "jaw_cyst"
+    ],
+    [
+      "fibrous_dysplasia",
+      "jaw_cyst"
+    ],
+    [
+      "deep_bite",
+      "tmd"
+    ],
+    [
+      "crossbite",
+      "tmd"
+    ],
+    [
+      "gingival_fibromatosis",
+      "periodontitis"
+    ],
+    [
+      "peri_implant_mucositis",
+      "peri_implantitis"
+    ],
+    [
+      "caries_deep",
+      "baby_bottle_caries",
+      "residual_root"
+    ],
+    [
+      "dens_evaginatus",
+      "irreversible_pulpitis",
+      "apical_periodontitis"
+    ],
+    [
+      "dens_in_dente",
+      "caries_deep"
+    ],
+    [
+      "occlusal_trauma",
+      "periodontitis"
+    ],
+    [
+      "desquamative_gingivitis",
+      "lichen_planus",
+      "pemphigoid"
+    ],
+    [
+      "pemphigus",
+      "desquamative_gingivitis"
+    ],
+    [
+      "bell_palsy",
+      "masticatory_muscle_spasm"
+    ],
+    [
+      "ankylosis",
+      "tmd"
+    ],
+    [
+      "prepubertal_periodontitis",
+      "aggressive_periodontitis"
+    ],
+    [
+      "refractory_periodontitis",
+      "periodontal_abscess"
+    ],
+    [
+      "facial_space_infection",
+      "osteomyelitis_jaw"
+    ],
+    [
+      "jaw_fracture",
+      "condylar_fracture"
+    ],
+    [
+      "jaw_fracture",
+      "facial_space_infection"
+    ],
+    [
+      "sjogren",
+      "xerostomia"
+    ],
+    [
+      "sjogren",
+      "candidiasis"
+    ],
+    [
+      "sjogren",
+      "caries_rampant"
+    ],
+    [
+      "sjogren",
+      "burning_mouth"
     ]
   ],
   "mutualExclusionGroups": [
@@ -1530,6 +2846,167 @@ const DISEASE_GRAPH = {
       "dentinogenesis_imperfecta",
       "fluorosis",
       "tetracycline_teeth"
+    ],
+    [
+      "chronic_pulpitis",
+      "irreversible_pulpitis",
+      "pulp_necrosis",
+      "reversible_pulpitis",
+      "pulp_calcification"
+    ],
+    [
+      "acute_apical_abscess",
+      "chronic_apical_granuloma",
+      "chronic_apical_cyst",
+      "apical_periodontitis"
+    ],
+    [
+      "arrested_caries",
+      "caries_shallow",
+      "caries_deep",
+      "residual_root",
+      "caries_recurrent",
+      "caries_rampant",
+      "baby_bottle_caries",
+      "root_caries"
+    ],
+    [
+      "concussion",
+      "luxation",
+      "crown_fracture",
+      "root_fracture",
+      "trauma"
+    ],
+    [
+      "dens_in_dente",
+      "fused_tooth",
+      "geminated_tooth",
+      "taurodontism",
+      "supernumerary_tooth",
+      "enamel_hypoplasia",
+      "fluorosis",
+      "tetracycline_teeth",
+      "dentinogenesis_imperfecta",
+      "dens_evaginatus"
+    ],
+    [
+      "peri_implantitis",
+      "peri_implant_mucositis",
+      "periodontitis",
+      "gingivitis",
+      "aggressive_periodontitis"
+    ],
+    [
+      "acute_multiple_gingival_abscess",
+      "gingival_abscess",
+      "periodontal_abscess",
+      "perio_endo_lesion",
+      "furcation_involvement"
+    ],
+    [
+      "prepubertal_periodontitis",
+      "aggressive_periodontitis",
+      "periodontitis",
+      "refractory_periodontitis"
+    ],
+    [
+      "desquamative_gingivitis",
+      "anug",
+      "gingivitis",
+      "periodontitis"
+    ],
+    [
+      "major_aphthous",
+      "oral_ulcer",
+      "traumatic_ulcer",
+      "behcet_disease",
+      "oral_cancer"
+    ],
+    [
+      "labial_herpes",
+      "herpes_stomatitis",
+      "hfmd",
+      "pemphigus",
+      "pemphigoid",
+      "erythema_multiforme"
+    ],
+    [
+      "erythroplakia",
+      "leukoplakia",
+      "lichen_planus",
+      "osf",
+      "oral_pigmentation"
+    ],
+    [
+      "contact_stomatitis",
+      "allergic_stomatitis"
+    ],
+    [
+      "mucocele",
+      "ranula",
+      "sebaceous_cyst_intraoral"
+    ],
+    [
+      "fissured_tongue",
+      "hairy_tongue",
+      "median_rhomboid_glossitis",
+      "glossitis",
+      "geographic_tongue"
+    ],
+    [
+      "jaw_cyst",
+      "ameloblastoma",
+      "embedded_tooth",
+      "fibrous_dysplasia"
+    ],
+    [
+      "hemangioma",
+      "lymphangioma",
+      "neurofibroma"
+    ],
+    [
+      "jaw_fracture",
+      "condylar_fracture",
+      "zygomatic_fracture",
+      "trauma"
+    ],
+    [
+      "bell_palsy",
+      "trigeminal_neuralgia",
+      "glossopharyngeal_neuralgia",
+      "atypical_odontalgia"
+    ],
+    [
+      "sleep_apnea",
+      "mouth_breathing"
+    ],
+    [
+      "sialolithiasis",
+      "parotitis",
+      "pleomorphic_adenoma",
+      "warthin_tumor"
+    ],
+    [
+      "dental_crowding",
+      "diastema",
+      "deep_bite",
+      "open_bite",
+      "crossbite",
+      "malocclusion"
+    ],
+    [
+      "facial_furuncle",
+      "sebaceous_cyst_facial"
+    ],
+    [
+      "necrotizing_sialometaplasia",
+      "oral_tuberculosis",
+      "oral_cancer"
+    ],
+    [
+      "refractory_periodontitis",
+      "periodontitis",
+      "aggressive_periodontitis"
     ]
   ],
   "comorbidityPairs": [
@@ -1612,6 +3089,294 @@ const DISEASE_GRAPH = {
     [
       "behcet_disease",
       "oral_ulcer"
+    ],
+    [
+      "diabetes",
+      "periodontitis"
+    ],
+    [
+      "diabetes",
+      "candidiasis"
+    ],
+    [
+      "diabetes",
+      "dry_socket"
+    ],
+    [
+      "hypertension",
+      "gingival_hyperplasia"
+    ],
+    [
+      "autoimmune",
+      "sjogren"
+    ],
+    [
+      "autoimmune",
+      "lichen_planus"
+    ],
+    [
+      "autoimmune",
+      "pemphigus"
+    ],
+    [
+      "smoking",
+      "leukoplakia"
+    ],
+    [
+      "smoking",
+      "oral_cancer"
+    ],
+    [
+      "smoking",
+      "periodontitis"
+    ],
+    [
+      "smoking",
+      "dry_socket"
+    ],
+    [
+      "betel",
+      "osf"
+    ],
+    [
+      "betel",
+      "oral_cancer"
+    ],
+    [
+      "alcohol",
+      "oral_cancer"
+    ],
+    [
+      "stress",
+      "bruxism"
+    ],
+    [
+      "stress",
+      "oral_ulcer"
+    ],
+    [
+      "stress",
+      "tmd"
+    ],
+    [
+      "poor_oral_hygiene",
+      "gingivitis"
+    ],
+    [
+      "poor_oral_hygiene",
+      "periodontitis"
+    ],
+    [
+      "poor_oral_hygiene",
+      "caries_shallow"
+    ],
+    [
+      "sugary_diet",
+      "caries_shallow"
+    ],
+    [
+      "sugary_diet",
+      "caries_deep"
+    ],
+    [
+      "acidic_diet",
+      "dental_erosion"
+    ],
+    [
+      "hard_food",
+      "cracked_tooth"
+    ],
+    [
+      "hard_food",
+      "trauma"
+    ],
+    [
+      "dry_mouth",
+      "caries_rampant"
+    ],
+    [
+      "dry_mouth",
+      "candidiasis"
+    ],
+    [
+      "dry_mouth",
+      "root_caries"
+    ],
+    [
+      "immune_deficiency",
+      "candidiasis"
+    ],
+    [
+      "immune_deficiency",
+      "oral_tuberculosis"
+    ],
+    [
+      "immune_deficiency",
+      "oral_lymphoma"
+    ],
+    [
+      "radiation",
+      "xerostomia"
+    ],
+    [
+      "radiation",
+      "caries_rampant"
+    ],
+    [
+      "radiation",
+      "radiation_stomatitis"
+    ],
+    [
+      "bisphosphonate",
+      "mronj"
+    ],
+    [
+      "bisphosphonate",
+      "osteomyelitis_jaw"
+    ],
+    [
+      "family_history_periodontitis",
+      "aggressive_periodontitis"
+    ],
+    [
+      "family_history_cancer",
+      "oral_cancer"
+    ],
+    [
+      "family_history_malocclusion",
+      "malocclusion"
+    ],
+    [
+      "female_menopause",
+      "burning_mouth"
+    ],
+    [
+      "female_menopause",
+      "xerostomia"
+    ],
+    [
+      "female_pregnancy",
+      "pregnancy_gingivitis"
+    ],
+    [
+      "occlusal_trauma",
+      "periodontitis"
+    ],
+    [
+      "occlusal_trauma",
+      "tmd"
+    ],
+    [
+      "mouth_breathing",
+      "gingivitis"
+    ],
+    [
+      "mouth_breathing",
+      "malocclusion"
+    ],
+    [
+      "sleep_apnea",
+      "bruxism"
+    ],
+    [
+      "sleep_apnea",
+      "tmd"
+    ],
+    [
+      "supernumerary_tooth",
+      "dental_crowding"
+    ],
+    [
+      "congenital_missing",
+      "diastema"
+    ],
+    [
+      "cleft_lip_palate",
+      "malocclusion"
+    ],
+    [
+      "fibrous_dysplasia",
+      "jaw_cyst"
+    ],
+    [
+      "deep_bite",
+      "tmd"
+    ],
+    [
+      "crossbite",
+      "tmd"
+    ],
+    [
+      "desquamative_gingivitis",
+      "lichen_planus"
+    ],
+    [
+      "pemphigus",
+      "desquamative_gingivitis"
+    ],
+    [
+      "bell_palsy",
+      "masticatory_muscle_spasm"
+    ],
+    [
+      "facial_space_infection",
+      "osteomyelitis_jaw"
+    ],
+    [
+      "jaw_fracture",
+      "condylar_fracture"
+    ],
+    [
+      "jaw_fracture",
+      "facial_space_infection"
+    ],
+    [
+      "sjogren",
+      "xerostomia"
+    ],
+    [
+      "sjogren",
+      "candidiasis"
+    ],
+    [
+      "sjogren",
+      "caries_rampant"
+    ],
+    [
+      "sjogren",
+      "burning_mouth"
+    ],
+    [
+      "dentin_hypersensitivity",
+      "wedge_defect"
+    ],
+    [
+      "dentin_hypersensitivity",
+      "root_caries"
+    ],
+    [
+      "dentin_hypersensitivity",
+      "tooth_wear_attrition"
+    ],
+    [
+      "dentin_hypersensitivity",
+      "post_scaling_sensitivity"
+    ],
+    [
+      "post_scaling_sensitivity",
+      "gingival_recession"
+    ],
+    [
+      "dental_crowding",
+      "gingivitis"
+    ],
+    [
+      "dental_crowding",
+      "caries_shallow"
+    ],
+    [
+      "diastema",
+      "gingivitis"
     ]
   ]
 };
@@ -2897,8 +4662,9 @@ const QUESTION_TREE = {
   "q_universal_age": {
     "id": "q_universal_age",
     "text": "你现在处在哪个年龄段？",
-    "stage": "history",
+    "stage": "demographics",
     "universal": true,
+    "order": 1,
     "branches": [
       {
         "emoji": "👶",
@@ -2947,8 +4713,9 @@ const QUESTION_TREE = {
   "q_universal_gender": {
     "id": "q_universal_gender",
     "text": "你的性别是？",
-    "stage": "history",
+    "stage": "demographics",
     "universal": true,
+    "order": 2,
     "branches": [
       {
         "emoji": "♀️",
@@ -2981,6 +4748,7 @@ const QUESTION_TREE = {
     "text": "你有没有以下这些全身的健康状况？（可多选）",
     "stage": "history",
     "universal": true,
+    "order": 6,
     "multiSelect": true,
     "branches": [
       {
@@ -3058,6 +4826,7 @@ const QUESTION_TREE = {
     "text": "你的直系亲属（爸妈/兄弟姐妹）有没有以下口腔问题？（可多选）",
     "stage": "history",
     "universal": true,
+    "order": 13,
     "multiSelect": true,
     "branches": [
       {
@@ -3095,6 +4864,7 @@ const QUESTION_TREE = {
     "text": "你有这些生活习惯吗？（可多选）",
     "stage": "lifestyle",
     "universal": true,
+    "order": 12,
     "multiSelect": true,
     "branches": [
       {
@@ -3141,6 +4911,7 @@ const QUESTION_TREE = {
     "text": "你平时怎么刷牙的？",
     "stage": "lifestyle",
     "universal": true,
+    "order": 10,
     "branches": [
       {
         "emoji": "🪚",
@@ -3178,6 +4949,7 @@ const QUESTION_TREE = {
     "text": "最近的精神状态和生活作息怎么样？",
     "stage": "lifestyle",
     "universal": true,
+    "order": 15,
     "branches": [
       {
         "emoji": "😫",
@@ -3221,6 +4993,7 @@ const QUESTION_TREE = {
     "text": "你的饮食习惯偏向哪种？（可多选）",
     "stage": "lifestyle",
     "universal": true,
+    "order": 11,
     "multiSelect": true,
     "branches": [
       {
@@ -3262,6 +5035,7 @@ const QUESTION_TREE = {
     "text": "你多久看一次牙医？",
     "stage": "lifestyle",
     "universal": true,
+    "order": 15.5,
     "branches": [
       {
         "emoji": "📅",
@@ -3293,6 +5067,7 @@ const QUESTION_TREE = {
     "text": "你平常用的牙膏含氟吗？",
     "stage": "lifestyle",
     "universal": true,
+    "order": 10.5,
     "branches": [
       {
         "emoji": "🪥",
@@ -3308,6 +5083,217 @@ const QUESTION_TREE = {
       {
         "emoji": "❓",
         "text": "不太清楚 / 没用含氟牙膏",
+        "riskTag": {}
+      }
+    ]
+  },
+  "q_prior_treatment": {
+    "id": "q_prior_treatment",
+    "text": "之前有没有因为这个问题去看过医生或做过处理？",
+    "stage": "history",
+    "universal": true,
+    "order": 5,
+    "branches": [
+      {
+        "emoji": "🏥",
+        "text": "去过医院，拍过片子/做过治疗",
+        "riskTag": {}
+      },
+      {
+        "emoji": "💊",
+        "text": "自己吃了止痛药/消炎药，暂时缓解了",
+        "riskTag": {
+          "irreversible_pulpitis": 1.5,
+          "apical_periodontitis": 1.5,
+          "periodontitis": 1.2
+        }
+      },
+      {
+        "emoji": "🩹",
+        "text": "在网上买了药/漱口水自己在用",
+        "riskTag": {
+          "gingivitis": 1.2,
+          "oral_ulcer": 0.8
+        }
+      },
+      {
+        "emoji": "❌",
+        "text": "没看过医生，也没自己处理",
+        "riskTag": {}
+      }
+    ]
+  },
+  "q_medication_allergy": {
+    "id": "q_medication_allergy",
+    "text": "你有没有以下药物或材料过敏史？（可多选）",
+    "stage": "history",
+    "universal": true,
+    "order": 7,
+    "multiSelect": true,
+    "branches": [
+      {
+        "emoji": "💊",
+        "text": "青霉素/磺胺/阿司匹林等药物过敏",
+        "riskTag": {}
+      },
+      {
+        "emoji": "🦷",
+        "text": "对牙科材料过敏（如树脂、金属、橡胶障）",
+        "riskTag": {
+          "allergic_stomatitis": 4,
+          "contact_stomatitis": 4
+        }
+      },
+      {
+        "emoji": "🧴",
+        "text": "对某些牙膏/漱口水/化妆品过敏",
+        "riskTag": {
+          "allergic_stomatitis": 3,
+          "contact_stomatitis": 3
+        }
+      },
+      {
+        "emoji": "✅",
+        "text": "没有已知的药物或材料过敏",
+        "riskTag": {}
+      }
+    ]
+  },
+  "q_bleeding_history": {
+    "id": "q_bleeding_history",
+    "text": "你平时有没有以下出血情况？（可多选）",
+    "stage": "history",
+    "universal": true,
+    "order": 8,
+    "multiSelect": true,
+    "branches": [
+      {
+        "emoji": "🩸",
+        "text": "刷牙时经常出血，而且出血量不少",
+        "riskTag": {
+          "gingivitis": 2,
+          "periodontitis": 1.5,
+          "aggressive_periodontitis": 2
+        }
+      },
+      {
+        "emoji": "🩹",
+        "text": "牙龈自己出血，或者小伤口流血不止",
+        "riskTag": {
+          "anug": 2,
+          "periodontal_abscess": 2
+        }
+      },
+      {
+        "emoji": "🩸",
+        "text": "女性月经量特别多",
+        "riskTag": {}
+      },
+      {
+        "emoji": "🧬",
+        "text": "确诊过血友病、血小板减少或其他血液病",
+        "riskTag": {}
+      },
+      {
+        "emoji": "✅",
+        "text": "以上都没有",
+        "riskTag": {}
+      }
+    ]
+  },
+  "q_dental_history": {
+    "id": "q_dental_history",
+    "text": "你之前做过哪些口腔治疗？（可多选）",
+    "stage": "history",
+    "universal": true,
+    "order": 9,
+    "multiSelect": true,
+    "branches": [
+      {
+        "emoji": "🦷",
+        "text": "补过牙 / 做过根管治疗",
+        "riskTag": {}
+      },
+      {
+        "emoji": "🔧",
+        "text": "拔过牙 / 做过种植牙",
+        "riskTag": {
+          "peri_implant_mucositis": 2,
+          "peri_implantitis": 2
+        }
+      },
+      {
+        "emoji": "🧩",
+        "text": "做过正畸（戴过牙套）",
+        "riskTag": {
+          "malocclusion": 0.5
+        }
+      },
+      {
+        "emoji": "🦷",
+        "text": "镶过牙 / 做过牙冠或贴面",
+        "riskTag": {}
+      },
+      {
+        "emoji": "😰",
+        "text": "好几年没去过牙科了",
+        "riskTag": {
+          "periodontitis": 1.8,
+          "caries_deep": 1.8,
+          "oral_cancer": 1.5,
+          "residual_root": 3,
+          "root_resorption": 2
+        }
+      },
+      {
+        "emoji": "✅",
+        "text": "以上都没有 / 记不清了",
+        "riskTag": {}
+      }
+    ]
+  },
+  "q_female_specific": {
+    "id": "q_female_specific",
+    "text": "以下情况是否符合你？（可多选）",
+    "stage": "female",
+    "universal": true,
+    "order": 14,
+    "condition": "female",
+    "multiSelect": true,
+    "branches": [
+      {
+        "emoji": "🤰",
+        "text": "目前正在怀孕",
+        "riskTag": {
+          "pregnancy_gingivitis": 6
+        },
+        "delta": {
+          "pregnancy_gingivitis": 8
+        }
+      },
+      {
+        "emoji": "🍼",
+        "text": "正在哺乳期",
+        "riskTag": {}
+      },
+      {
+        "emoji": "💊",
+        "text": "在吃口服避孕药",
+        "riskTag": {
+          "pregnancy_gingivitis": 2
+        }
+      },
+      {
+        "emoji": "🔥",
+        "text": "正在更年期/已经绝经",
+        "riskTag": {
+          "burning_mouth": 3,
+          "xerostomia": 2
+        }
+      },
+      {
+        "emoji": "✅",
+        "text": "以上都不符合",
         "riskTag": {}
       }
     ]
@@ -3586,7 +5572,10 @@ class OralTriageEngine {
           this.visitedNodes = [];
           this.hasRedFlag = false;
           this.answeredCount = 0;
-          this.universalQueue = Object.values(QUESTION_TREE).filter(q => q.universal).map(q => q.id);
+          this.universalQueue = Object.values(QUESTION_TREE)
+            .filter(q => q.universal)
+            .sort((a, b) => (a.order || 0) - (b.order || 0))
+            .map(q => q.id);
           this.totalNodesEstimate = 5 + this.universalQueue.length;
           return QUESTION_TREE[this.currentNode];
         }
@@ -3628,8 +5617,14 @@ class OralTriageEngine {
           if (branch.forceRed) this.hasRedFlag = true;
 
           let nextNodes = branch.next || [];
-          if (nextNodes.length === 0 && this.universalQueue.length > 0) {
-            nextNodes = [this.universalQueue.shift()];
+          if (nextNodes.length === 0) {
+            while (this.universalQueue.length > 0) {
+              const nextId = this.universalQueue.shift();
+              const nextQ = QUESTION_TREE[nextId];
+              if (nextQ.condition === 'female' && this.userGender !== 'female') continue;
+              nextNodes = [nextId];
+              break;
+            }
           }
           this.totalNodesEstimate = this.answeredCount + nextNodes.length + this.universalQueue.length;
 
