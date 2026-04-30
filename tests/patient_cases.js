@@ -1,7 +1,9 @@
 /**
- * 30份模拟患者真实病例
+ * 90份模拟患者真实病例 (P01-P100)
  * 覆盖全部145种口腔疾病、5大疾病类别、3个紧急级别
  * 每份病例包含完整的DAG问答路径
+ * P01-P40: 初始40例
+ * P41-P100: 新增60例 (含罕见病/共病/模糊/健康对照)
  */
 
 const PATIENT_CASES = [
@@ -383,14 +385,14 @@ const PATIENT_CASES = [
   {
     id: 'P16',
     name: '牙周脓肿病例',
-    profile: { ageGroup: '52岁', gender: '男', desc: '52岁男性，牙周炎病史，昨天牙龈突然鼓起一个半球形红肿的包，摸上去有波动感，疼得要命，牙齿\"浮起来\"了。' },
+    profile: { ageGroup: '52岁', gender: '男', desc: '52岁男性，牙周炎病史，昨天牙龈突然鼓起一个半球形红肿的包，按上去有波动感，疼得要命。' },
     target: 'periodontal_abscess',
     category: 'perio',
     urgency: 'red',
     answers: {
       q_entry: 1,
       q_perio_necrosis_smell: 1,
-      q_perio_bleeding_type: 1,
+      q_perio_bleeding_type: 2,
       q_perio_mobility: 0,
       q_perio_age_rapid: 1,
       q_universal_age: 2,
@@ -900,11 +902,11 @@ const PATIENT_CASES = [
     category: 'mucosa',
     urgency: 'red',
     answers: {
-      q_entry: 1,
-      q_perio_necrosis_smell: 1,
-      q_perio_bleeding_type: 1,
-      q_perio_mobility: 0,
-      q_perio_age_rapid: 1,
+      q_entry: 2,
+      q_mucosa_can_scrape: 1,
+      q_mucosa_white_or_ulcer: 1,
+      q_mucosa_ulcer_pattern: 5,
+      q_mucosa_ulcer_duration: 2,
       q_universal_age: 3,
       q_universal_gender: 1,
       q_universal_medical: 4,
@@ -1017,10 +1019,326 @@ const PATIENT_CASES = [
       q_universal_dental_visit: 0,
       q_universal_fluoride: 0,
     }
+  },  // ==================== P41-P100: 新增60例（正确DAG路径） ====================
+
+  // --- tooth (10 cases) ---
+  {
+    id: 'P41', name: '牙髓坏死病例', profile: { ageGroup: '38岁', gender: '男', desc: '38岁男性，右下后牙几年前曾剧痛过后慢慢不疼了，牙齿变灰黄色，对冷热没感觉，牙龈反复鼓脓包。' },
+    target: 'pulp_necrosis', category: 'tooth', urgency: 'yellow',
+    answers: { q_entry: 0, q_pain_spontaneous: 0, q_pain_cold_relief: 1, q_pain_floating: 0, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
   },
+  {
+    id: 'P42', name: '继发龋病例', profile: { ageGroup: '45岁', gender: '女', desc: '45岁女性，多年前补过的牙齿边缘出现新黑洞，有时嵌塞食物后不适。' },
+    target: 'caries_recurrent', category: 'tooth', urgency: 'yellow',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 0, q_hard_defect_type: 4, q_universal_age: 2, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 0, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P43', name: '牙酸蚀症病例2', profile: { ageGroup: '22岁', gender: '男', desc: '22岁男生，每天喝柠檬水和碳酸饮料，牙齿舌侧面光滑凹陷，遇冷敏感。' },
+    target: 'dental_erosion', category: 'tooth', urgency: 'green',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 0, q_hard_defect_type: 2, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 1, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P44', name: '静止龋病例', profile: { ageGroup: '50岁', gender: '男', desc: '50岁男性，口腔检查发现多颗牙咬合面有黑色硬质斑点但无疼痛不适，多年未变化。' },
+    target: 'caries_shallow', category: 'tooth', urgency: 'green',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 0, q_hard_defect_type: 0, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 2, q_universal_diet: 0, q_universal_dental_visit: 0, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P45', name: '牙本质敏感症病例2', profile: { ageGroup: '30岁', gender: '女', desc: '30岁女性，喝冰水时多颗牙齿颈部区域出现短暂锐痛，停止刺激马上不疼。牙龈有轻度退缩。' },
+    target: 'dentin_hypersensitivity', category: 'tooth', urgency: 'green',
+    answers: { q_entry: 0, q_pain_spontaneous: 1, q_pain_cold_hot_diff: 0, q_pain_trigger_main: 1, q_universal_age: 1, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 0, q_universal_stress: 2, q_universal_diet: 1, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P46', name: '畸形中央尖病例', profile: { ageGroup: '12岁', gender: '男', desc: '12岁男生，新长出的前磨牙咬合面有个多出来的小尖尖，咬硬东西时小尖折了，露出里面的牙髓疼。' },
+    target: 'dens_evaginatus', category: 'tooth', urgency: 'red',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 1, q_hard_dev_color_or_shape: 1, q_universal_age: 0, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 2, q_universal_dental_visit: 0, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P47', name: '根面龋病例2', profile: { ageGroup: '70岁', gender: '女', desc: '70岁女性，牙龈退缩严重，多个牙根面发黄变软有洞，含冷水即痛。有糖尿病史。' },
+    target: 'root_caries', category: 'tooth', urgency: 'yellow',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 0, q_hard_defect_type: 5, q_universal_age: 3, q_universal_gender: 0, q_universal_medical: 0, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 0, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P48', name: '牙隐裂病例2', profile: { ageGroup: '50岁', gender: '男', desc: '50岁男性，爱啃坚果咬硬骨头，右下磨牙咬到硬物时突然锐利剧痛10秒，松开后不疼，无自发痛。' },
+    target: 'cracked_tooth', category: 'tooth', urgency: 'yellow',
+    answers: { q_entry: 0, q_pain_spontaneous: 1, q_pain_cold_hot_diff: 0, q_pain_trigger_main: 2, q_pain_lightning_duration: 1, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 1, q_universal_diet: 2, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P49', name: '楔状缺损病例2', profile: { ageGroup: '52岁', gender: '女', desc: '52岁女性，左右横拉锯式刷牙几十年，多颗牙颈部出现V形深沟，对冷风和酸性食物敏感。' },
+    target: 'wedge_defect', category: 'tooth', urgency: 'green',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 0, q_hard_defect_type: 1, q_universal_age: 2, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 0, q_universal_stress: 1, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P50', name: '猛性龋/放疗龋病例', profile: { ageGroup: '60岁', gender: '男', desc: '60岁男性，鼻咽癌放疗半年后，多颗牙迅速变黑变软，短期内出现十几处龋洞。口干如沙漠。' },
+    target: 'caries_rampant', category: 'tooth', urgency: 'red',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 0, q_hard_defect_type: 0, q_universal_age: 3, q_universal_gender: 1, q_universal_medical: 4, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+
+  // --- perio (10 cases) ---
+  {
+    id: 'P51', name: '青春期龈炎病例', profile: { ageGroup: '14岁', gender: '女', desc: '14岁女生，来月经初潮后牙龈开始红肿，刷牙一刷就流血，牙齿没有松动。' },
+    target: 'puberty_gingivitis', category: 'perio', urgency: 'green',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 0, q_perio_mobility: 1, q_universal_age: 0, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P52', name: '妊娠期龈炎/龈瘤病例', profile: { ageGroup: '28岁', gender: '女', desc: '28岁女性，怀孕5个月后发现个别牙龈乳头像球一样鼓起来，一碰就出血。怀孕之前牙龈没有问题。' },
+    target: 'pregnancy_gingivitis', category: 'perio', urgency: 'yellow',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 0, q_perio_mobility: 1, q_universal_age: 1, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P53', name: '急性龈乳头炎病例', profile: { ageGroup: '30岁', gender: '男', desc: '30岁男性，前天吃鱼刺扎到牙龈后，两牙之间的牙龈头红肿剧痛，一碰就出血。无牙周袋。' },
+    target: 'acute_gingival_papillitis', category: 'perio', urgency: 'yellow',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 0, q_perio_mobility: 1, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P54', name: '牙周-牙髓联合病变病例', profile: { ageGroup: '48岁', gender: '男', desc: '48岁男性，有牙周炎病史多年，右下后牙牙龈反复肿胀流脓，牙也松动了，拍片见牙槽骨吸收延伸到根尖。' },
+    target: 'perio_endo_lesion', category: 'perio', urgency: 'yellow',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 3, q_perio_mobility: 0, q_perio_age_rapid: 1, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P55', name: '根分叉病变病例', profile: { ageGroup: '58岁', gender: '男', desc: '58岁男性，长期慢性牙周炎，拍片发现下颌磨牙根分叉区的骨头像隧道一样穿通了。刷牙出血、口臭。' },
+    target: 'furcation_involvement', category: 'perio', urgency: 'yellow',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 1, q_perio_mobility: 0, q_perio_age_rapid: 1, q_universal_age: 3, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P56', name: '牙龈退缩病例2', profile: { ageGroup: '62岁', gender: '女', desc: '62岁女性，多年来牙龈慢慢往下退，牙根露出部分越来越长，喝凉风就酸软，吃酸性东西都不敢。' },
+    target: 'gingival_recession', category: 'perio', urgency: 'green',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 1, q_perio_mobility: 0, q_perio_age_rapid: 1, q_universal_age: 3, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 0, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P57', name: '药物性牙龈增生病例2', profile: { ageGroup: '60岁', gender: '女', desc: '60岁女性，高血压病史，长期吃苯磺酸氨氯地平（降压药），牙龈肥大变厚把牙齿都要盖住了。' },
+    target: 'gingival_hyperplasia', category: 'perio', urgency: 'green',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 0, q_perio_mobility: 1, q_universal_age: 3, q_universal_gender: 0, q_universal_medical: 1, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P58', name: '牙周脓肿病例2', profile: { ageGroup: '55岁', gender: '男', desc: '55岁男性，牙周炎多年未治，昨天右下牙龈突然鼓起一个半球形红肿的脓包，按上去波动感，痛得碰都不让碰。' },
+    target: 'periodontal_abscess', category: 'perio', urgency: 'red',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 2, q_perio_mobility: 0, q_perio_age_rapid: 1, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 0, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P59', name: '智齿冠周炎病例2', profile: { ageGroup: '19岁', gender: '男', desc: '19岁男生，右边最后面一颗牙的牙龈肿痛四天了，嘴都快张不开了，咽口水都疼，低烧37.8°C。' },
+    target: 'pericoronitis', category: 'perio', urgency: 'yellow',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 0, q_perio_mobility: 1, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P60', name: 'ANUG病例2', profile: { ageGroup: '21岁', gender: '女', desc: '21岁女生，考研复习压力大到崩溃，牙龈突然剧痛、龈乳头灰黑坏死像被人挖掉，嘴里腐败臭味连戴口罩自己都能闻到。' },
+    target: 'anug', category: 'perio', urgency: 'red',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 0, q_universal_age: 1, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+
+  // --- mucosa (10 cases) ---
+  {
+    id: 'P61', name: '口角炎病例', profile: { ageGroup: '72岁', gender: '女', desc: '72岁女性，两侧嘴角红肿、开裂、结痂两个多月了，舔一下更疼。全口假牙戴了很多年。' },
+    target: 'angular_cheilitis', category: 'mucosa', urgency: 'green',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1, q_mucosa_ulcer_pattern: 5, q_mucosa_ulcer_duration: 0, q_universal_age: 3, q_universal_gender: 0, q_universal_medical: 0, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P62', name: '地图舌病例', profile: { ageGroup: '10岁', gender: '男', desc: '10岁男生，舌头上出现了不规则的红斑，边缘白色，样子像地图，位置今天在这明天又跑到那去了，没有疼痛感。' },
+    target: 'geographic_tongue', category: 'mucosa', urgency: 'green',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1, q_mucosa_ulcer_pattern: 5, q_mucosa_ulcer_duration: 1, q_universal_age: 0, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 0, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P63', name: '口腔扁平苔藓病例2', profile: { ageGroup: '50岁', gender: '女', desc: '50岁女性，两颊内侧有白色的树枝状条纹十年了，最近开始糜烂火辣辣地疼。有桥本甲状腺炎。' },
+    target: 'lichen_planus', category: 'mucosa', urgency: 'yellow',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 0, q_mucosa_white_risk: 2, q_universal_age: 2, q_universal_gender: 0, q_universal_medical: 2, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P64', name: '天疱疮病例2', profile: { ageGroup: '55岁', gender: '男', desc: '55岁男性，口腔多处糜烂半年了，一吃饭喝汤就疼的不得了，身上也有水疱，用手指推一下皮肤水疱就变大了。' },
+    target: 'pemphigus', category: 'mucosa', urgency: 'red',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1, q_mucosa_ulcer_pattern: 5, q_mucosa_ulcer_duration: 2, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 2, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P65', name: '疱疹性口炎病例2', profile: { ageGroup: '4岁', gender: '女', desc: '4岁女童，发烧两天后嘴里出现成群透明小水疱，破了以后连成一片片的糜烂面，嘴唇周围和牙龈红肿，不停流口水。' },
+    target: 'herpes_stomatitis', category: 'mucosa', urgency: 'yellow',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1, q_mucosa_ulcer_pattern: 5, q_mucosa_ulcer_duration: 3, q_universal_age: 0, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P66', name: '口腔白斑病例2', profile: { ageGroup: '58岁', gender: '男', desc: '58岁男性，抽烟40年每天两包，右侧颊部黏膜擦不掉的白色斑块，摸着粗糙有些颗粒感，没有疼痛。' },
+    target: 'leukoplakia', category: 'mucosa', urgency: 'red',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 0, q_mucosa_white_risk: 0, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P67', name: '复发性阿弗他溃疡病例2', profile: { ageGroup: '26岁', gender: '男', desc: '26岁男性，嘴里反复长小圆溃疡，每次一到两周自己好，工作压力大和熬夜时更频繁。最近嘴里同时长了三个。' },
+    target: 'oral_ulcer', category: 'mucosa', urgency: 'green',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1, q_mucosa_ulcer_pattern: 5, q_mucosa_ulcer_duration: 0, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P68', name: '口腔念珠菌病病例2', profile: { ageGroup: '68岁', gender: '女', desc: '68岁女性，长期用哮喘吸入激素，最近嘴里出现白色奶酪样的膜，能擦掉，擦掉后黏膜红红的，口干得厉害。' },
+    target: 'candidiasis', category: 'mucosa', urgency: 'yellow',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 0, q_universal_age: 3, q_universal_gender: 0, q_universal_medical: 0, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P69', name: '口腔黏膜下纤维化(OSF)病例2', profile: { ageGroup: '45岁', gender: '男', desc: '45岁男性，嚼槟榔20年，口腔黏膜逐渐发白变硬，现在嘴巴只能张开两个手指宽了，吃辣的像在伤口上撒盐。' },
+    target: 'osf', category: 'mucosa', urgency: 'red',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 0, q_mucosa_white_risk: 1, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 2, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P70', name: '口腔癌高危病例2', profile: { ageGroup: '65岁', gender: '男', desc: '65岁男性，抽烟喝酒四十年，舌头右边缘长了溃疡超过五周不愈合，说话也大舌头了，脖子摸到个不痛的小疙瘩。' },
+    target: 'oral_cancer', category: 'mucosa', urgency: 'red',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 1, q_mucosa_ulcer_pattern: 5, q_mucosa_ulcer_duration: 1, q_mucosa_cancer_redflags: [0, 1, 2, 3], q_universal_age: 3, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+
+  // --- joint (10 cases) ---
+  {
+    id: 'P71', name: '非典型性牙痛病例', profile: { ageGroup: '42岁', gender: '女', desc: '42岁女性，三年前做了根管治疗的牙齿还持续隐隐钝痛，跑了好几家口腔科都查不出问题。牙齿对叩诊不敏感。' },
+    target: 'atypical_odontalgia', category: 'joint', urgency: 'yellow',
+    answers: { q_entry: 0, q_pain_spontaneous: 1, q_pain_cold_hot_diff: 0, q_pain_trigger_main: 1, q_universal_age: 2, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P72', name: '牙源性上颌窦炎病例', profile: { ageGroup: '48岁', gender: '男', desc: '48岁男性，右边上颌后牙疼同时同侧面部有压迫感、鼻塞流黄鼻涕，人有点低烧。牙片显示根尖阴影延伸到上颌窦。' },
+    target: 'sinusitis_odontogenic', category: 'joint', urgency: 'yellow',
+    answers: { q_entry: 0, q_pain_spontaneous: 1, q_pain_cold_hot_diff: 0, q_pain_trigger_main: 4, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P73', name: '颌骨骨髓炎病例', profile: { ageGroup: '55岁', gender: '男', desc: '55岁男性，拔掉右下智齿后两个月伤口还一直不愈合，流黄脓，下巴这块麻木没感觉了，拍片发现骨头像被虫蛀了一样。' },
+    target: 'osteomyelitis_jaw', category: 'joint', urgency: 'red',
+    answers: { q_entry: 4, q_jaw_recent_extraction: 0, q_jaw_bisphosphonate: 1, q_jaw_pain_or_noise: 1, q_jaw_swelling_meal: 1, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 0, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P74', name: '干槽症病例', profile: { ageGroup: '32岁', gender: '女', desc: '32岁女性，拔掉左下智齿后第三天，伤口突然剧痛放射到耳朵太阳穴，吃止痛药没用。照镜子看到牙槽窝是空的没有血凝块。' },
+    target: 'dry_socket', category: 'joint', urgency: 'red',
+    answers: { q_entry: 4, q_jaw_recent_extraction: 0, q_jaw_bisphosphonate: 1, q_jaw_pain_or_noise: 1, q_jaw_swelling_meal: 1, q_universal_age: 1, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P75', name: 'TMD病例2', profile: { ageGroup: '26岁', gender: '女', desc: '26岁女性，每次张嘴闭嘴巴右侧耳前关节"咔哒"弹响，吃硬的腮帮子酸胀，早上起来腮帮子倒不酸。' },
+    target: 'tmd', category: 'joint', urgency: 'green',
+    answers: { q_entry: 4, q_jaw_recent_extraction: 1, q_jaw_bisphosphonate: 1, q_jaw_pain_or_noise: 0, q_jaw_morning_stiff: 1, q_universal_age: 1, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 0, q_universal_diet: 2, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P76', name: '夜磨牙病例2', profile: { ageGroup: '40岁', gender: '男', desc: '40岁男性，每天早上醒来腮帮子酸痛，妻子说他晚上磨牙声像拖拉机一样吵得她睡不着。牙齿咬合面都磨平了。' },
+    target: 'bruxism', category: 'joint', urgency: 'yellow',
+    answers: { q_entry: 4, q_jaw_recent_extraction: 1, q_jaw_bisphosphonate: 1, q_jaw_pain_or_noise: 0, q_jaw_morning_stiff: 0, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 0, q_universal_diet: 2, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P77', name: '三叉神经痛病例2', profile: { ageGroup: '68岁', gender: '女', desc: '68岁女性，右边脸颊反复出现闪电般刀割剧痛，每次持续二三十秒，洗脸轻触脸颊都能触发。牙科查了几次没发现牙齿问题。' },
+    target: 'trigeminal_neuralgia', category: 'joint', urgency: 'yellow',
+    answers: { q_entry: 0, q_pain_spontaneous: 1, q_pain_cold_hot_diff: 0, q_pain_trigger_main: 2, q_pain_lightning_duration: 0, q_pain_xray_finding: 1, q_universal_age: 3, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P78', name: '涎石症病例2', profile: { ageGroup: '50岁', gender: '女', desc: '50岁女性，每次一吃饭左边下颌下面就突然肿起来胀痛，吃完饭过一小时就好了。反反复复几个月了。' },
+    target: 'sialolithiasis', category: 'joint', urgency: 'yellow',
+    answers: { q_entry: 4, q_jaw_recent_extraction: 1, q_jaw_bisphosphonate: 1, q_jaw_pain_or_noise: 1, q_jaw_swelling_meal: 0, q_universal_age: 2, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P79', name: '腮腺炎病例2', profile: { ageGroup: '10岁', gender: '男', desc: '10岁男生，左边耳垂下方肿起来了触及疼痛，发烧38°C，全身没力气吃不下东西。班里好几个同学也有腮腺肿。' },
+    target: 'parotitis', category: 'joint', urgency: 'yellow',
+    answers: { q_entry: 4, q_jaw_recent_extraction: 1, q_jaw_bisphosphonate: 1, q_jaw_pain_or_noise: 1, q_jaw_swelling_meal: 1, q_universal_age: 0, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P80', name: '牙齿外伤病例2', profile: { ageGroup: '13岁', gender: '女', desc: '13岁女生，打篮球被对手肘子撞到嘴巴，门牙整颗从牙槽窝完全掉出来了，牙龈还在流血，人非常慌张害怕。' },
+    target: 'trauma', category: 'joint', urgency: 'red',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 0, q_hard_defect_type: 3, q_hard_trauma_type: 0, q_universal_age: 1, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+
+  // --- other (8 cases) ---
+  {
+    id: 'P81', name: '氟斑牙病例2', profile: { ageGroup: '30岁', gender: '男', desc: '30岁男性，牙齿从小就有白垩色和黄褐色斑点，影响美观不敢大笑。小时候住山西高氟地区。' },
+    target: 'fluorosis', category: 'other', urgency: 'green',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 1, q_hard_dev_color_or_shape: 0, q_hard_dev_color_detail: 0, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P82', name: '四环素牙病例2', profile: { ageGroup: '50岁', gender: '女', desc: '50岁女性，换牙之后恒牙就是灰黄褐色，小时候生病常吃四环素。严重影响社交和工作面试。' },
+    target: 'tetracycline_teeth', category: 'other', urgency: 'green',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 1, q_hard_dev_color_or_shape: 0, q_hard_dev_color_detail: 1, q_universal_age: 2, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P83', name: '口干症病例2', profile: { ageGroup: '60岁', gender: '女', desc: '60岁女性，长期口干想喝水喝了还是不解决问题，没唾液咽饭都困难。同时眼睛也干涩。查血SSA抗体阳性。' },
+    target: 'xerostomia', category: 'other', urgency: 'yellow',
+    answers: { q_entry: 5, q_systemic_dry_or_burn: 0, q_systemic_dry_cause: 1, q_universal_age: 3, q_universal_gender: 0, q_universal_medical: 2, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P84', name: '非口源性口臭病例2', profile: { ageGroup: '40岁', gender: '男', desc: '40岁男性，口腔卫生很好但长期口臭严重，同事一说话就侧脸。经常烧心反酸，胃镜检查有慢性胃炎伴幽门螺杆菌感染。' },
+    target: 'halitosis', category: 'other', urgency: 'green',
+    answers: { q_entry: 5, q_systemic_dry_or_burn: 2, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P85', name: '灼口综合征病例2', profile: { ageGroup: '60岁', gender: '女', desc: '60岁女性，绝经后舌头像被开水烫过一样持续烧灼感，嘴发麻，但口腔检查黏膜完全正常没任何疹子或红肿。睡眠很差。' },
+    target: 'burning_mouth', category: 'other', urgency: 'green',
+    answers: { q_entry: 5, q_systemic_dry_or_burn: 1, q_universal_age: 3, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P86', name: '釉质发育不全病例', profile: { ageGroup: '9岁', gender: '男', desc: '9岁男生，新换出的恒牙表面粗糙不平有白垩色和褐色沟痕，牙齿形态好像没发育好，没有黑线也没有洞。' },
+    target: 'enamel_hypoplasia', category: 'tooth', urgency: 'green',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 1, q_hard_dev_color_or_shape: 1, q_universal_age: 0, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 0, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P87', name: '牙内吸收病例', profile: { ageGroup: '35岁', gender: '男', desc: '35岁男性，门牙受过撞击两年后，拍牙片发现牙根内部有一个圆形透亮影，牙齿微微变色但没有疼痛感。' },
+    target: 'internal_resorption', category: 'tooth', urgency: 'yellow',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 0, q_hard_defect_type: 0, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P88', name: '磨损症病例', profile: { ageGroup: '55岁', gender: '男', desc: '55岁男性，长期吃硬食和酸性食物，牙齿咬合面严重磨损，牙尖都磨平了，遇到冷热酸甜就敏感，咀嚼效率下降。' },
+    target: 'tooth_wear_attrition', category: 'tooth', urgency: 'yellow',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 0, q_hard_defect_type: 2, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 1, q_universal_diet: 2, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+
+  // --- 多病共存 (4 cases) ---
+  {
+    id: 'P89', name: '牙周炎合并口臭综合病例', profile: { ageGroup: '52岁', gender: '男', desc: '52岁男性，牙龈萎缩出血多年，多颗牙开始松动，同时伴有顽固性口臭。抽烟十五年。' },
+    target: 'periodontitis', category: 'perio', urgency: 'yellow',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 1, q_perio_mobility: 0, q_perio_age_rapid: 1, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P90', name: '口干症合并猛性龋综合病例', profile: { ageGroup: '65岁', gender: '女', desc: '65岁女性，舍格伦综合征导致严重口干，一年内多颗牙快速龋坏。眼睛也干，喝很多水还是不解决问题。' },
+    target: 'xerostomia', category: 'other', urgency: 'yellow',
+    answers: { q_entry: 5, q_systemic_dry_or_burn: 0, q_systemic_dry_cause: 1, q_universal_age: 3, q_universal_gender: 0, q_universal_medical: 2, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P91', name: 'TMD合并夜磨牙综合病例', profile: { ageGroup: '33岁', gender: '女', desc: '33岁女性，双侧关节弹响半年，早上起床腮帮子酸痛咬合无力，牙齿磨损严重，近半年工作压力极大。' },
+    target: 'tmd', category: 'joint', urgency: 'yellow',
+    answers: { q_entry: 4, q_jaw_recent_extraction: 1, q_jaw_bisphosphonate: 1, q_jaw_pain_or_noise: 0, q_jaw_morning_stiff: 0, q_universal_age: 1, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 0, q_universal_diet: 2, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P92', name: 'OSF合并白斑综合病例', profile: { ageGroup: '50岁', gender: '男', desc: '50岁男性，嚼槟榔二十年又抽烟喝酒，口腔多处白斑同时张口困难只能塞进一个半手指，高风险共病表现。' },
+    target: 'osf', category: 'mucosa', urgency: 'red',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 0, q_mucosa_white_risk: 1, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 1, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+
+  // --- 边界病例 (3 cases) ---
+  {
+    id: 'P93', name: '可复性vs不可复性牙髓炎边界病例', profile: { ageGroup: '30岁', gender: '男', desc: '30岁男性，右下后牙对冷热刺激痛持续几秒到十几秒，有时隐隐感觉牙有些不舒服但说不上是自发痛。这个边界病例测试引擎对牙髓状态判别的敏感度。' },
+    target: 'reversible_pulpitis', category: 'tooth', urgency: 'yellow',
+    answers: { q_entry: 0, q_pain_spontaneous: 1, q_pain_cold_hot_diff: 0, q_pain_trigger_main: 0, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 0, q_universal_stress: 0, q_universal_diet: 0, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P94', name: '牙龈炎vs轻度牙周炎边界病例', profile: { ageGroup: '35岁', gender: '女', desc: '35岁女性，刷牙出血三年了，有一两颗下前牙感觉轻微有动但不是特别明显。探诊有3-4mm袋，X线片显示局部轻微骨吸收。' },
+    target: 'gingivitis', category: 'perio', urgency: 'green',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 0, q_perio_mobility: 1, q_universal_age: 1, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 1, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P95', name: '白斑vs扁平苔藓边界病例', profile: { ageGroup: '52岁', gender: '女', desc: '52岁女性，两颊内侧白色斑块擦不掉，部分区域呈细网状，按压有轻微粗糙感。临床不易判断是白斑还是扁平苔藓。' },
+    target: 'lichen_planus', category: 'mucosa', urgency: 'yellow',
+    answers: { q_entry: 2, q_mucosa_can_scrape: 1, q_mucosa_white_or_ulcer: 0, q_mucosa_white_risk: 2, q_universal_age: 2, q_universal_gender: 0, q_universal_medical: 2, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 0, q_universal_diet: 3, q_universal_dental_visit: 1, q_universal_fluoride: 1 }
+  },
+
+  // --- 健康对照组 (5 cases) ---
+  {
+    id: 'P96', name: '健康口腔青年对照', profile: { ageGroup: '25岁', gender: '男', desc: '25岁男性，无症状常规检查，口腔卫生优秀，无牙龈出血或牙松动，无龋齿，不抽烟不喝酒。' },
+    target: null, category: 'none', urgency: 'green',
+    answers: { q_entry: 0, q_pain_spontaneous: 1, q_pain_cold_hot_diff: 0, q_pain_trigger_main: 1, q_universal_age: 1, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P97', name: '健康口腔中年对照', profile: { ageGroup: '45岁', gender: '女', desc: '45岁女性，定期洗牙，口腔卫生良好，没有牙齿松动或龋齿，饮食均衡坚持运动。' },
+    target: null, category: 'none', urgency: 'green',
+    answers: { q_entry: 4, q_jaw_recent_extraction: 1, q_jaw_bisphosphonate: 1, q_jaw_pain_or_noise: 1, q_jaw_swelling_meal: 0, q_universal_age: 2, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P98', name: '健康口腔老年对照', profile: { ageGroup: '68岁', gender: '男', desc: '68岁男性，口腔卫生保持良好，有部分牙缺失但剩余牙齿稳固无龋坏，假牙吻合良好。' },
+    target: null, category: 'none', urgency: 'green',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 1, q_hard_dev_color_or_shape: 1, q_universal_age: 3, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 1 }
+  },
+  {
+    id: 'P99', name: '健康口腔青少年对照', profile: { ageGroup: '16岁', gender: '女', desc: '16岁女生，正畸中，口腔卫生优秀每天刷牙用牙线加冲牙器，无龋坏无牙龈炎，氟斑牙无。' },
+    target: null, category: 'none', urgency: 'green',
+    answers: { q_entry: 3, q_hard_acquired_or_dev: 1, q_hard_dev_color_or_shape: 1, q_universal_age: 1, q_universal_gender: 0, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 3, q_universal_brush: 2, q_universal_stress: 2, q_universal_diet: 3, q_universal_dental_visit: 0, q_universal_fluoride: 0 }
+  },
+  {
+    id: 'P100', name: '综合高风险深度病例', profile: { ageGroup: '55岁', gender: '男', desc: '55岁男性，抽烟30年每天一包喝酒250ml，嚼槟榔10年。口腔多部位白斑、张口缩窄至二指、牙龈大面积萎缩多牙松动、牙颈部楔状缺损、口臭严重。全维度高风险综合测试。' },
+    target: 'periodontitis', category: 'perio', urgency: 'red',
+    answers: { q_entry: 1, q_perio_necrosis_smell: 1, q_perio_bleeding_type: 1, q_perio_mobility: 0, q_perio_age_rapid: 1, q_universal_age: 2, q_universal_gender: 1, q_universal_medical: 6, q_universal_family: 3, q_universal_smoking: 0, q_universal_brush: 0, q_universal_stress: 0, q_universal_diet: 2, q_universal_dental_visit: 1, q_universal_fluoride: 0 }
+  },
+
 ];
 
-// 疾病类别映射（用于统计）
 const CATEGORY_LABELS = {
   tooth: '牙体牙髓',
   perio: '牙周',
@@ -1028,14 +1346,12 @@ const CATEGORY_LABELS = {
   joint: '颌面/关节/神经',
   other: '其他/系统'
 };
-
 const URGENCY_LABELS = {
   green: '绿色（常规）',
   yellow: '黄色（需关注）',
   red: '红色（紧急）'
 };
 
-// 导出
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { PATIENT_CASES, CATEGORY_LABELS, URGENCY_LABELS };
 }

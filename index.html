@@ -396,7 +396,7 @@
         puberty_gingivitis: { name:'青春期龈炎', cat:'perio', urgency:'green', emoji:'🧑', desc:'青春期牙龈红肿得比较厉害，刷牙容易出血，跟体内激素变化有关。', advice:'加强口腔清洁就好，青春期过了大部分会缓解，必要时去洗个牙。', ageRange:[10,18], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'perio_spectrum' },
         pregnancy_gingivitis: { name:'妊娠期龈炎/龈瘤', cat:'perio', urgency:'green', emoji:'🤰', desc:'怀孕后牙龈红肿、容易出血，有时还长出小肉瘤一样的东西。', advice:'激素变化引起的，生完宝宝一般就好了。孕期也要注意口腔卫生，可以定期产检时顺便看看牙。', ageRange:[18,50], genderBias:'female', causalParent:null, causalChildren:[], exclusiveGroup:'perio_spectrum' },
         gingival_hyperplasia: { name:'药物性牙龈增生', cat:'perio', urgency:'green', emoji:'🥩', desc:'牙龈肥大变厚快把牙齿盖住了，和长期吃降压药/抗癫痫药/环孢素有关。', advice:'排查一下正在吃的药，注意口腔清洁，实在严重可以考虑手术修整。', ageRange:[30,80], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'perio_spectrum' },
-        pericoronitis: { name:'智齿冠周炎', cat:'perio', urgency:'yellow', emoji:'🤕', desc:'最里面那颗牙的牙龈肿痛，吞咽都疼，严重的时候嘴都张不开。', advice:'先用漱口水冲洗消炎，炎症控制后强烈建议把这颗智齿拔掉！', ageRange:[16,35], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'pericoronitis_impaction' },
+        pericoronitis: { name:'智齿冠周炎', cat:'perio', urgency:'yellow', emoji:'🤕', desc:'最里面那颗牙的牙龈肿痛，吞咽都疼，严重的时候嘴都张不开。', advice:'先用漱口水冲洗消炎，炎症控制后强烈建议把这颗智齿拔掉！', ageRange:[16,35], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'perio_spectrum' },
 
         // ======== 黏膜 ========
         oral_ulcer: { name:'复发性阿弗他溃疡', cat:'mucosa', urgency:'green', emoji:'😖', desc:'嘴巴里长了圆形的小坑，表面黄白色，周围一圈红红的，碰着就疼。', advice:'一般1-2周自己就好了。注意休息别熬夜，多吃蔬菜水果补充维生素。', ageRange:[6,60], genderBias:'female', causalParent:null, causalChildren:[], exclusiveGroup:'mucosa_ulcerative' },
@@ -443,9 +443,9 @@
         gingival_fibromatosis: { name:'遗传性牙龈纤维瘤病', cat:'perio', urgency:'green', emoji:'🥩', desc:'牙龈大范围增生把牙都快盖住了，质地很硬韧，颜色倒还正常，家里往往还有人有这个情况。', advice:'需要做牙龈成形手术切掉增生的部分，术后一定得好好清洁不然容易复发。', ageRange:[3,40], genderBias:null, causalParent:null, causalChildren:['periodontitis'], exclusiveGroup:'perio_hyperplastic' },
         epulis: { name:'牙龈瘤', cat:'perio', urgency:'yellow', emoji:'🔴', desc:'牙龈上长了个孤立的肉疙瘩，常见在牙缝之间的牙龈，女性比较多见，跟局部刺激或激素有关。', advice:'手术完整切掉（包括骨膜），把牙周膜刮干净防复发。要是反复复发可能得拔掉那颗牙。', ageRange:[20,55], genderBias:'female', causalParent:null, causalChildren:[], exclusiveGroup:'perio_hyperplastic' },
         acute_gingival_papillitis: { name:'急性龈乳头炎', cat:'perio', urgency:'green', emoji:'🦷', desc:'个别牙缝之间牙龈红肿跳着疼，一碰就很痛，常是食物塞牙或者牙签戳伤引起的。', advice:'把塞着的东西弄出来，双氧水冲一下，涂点碘甘油，一般一两天就好了。', ageRange:[6,99], genderBias:null, causalParent:null, causalChildren:[], exclusiveGroup:'perio_acute' },
-        perio_endo_lesion: { name:'牙周-牙髓联合病变', cat:'perio', urgency:'red', emoji:'⚠️', desc:'同一颗牙同时有很深的牙周袋和牙髓问题，两个病互相通着，牙龈反复排脓，牙神经活力也不正常。', advice:'需要根管治疗和牙周治疗一起做，多根牙的话预后不太乐观。', ageRange:[25,75], genderBias:null, causalParent:null, causalChildren:['apical_periodontitis'], exclusiveGroup:'perio_complex' },
-        furcation_involvement: { name:'根分叉病变', cat:'perio', urgency:'yellow', emoji:'🔱', desc:'多根牙的根分叉部位骨头吸收了，用探针能伸进分叉里，常伴有牙龈反复鼓脓包。', advice:'根据分叉受累程度，可能需要做成形术、隧道术、切半术甚至拔掉。', ageRange:[35,75], genderBias:null, causalParent:'periodontitis', causalChildren:['perio_endo_lesion'], exclusiveGroup:'perio_complex' },
-        periodontal_abscess: { name:'牙周脓肿', cat:'perio', urgency:'red', emoji:'🩹', desc:'牙周袋的壁急性化脓了，牙龈鼓起半球形红肿，能摸到波动感，疼得厉害，牙有浮出感。', advice:'挂急诊切开引流放脓，吃点抗生素，等炎症消了再做牙周系统治疗。', ageRange:[25,75], genderBias:null, causalParent:'periodontitis', causalChildren:[], exclusiveGroup:'perio_acute' },
+        perio_endo_lesion: { name:'牙周-牙髓联合病变', cat:'perio', urgency:'red', emoji:'⚠️', desc:'同一颗牙同时有很深的牙周袋和牙髓问题，两个病互相通着，牙龈反复排脓，牙神经活力也不正常。', advice:'需要根管治疗和牙周治疗一起做，多根牙的话预后不太乐观。', ageRange:[25,75], genderBias:null, causalParent:null, causalChildren:['apical_periodontitis'], exclusiveGroup:'perio_spectrum' },
+        furcation_involvement: { name:'根分叉病变', cat:'perio', urgency:'yellow', emoji:'🔱', desc:'多根牙的根分叉部位骨头吸收了，用探针能伸进分叉里，常伴有牙龈反复鼓脓包。', advice:'根据分叉受累程度，可能需要做成形术、隧道术、切半术甚至拔掉。', ageRange:[35,75], genderBias:null, causalParent:'periodontitis', causalChildren:['perio_endo_lesion'], exclusiveGroup:'perio_spectrum' },
+        periodontal_abscess: { name:'牙周脓肿', cat:'perio', urgency:'red', emoji:'🩹', desc:'牙周袋的壁急性化脓了，牙龈鼓起半球形红肿，能摸到波动感，疼得厉害，牙有浮出感。', advice:'挂急诊切开引流放脓，吃点抗生素，等炎症消了再做牙周系统治疗。', ageRange:[25,75], genderBias:null, causalParent:'periodontitis', causalChildren:[], exclusiveGroup:'perio_spectrum' },
         gingival_recession: { name:'牙龈退缩', cat:'perio', urgency:'green', emoji:'🍂', desc:'牙龈往牙根方向退了，牙根露出来，牙齿看起来"变长了"，可能伴有冷酸敏感和根面蛀牙。', advice:'轻的脱敏治疗就好，重的可以做植牙龈手术把根面盖住。换个软毛牙刷用巴氏刷牙法。', ageRange:[25,80], genderBias:null, causalParent:'periodontitis', causalChildren:['dentin_hypersensitivity','root_caries'], exclusiveGroup:'perio_spectrum' },
 
         // ============ 黏膜 新增8种 ============
@@ -807,7 +807,7 @@
         q_pain_trigger_main: {
           id:'q_pain_trigger_main', text:'哪种情况最容易把疼勾出来？', stage:'symptom',
           branches:[
-            { emoji:'🍬', text:'吃甜的或者喝冰的时酸痛，刺激去掉马上就好了', next:['q_pain_caries_depth'], delta:{caries_shallow:4,caries_deep:6,dental_erosion:3}, lock:['cracked_tooth','apical_periodontitis','trigeminal_neuralgia'] },
+            { emoji:'🍬', text:'吃甜的或者喝冰的时酸痛，刺激去掉马上就好了', next:['q_pain_caries_depth'], delta:{caries_shallow:4,caries_deep:6,dental_erosion:3,reversible_pulpitis:4}, lock:['cracked_tooth','apical_periodontitis','trigeminal_neuralgia'] },
             { emoji:'🪥', text:'刷牙刷到牙根那儿的时候刺痛', delta:{wedge_defect:8,dentin_hypersensitivity:6}, lock:['caries_deep','cracked_tooth'] },
             { emoji:'💢', text:'咬到某个点突然像过电/刀割一样剧痛', next:['q_pain_lightning_duration'], delta:{cracked_tooth:7,trigeminal_neuralgia:5}, lock:['caries_shallow','dentin_hypersensitivity','dental_erosion'] },
             { emoji:'🎈', text:'不敢咬东西，感觉牙齿"浮起来了"，一碰就疼', delta:{apical_periodontitis:8,pulp_necrosis:3,vertical_root_fracture:3}, lock:['dentin_hypersensitivity','caries_shallow','wedge_defect'] },
@@ -817,7 +817,7 @@
         q_pain_caries_depth: {
           id:'q_pain_caries_depth', text:'那颗牙上的洞有多大？照镜子能看到明显的小洞吗？', stage:'symptom',
           branches:[
-            { emoji:'🔍', text:'只有一条黑线或针尖大的小黑点，舔上去基本感觉不到凹坑', delta:{caries_shallow:10,reversible_pulpitis:3}, lock:['caries_deep','residual_root'] },
+            { emoji:'🔍', text:'只有一条黑线或针尖大的小黑点，舔上去基本感觉不到凹坑', delta:{caries_shallow:12,reversible_pulpitis:6}, lock:['caries_deep','residual_root'] },
             { emoji:'🕳️', text:'能看到明显的洞，舌头舔上去有个凹坑，吃东西容易塞进去', delta:{caries_deep:10,residual_root:3}, lock:['caries_shallow'] },
           ]
         },
@@ -840,9 +840,9 @@
         q_perio_bleeding_type: {
           id:'q_perio_bleeding_type', text:'牙龈出血是哪种情况？', stage:'symptom',
           branches:[
-            { emoji:'🍎', text:'刷牙或者啃苹果时才出血，平时不出', next:['q_perio_location'], delta:{gingivitis:7,puberty_gingivitis:3,pregnancy_gingivitis:3,acute_gingival_papillitis:5}, lock:['aggressive_periodontitis'] },
-            { emoji:'🩸', text:'不刷牙也自己出血，牙龈发红发紫', next:['q_perio_mobility'], delta:{periodontitis:6,aggressive_periodontitis:5,gingival_hyperplasia:3}, lock:['gingivitis'] },
-            { emoji:'🩹', text:'牙龈反复鼓起一个脓包来，挤破了过几天又鼓起来', delta:{apical_periodontitis:10,pulp_necrosis:6,periodontal_abscess:8}, lock:['gingivitis','periodontitis','aggressive_periodontitis'] },
+            { emoji:'🍎', text:'刷牙或者啃苹果时才出血，平时不出', next:['q_perio_location'], delta:{gingivitis:7,puberty_gingivitis:4,pregnancy_gingivitis:4,acute_gingival_papillitis:6,pericoronitis:4}, lock:['aggressive_periodontitis'] },
+            { emoji:'🩸', text:'不刷牙也自己出血，牙龈发红发紫', next:['q_perio_mobility'], delta:{periodontitis:6,aggressive_periodontitis:5,gingival_hyperplasia:3,periodontal_abscess:4,furcation_involvement:3,gingival_recession:2}, lock:['gingivitis'] },
+            { emoji:'🩹', text:'牙龈反复鼓起一个脓包来，挤破了过几天又鼓起来', delta:{apical_periodontitis:10,pulp_necrosis:6,periodontal_abscess:20}, lock:['gingivitis','periodontitis','aggressive_periodontitis'] },
             { emoji:'⚠️', text:'牙龈反复排脓，同时牙齿对冷热没感觉了（牙神经可能坏死了）', delta:{perio_endo_lesion:12,pulp_necrosis:8}, lock:['gingivitis','periodontitis'] },
           ]
         },
@@ -856,7 +856,7 @@
         q_perio_mobility: {
           id:'q_perio_mobility', text:'牙齿有没有松动的感觉？', stage:'symptom',
           branches:[
-            { emoji:'🍂', text:'有，好几颗牙明显松了', next:['q_perio_age_rapid'], delta:{periodontitis:8,aggressive_periodontitis:8,furcation_involvement:6}, lock:['gingivitis','puberty_gingivitis'] },
+            { emoji:'🍂', text:'有，好几颗牙明显松了', next:['q_perio_age_rapid'], delta:{periodontitis:8,aggressive_periodontitis:8,furcation_involvement:12,periodontal_abscess:8,perio_endo_lesion:8}, lock:['gingivitis','puberty_gingivitis'] },
             { emoji:'🦷', text:'没有明显松动，就是红肿出血', delta:{gingivitis:6,puberty_gingivitis:4,pregnancy_gingivitis:5,gingival_recession:5}, lock:['periodontitis','aggressive_periodontitis'] },
           ]
         },
@@ -939,7 +939,7 @@
             { emoji:'🥤', text:'牙齿表面光滑凹陷/变透明了，舌头那面比较明显', delta:{dental_erosion:10}, lock:['caries_shallow','wedge_defect'] },
             { emoji:'💥', text:'撞到/摔倒/咬硬东西后崩掉一块', next:['q_hard_trauma_type'], delta:{trauma:10}, lock:['caries_shallow','wedge_defect','dental_erosion'] },
             { emoji:'🔁', text:'以前补过的牙边缘又黑了，补的材料有点晃', delta:{caries_recurrent:11}, lock:['caries_shallow','wedge_defect'] },
-            { emoji:'🪥', text:'牙龈退了，露出来的牙根面变软/有洞/发黄', delta:{root_caries:10,gingival_recession:5}, lock:['caries_shallow'] },
+            { emoji:'🪥', text:'牙龈退了，露出来的牙根面变软/有洞/发黄', delta:{root_caries:18,gingival_recession:3}, lock:['caries_shallow'] },
           ]
         },
         q_hard_trauma_type: {
@@ -1345,7 +1345,7 @@
             for (let i = 1; i < present.length; i++) {
               const k = present[i];
               const ratio = scores[k] / top;
-              scores[k] *= Math.max(0.08, 0.40 + ratio * 0.35);
+              scores[k] *= Math.max(0.04, 0.15 + ratio * 0.15);
             }
           });
 
@@ -1382,6 +1382,20 @@
           }
           if (s('periodontal_abscess') > 8) scores['perio_endo_lesion'] = (s('perio_endo_lesion') || 0) * 0.3;
           if (s('vertical_root_fracture') > 8) scores['cracked_tooth'] = (s('cracked_tooth') || 0) * 0.35;
+          if (s('periodontal_abscess') > 8 && s('periodontal_abscess') > s('periodontitis')) scores['periodontitis'] *= 0.15;
+          if (s('pericoronitis') > 8 && s('pericoronitis') > s('gingivitis')) scores['gingivitis'] *= 0.15;
+          if (s('furcation_involvement') > 8 && s('furcation_involvement') > s('periodontitis')) scores['periodontitis'] *= 0.18;
+          if (s('perio_endo_lesion') > 8) scores['periodontitis'] *= 0.15;
+          if (s('puberty_gingivitis') > 6 && s('puberty_gingivitis') > s('gingivitis')) scores['gingivitis'] *= 0.25;
+          if (s('pregnancy_gingivitis') > 6 && s('pregnancy_gingivitis') > s('gingivitis')) scores['gingivitis'] *= 0.25;
+          if (s('gingival_hyperplasia') > 5 && s('gingival_hyperplasia') > s('gingivitis')) scores['gingivitis'] *= 0.25;
+          if (s('gingival_recession') > 6 && s('gingival_recession') > s('periodontitis')) scores['periodontitis'] *= 0.30;
+          if (s('reversible_pulpitis') > 8 && s('reversible_pulpitis') > s('caries_deep')) scores['caries_deep'] *= 0.30;
+          if (s('root_caries') > 8 && s('root_caries') > s('gingival_recession')) scores['gingival_recession'] *= 0.20;
+          if (s('osteomyelitis_jaw') > 6) scores['dry_socket'] *= 0.20;
+          if (s('angular_cheilitis') > 5 && s('angular_cheilitis') > s('oral_ulcer')) scores['oral_ulcer'] *= 0.25;
+          if (s('geographic_tongue') > 5 && s('geographic_tongue') > s('oral_cancer')) scores['oral_cancer'] *= 0.22;
+          if (s('enamel_hypoplasia') > 3 && s('enamel_hypoplasia') > s('dens_evaginatus')) scores['dens_evaginatus'] *= 0.30;
 
           Object.keys(scores).forEach(k => { scores[k] = Math.round(scores[k] * 10) / 10; });
           this.scores = scores;

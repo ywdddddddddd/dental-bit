@@ -568,6 +568,30 @@ function generateCase(index) {
     }
   }
 
+  // 2b. 共病对联合抽样：如果某个共病对的一方被抽中，另一方概率提升
+  const COMORBIDITY_BOOST = new Map();
+  // Key pairs from index.html DISEASE_GRAPH.comorbidityPairs
+  const comorbidPairs = [
+    ['periodontitis','halitosis'],['tmd','bruxism'],['xerostomia','candidiasis'],
+    ['xerostomia','caries_rampant'],['xerostomia','burning_mouth'],
+    ['caries_shallow','caries_deep'],['bruxism','cracked_tooth'],
+    ['bruxism','wedge_defect'],['periodontitis','furcation_involvement'],
+    ['leukoplakia','oral_cancer'],['lichen_planus','oral_cancer'],
+    ['osf','oral_cancer'],['gingivitis','periodontitis'],
+    ['irreversible_pulpitis','apical_periodontitis'],
+  ];
+  for (const [a, b] of comorbidPairs) {
+    const hasA = activeDiseases.includes(a);
+    const hasB = activeDiseases.includes(b);
+    if (hasA && !hasB) COMORBIDITY_BOOST.set(b, (COMORBIDITY_BOOST.get(b)||0) + 0.35);
+    if (hasB && !hasA) COMORBIDITY_BOOST.set(a, (COMORBIDITY_BOOST.get(a)||0) + 0.35);
+  }
+  for (const [diseaseId, boost] of COMORBIDITY_BOOST) {
+    if (Math.random() < Math.min(boost, 0.7)) {
+      activeDiseases.push(diseaseId);
+    }
+  }
+
   // 3. 按互斥组去重（一个互斥组只保留最高概率的疾病）
   // 注：这里简化为保持所有抽到的疾病，让引擎的互斥逻辑处理
 
